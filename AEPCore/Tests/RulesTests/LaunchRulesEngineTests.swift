@@ -277,6 +277,48 @@ class LaunchRulesEngineTests: XCTestCase {
         XCTAssertTrue(mockInterceptor.completionWasCalled)
     }
     
+    func testReevaluationCompletionFailure_SkipsReEvaluation() {
+        // Given
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let mockInterceptor = MockRuleReevaluationInterceptor()
+        mockInterceptor.shouldCallCompletionImmediately = true
+        mockInterceptor.completionSuccessValue = false  // Simulate failure
+        rulesEngine.setReevaluationInterceptor(mockInterceptor)
+        
+        // Load reevaluable rules
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_reevaluable", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let rules = JSONRulesParser.parse(data) else {
+            XCTFail("Could not load rules_reevaluable.json")
+            return
+        }
+        
+        rulesEngine.replaceRules(with: rules)
+        
+        // When
+        let testEvent = Event(name: "test",
+                              type: "com.adobe.eventType.generic.track",
+                              source: "com.adobe.eventSource.requestContent",
+                              data: ["action": "fullscreen"])
+        
+        _ = rulesEngine.process(event: testEvent)
+        
+        // Wait for async processing
+        let expectation = XCTestExpectation(description: "Wait for processing")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1.0)
+        
+        // Then - interceptor was called but completion reported failure
+        XCTAssertTrue(mockInterceptor.onReevaluationTriggeredCalled)
+        XCTAssertTrue(mockInterceptor.completionWasCalled)
+        // Note: Re-evaluation is skipped when completion(false) is called,
+        // schema consequences will not be processed
+    }
+    
     func testHasReevaluableSupportedConsequence_SchemaType() {
         // Given - a rule with schema consequence type and meta.reEvaluable = true
         let jsonWithSchemaConsequence = """
@@ -902,8 +944,8 @@ class LaunchRulesEngineTests: XCTestCase {
         let firstCompletion = mockInterceptor.completionReceived
         XCTAssertNotNil(firstCompletion, "First completion should be captured")
         
-        // Call first completion
-        firstCompletion?()
+        // Call first completion with success
+        firstCompletion?(true)
         
         // Wait and verify
         let expectation = XCTestExpectation(description: "Wait for sequence")
@@ -923,15 +965,17 @@ class MockRuleReevaluationInterceptor: RuleReevaluationInterceptor {
     var onReevaluationTriggeredCalled = false
     var eventReceived: Event?
     var reevaluableRulesReceived: [LaunchRule]?
-    var completionReceived: (() -> Void)?
+    var completionReceived: ((Bool) -> Void)?
     var completionWasCalled = false
     var shouldCallCompletionImmediately = false
+    /// Whether to report success (true) or failure (false) when calling completion
+    var completionSuccessValue = true
     var callCount = 0
     
     /// Track all events received (for multiple event tests)
     var allEventsReceived: [Event] = []
     
-    func onReevaluationTriggered(event: Event, reevaluableRules: [LaunchRule], completion: @escaping () -> Void) {
+    func onReevaluationTriggered(event: Event, reevaluableRules: [LaunchRule], completion: @escaping (Bool) -> Void) {
         onReevaluationTriggeredCalled = true
         eventReceived = event
         reevaluableRulesReceived = reevaluableRules
@@ -941,7 +985,7 @@ class MockRuleReevaluationInterceptor: RuleReevaluationInterceptor {
         
         if shouldCallCompletionImmediately {
             completionWasCalled = true
-            completion()
+            completion(completionSuccessValue)
         }
     }
     
@@ -951,6 +995,7 @@ class MockRuleReevaluationInterceptor: RuleReevaluationInterceptor {
         reevaluableRulesReceived = nil
         completionReceived = nil
         completionWasCalled = false
+        completionSuccessValue = true
         callCount = 0
         allEventsReceived.removeAll()
     }

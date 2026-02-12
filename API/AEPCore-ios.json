@@ -12084,93 +12084,6 @@
       },
       {
         "kind": "TypeDecl",
-        "name": "RuleReevaluationInterceptor",
-        "printedName": "RuleReevaluationInterceptor",
-        "children": [
-          {
-            "kind": "Function",
-            "name": "onReevaluationTriggered",
-            "printedName": "onReevaluationTriggered(event:reevaluableRules:completion:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Event",
-                "printedName": "AEPCore.Event",
-                "usr": "c:@M@AEPCore@objc(cs)AEPEvent"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Array",
-                "printedName": "[AEPCore.LaunchRule]",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "LaunchRule",
-                    "printedName": "AEPCore.LaunchRule",
-                    "usr": "s:7AEPCore10LaunchRuleV"
-                  }
-                ],
-                "usr": "s:Sa"
-              },
-              {
-                "kind": "TypeFunc",
-                "name": "Function",
-                "printedName": "() -> ()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  }
-                ]
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:7AEPCore27RuleReevaluationInterceptorP02onC9Triggered5event16reevaluableRules10completionyAA5EventC_SayAA06LaunchB0VGyyctF",
-            "mangledName": "$s7AEPCore27RuleReevaluationInterceptorP02onC9Triggered5event16reevaluableRules10completionyAA5EventC_SayAA06LaunchB0VGyyctF",
-            "moduleName": "AEPCore",
-            "genericSig": "<τ_0_0 where τ_0_0 : AEPCore.RuleReevaluationInterceptor>",
-            "sugared_genericSig": "<Self where Self : AEPCore.RuleReevaluationInterceptor>",
-            "protocolReq": true,
-            "reqNewWitnessTableEntry": true,
-            "funcSelfKind": "NonMutating"
-          }
-        ],
-        "declKind": "Protocol",
-        "usr": "s:7AEPCore27RuleReevaluationInterceptorP",
-        "mangledName": "$s7AEPCore27RuleReevaluationInterceptorP",
-        "moduleName": "AEPCore",
-        "genericSig": "<τ_0_0 : AnyObject>",
-        "sugared_genericSig": "<Self : AnyObject>",
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Escapable",
-            "printedName": "Escapable",
-            "usr": "s:s9EscapableP",
-            "mangledName": "$ss9EscapableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Copyable",
-            "printedName": "Copyable",
-            "usr": "s:s8CopyableP",
-            "mangledName": "$ss8CopyableP"
-          }
-        ]
-      },
-      {
-        "kind": "TypeDecl",
         "name": "LaunchRulesEngine",
         "printedName": "LaunchRulesEngine",
         "children": [
@@ -13224,6 +13137,94 @@
             "printedName": "Escapable",
             "usr": "s:s9EscapableP",
             "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "RuleReevaluationInterceptor",
+        "printedName": "RuleReevaluationInterceptor",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "onReevaluationTriggered",
+            "printedName": "onReevaluationTriggered(event:reevaluableRules:completion:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Event",
+                "printedName": "AEPCore.Event",
+                "usr": "c:@M@AEPCore@objc(cs)AEPEvent"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[AEPCore.LaunchRule]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "LaunchRule",
+                    "printedName": "AEPCore.LaunchRule",
+                    "usr": "s:7AEPCore10LaunchRuleV"
+                  }
+                ],
+                "usr": "s:Sa"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.Bool) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7AEPCore27RuleReevaluationInterceptorP02onC9Triggered5event16reevaluableRules10completionyAA5EventC_SayAA06LaunchB0VGySbctF",
+            "mangledName": "$s7AEPCore27RuleReevaluationInterceptorP02onC9Triggered5event16reevaluableRules10completionyAA5EventC_SayAA06LaunchB0VGySbctF",
+            "moduleName": "AEPCore",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPCore.RuleReevaluationInterceptor>",
+            "sugared_genericSig": "<Self where Self : AEPCore.RuleReevaluationInterceptor>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:7AEPCore27RuleReevaluationInterceptorP",
+        "mangledName": "$s7AEPCore27RuleReevaluationInterceptorP",
+        "moduleName": "AEPCore",
+        "genericSig": "<τ_0_0 : AnyObject>",
+        "sugared_genericSig": "<Self : AnyObject>",
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
           }
         ]
       },
