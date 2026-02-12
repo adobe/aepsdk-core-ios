@@ -14,20 +14,6 @@ import AEPServices
 import Foundation
 import AEPRulesEngine
 
-/// Protocol for intercepting rule evaluation when reevaluable rules are triggered
-public protocol RuleReevaluationInterceptor: AnyObject {
-    /// Called when reevaluable rules match an event
-    /// - Parameters:
-    ///   - event: The event that triggered the rules
-    ///   - reevaluableRules: Rules marked as reevaluable
-    ///   - completion: Call when done to trigger re-evaluation
-    func onReevaluationTriggered(
-        event: Event,
-        reevaluableRules: [LaunchRule],
-        completion: @escaping () -> Void
-    )
-}
-
 // MARK: - LaunchRulesEngine
 
 /// A rules engine for Launch rules
@@ -64,7 +50,7 @@ public class LaunchRulesEngine {
     private var dispatchChainedEventsCount: [UUID: Int] = [:]
     
     /// The interceptor that handles reevaluation when reevaluable rules match
-    private weak var reevaluationInterceptor: RuleReevaluationInterceptor?
+    private var reevaluationInterceptor: RuleReevaluationInterceptor?
 
     let extensionRuntime: ExtensionRuntime
     let evaluator: ConditionEvaluator
@@ -92,8 +78,8 @@ public class LaunchRulesEngine {
     
     /// Sets the interceptor that will be notified when reevaluable rules match.
     ///
-    /// The interceptor is held weakly to avoid retain cycles. When reevaluable rules
-    /// are triggered, the interceptor can update rules and signal completion to
+    /// The rules engine maintains a strong reference to the interceptor. When reevaluable 
+    /// rules are triggered, the interceptor can update rules and signal completion to
     /// trigger re-evaluation.
     ///
     /// - Parameter interceptor: The interceptor to handle reevaluation, or `nil` to remove
@@ -226,8 +212,14 @@ public class LaunchRulesEngine {
         let processedEvent = processConsequences(for: event, matchedRules: rulesToProcess, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
         
         // Pass the processed event to the interceptor
-        interceptor.onReevaluationTriggered(event: processedEvent, reevaluableRules: reevaluableRules) { [weak self] in
+        interceptor.onReevaluationTriggered(event: processedEvent, reevaluableRules: reevaluableRules) { [weak self] success in
             guard let self = self else { return }
+            
+            // If the interceptor reports failure, log and skip re-evaluation
+            guard success else {
+                Log.debug(label: self.LOG_TAG, "(\(self.name)) : Re-evaluation skipped due to interceptor failure for event '\(event.id)'")
+                return
+            }
             
             // Re-evaluate rules after interceptor completes (rules may have been updated)
             self.rulesQueue.async {
