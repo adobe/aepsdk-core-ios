@@ -50,7 +50,7 @@ public class LaunchRulesEngine {
     private var dispatchChainedEventsCount: [UUID: Int] = [:]
     
     /// The interceptor that handles reevaluation when reevaluable rules match
-    private var reevaluationInterceptor: RuleReevaluationInterceptor?
+    private weak var reevaluationInterceptor: RuleReevaluationInterceptor?
 
     let extensionRuntime: ExtensionRuntime
     let evaluator: ConditionEvaluator
@@ -78,9 +78,9 @@ public class LaunchRulesEngine {
     
     /// Sets the interceptor that will be notified when reevaluable rules match.
     ///
-    /// The rules engine maintains a strong reference to the interceptor. When reevaluable 
-    /// rules are triggered, the interceptor can update rules and signal completion to
-    /// trigger re-evaluation.
+    /// The rules engine maintains a weak reference to the interceptor.
+    /// When reevaluable rules are triggered, the interceptor can update rules and
+    /// signal completion to trigger re-evaluation. 
     ///
     /// - Parameter interceptor: The interceptor to handle reevaluation, or `nil` to remove
     public func setReevaluationInterceptor(_ interceptor: RuleReevaluationInterceptor?) {

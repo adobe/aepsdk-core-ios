@@ -12,8 +12,8 @@
 
 import Foundation
 
-/// Protocol for intercepting rule evaluation when reevaluable rules are triggered
-public protocol RuleReevaluationInterceptor {
+/// Protocol for intercepting rule evaluation when reevaluable rules are triggered.
+public protocol RuleReevaluationInterceptor: AnyObject {
     /// Called when reevaluable rules match an event
     /// - Parameters:
     ///   - event: The event that triggered the rules
