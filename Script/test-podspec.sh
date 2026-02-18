@@ -2,7 +2,8 @@
 
 set -e # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 # Install any missing gems automatically
-bundle check || bundle install --path vendor/bundle
+bundle config set --local path 'vendor/bundle'
+bundle check || bundle install
 
 PROJECT_NAME=TestProject
 
