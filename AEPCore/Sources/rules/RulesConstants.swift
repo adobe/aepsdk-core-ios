@@ -17,6 +17,10 @@ enum RulesConstants {
     static let LOG_MODULE_PREFIX = "Launch Rules Engine"
     enum Keys {
         static let RULES_ENGINE_NAME = "name"
+        static let RE_EVALUATE = "reEvaluate"
+    }
+    enum ConsequenceTypes {
+        static let SCHEMA = "schema"
     }
     enum Transform {
         static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
