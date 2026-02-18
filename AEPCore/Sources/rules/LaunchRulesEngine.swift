@@ -14,6 +14,8 @@ import AEPServices
 import Foundation
 import AEPRulesEngine
 
+// MARK: - LaunchRulesEngine
+
 /// A rules engine for Launch rules
 public class LaunchRulesEngine {
     private let LOG_TAG = RulesConstants.LOG_MODULE_PREFIX
@@ -46,6 +48,9 @@ public class LaunchRulesEngine {
     private let rulesQueue: DispatchQueue
     private var waitingEvents: [Event]?
     private var dispatchChainedEventsCount: [UUID: Int] = [:]
+    
+    /// The interceptor that handles reevaluation when reevaluable rules match
+    private weak var reevaluationInterceptor: RuleReevaluationInterceptor?
 
     let extensionRuntime: ExtensionRuntime
     let evaluator: ConditionEvaluator
@@ -67,6 +72,21 @@ public class LaunchRulesEngine {
 //            RulesEngineLog.logging = RulesEngineNativeLogging()
 //        }
         self.extensionRuntime = extensionRuntime
+    }
+    
+    // MARK: - Reevaluation Interceptor
+    
+    /// Sets the interceptor that will be notified when reevaluable rules match.
+    ///
+    /// The rules engine maintains a weak reference to the interceptor.
+    /// When reevaluable rules are triggered, the interceptor can update rules and
+    /// signal completion to trigger re-evaluation. 
+    ///
+    /// - Parameter interceptor: The interceptor to handle reevaluation, or `nil` to remove
+    public func setReevaluationInterceptor(_ interceptor: RuleReevaluationInterceptor?) {
+        rulesQueue.sync {
+            self.reevaluationInterceptor = interceptor
+        }
     }
 
     /// Register a `RulesTracer`
@@ -159,16 +179,109 @@ public class LaunchRulesEngine {
     private func evaluateRules(for event: Event) -> Event {
         let dispatchChainCount = dispatchChainedEventsCount.removeValue(forKey: event.id)
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
-        var matchedRules: [LaunchRule]?
-        matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
-        guard let matchedRulesUnwrapped = matchedRules else {
+        let matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
+        
+        guard !matchedRules.isEmpty else {
             return event
         }
-
+        
+        // If no interceptor is set, process consequences immediately
+        guard let interceptor = reevaluationInterceptor else {
+            return processConsequences(for: event, matchedRules: matchedRules, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
+        }
+        
+        // Get rules that are reevaluable AND have schema consequences
+        let reevaluableRules = getReevaluableRules(from: matchedRules)
+        
+        if reevaluableRules.isEmpty {
+            return processConsequences(for: event, matchedRules: matchedRules, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
+        }
+        
+        // Get rules to hold (rules with schema consequences - wait for reevaluation)
+        let rulesToHold = getRulesToHoldForReevaluation(from: matchedRules)
+        let rulesToHoldIds = Set(rulesToHold.flatMap { $0.consequences.map { $0.id } })
+        
+        // Rules to process immediately = matched rules - rules to hold
+        let rulesToProcess = matchedRules.filter { rule in
+            !rule.consequences.contains { rulesToHoldIds.contains($0.id) }
+        }
+        
+        Log.trace(label: LOG_TAG, "(\(self.name)) : Found \(reevaluableRules.count) reevaluable rule(s), \(rulesToHold.count) rule(s) to hold, \(rulesToProcess.count) rule(s) to process immediately")
+        
+        // Process non-schema rules first to get the processed event
+        let processedEvent = processConsequences(for: event, matchedRules: rulesToProcess, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
+        
+        // Pass the processed event to the interceptor
+        interceptor.onReevaluationTriggered(event: processedEvent, reevaluableRules: reevaluableRules) { [weak self] success in
+            guard let self = self else { return }
+            
+            // If the interceptor reports failure, log and skip re-evaluation
+            guard success else {
+                Log.debug(label: self.LOG_TAG, "(\(self.name)) : Re-evaluation skipped due to interceptor failure for event '\(event.id)'")
+                return
+            }
+            
+            // Re-evaluate rules after interceptor completes (rules may have been updated)
+            self.rulesQueue.async {
+                let newTokenFinder = TokenFinder(event: event, extensionRuntime: self.extensionRuntime)
+                var newlyMatchedRules = self.rulesEngine.evaluate(data: newTokenFinder)
+                
+                // Remove rules that were already processed (compare by consequence IDs)
+                let processedIds = Set(rulesToProcess.flatMap { $0.consequences.map { $0.id } })
+                newlyMatchedRules = newlyMatchedRules.filter { newRule in
+                    !newRule.consequences.contains { processedIds.contains($0.id) }
+                }
+                
+                Log.trace(label: self.LOG_TAG, "(\(self.name)) : Re-evaluation complete, processing \(newlyMatchedRules.count) newly matched rule(s)")
+                _ = self.processConsequences(for: processedEvent, matchedRules: newlyMatchedRules, tokenFinder: newTokenFinder, dispatchChainCount: dispatchChainCount)
+            }
+        }
+        
+        return processedEvent
+    }
+    
+    // MARK: - Reevaluation Helper Methods
+    
+    /// Returns rules that are marked as reevaluable AND have schema consequences.
+    /// Only rules with schema consequences can trigger reevaluation.
+    ///
+    /// - Parameter rules: The list of matched rules to filter
+    /// - Returns: Rules that should trigger reevaluation
+    private func getReevaluableRules(from rules: [LaunchRule]) -> [LaunchRule] {
+        return rules.filter { $0.reevaluable && $0.hasReevaluableSupportedConsequence() }
+    }
+    
+    /// Returns rules that have schema consequences and should be held until reevaluation completes.
+    /// These rules are not processed immediately because their consequences depend on updated rules.
+    ///
+    /// - Parameter rules: The list of matched rules to filter
+    /// - Returns: Rules that should wait for reevaluation
+    private func getRulesToHoldForReevaluation(from rules: [LaunchRule]) -> [LaunchRule] {
+        return rules.filter { $0.hasReevaluableSupportedConsequence() }
+    }
+    
+    /// Processes consequences for matched rules.
+    ///
+    /// This method handles the actual consequence processing including attach data,
+    /// modify data, dispatch, schema, and other consequence types.
+    ///
+    /// - Parameters:
+    ///   - event: The original event being processed
+    ///   - matchedRules: The rules that matched the event
+    ///   - tokenFinder: The token finder for resolving dynamic values
+    ///   - dispatchChainCount: Current dispatch chain count to prevent infinite loops
+    /// - Returns: The processed event with any modifications applied
+    private func processConsequences(
+        for event: Event,
+        matchedRules: [LaunchRule],
+        tokenFinder: TokenFinder,
+        dispatchChainCount: Int?
+    ) -> Event {
         var processedEvent = event
-        for rule in matchedRulesUnwrapped {
+        
+        for rule in matchedRules {
             for consequence in rule.consequences {
-                let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
+                let consequenceWithConcreteValue = replaceToken(for: consequence, data: tokenFinder)
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
                     guard let attachedEventData = processAttachDataConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data) else {
@@ -183,12 +296,11 @@ public class LaunchRulesEngine {
                     processedEvent = processedEvent.copyWithNewData(data: modifiedEventData)
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
-
                     if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
                         continue
                     }
-                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent)  else {
+                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent) else {
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
@@ -199,10 +311,11 @@ public class LaunchRulesEngine {
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_SCHEMA:
                     processSchemaConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent)
+                    
                 default:
-                    let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent)
-                    Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
-                    extensionRuntime.dispatch(event: event)
+                    let consequenceEvent = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent)
+                    Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(consequenceEvent)")
+                    extensionRuntime.dispatch(event: consequenceEvent)
                 }
             }
         }

@@ -12,8 +12,9 @@
 #if os(iOS)
     import Foundation
 
-    /// This protocol is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
-    /// The status is exposed through isMessageDisplayed.
+    /// This protocol is used to monitor if a UI message is displayed.  Primarily it is used in conjunction with the MessageSetting.uiTakeover property to prevent multiple
+    ///   messages with `uiTakeover` from being displayed at the same time.
+    @available(iOSApplicationExtension, unavailable)
     protocol MessageMonitoring {
         /// - Returns: `true` if a message is being displayed
         func isMessageDisplayed() -> Bool
@@ -44,5 +45,11 @@
         /// Check if the message is being displayed and call invoke the appropriate listeners
         /// - Returns: `true` if message needs to be dismissed
         func dismiss() -> Bool
+        
+        /// Checks if the passed message is showing and dismisses it if necessary.
+        /// If no message is passed in, the code will pass and try to dismiss any message that was otherwise showing.
+        /// - Parameter message: `Showable` of message to dismiss
+        /// - Returns: `true` if a message was dismissed
+        func dismiss(_ message: Showable?) -> Bool
     }
 #endif

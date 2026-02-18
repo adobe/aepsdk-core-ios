@@ -100,15 +100,15 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
-          device: "iPhone 15"
-          version: "17.4"
+          device: "iPhone 16"
+          version: "18.5"
 
   prestart_tvos_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
           device: "Apple TV"
-          version: "17.4"
+          version: "18.5"
       
   parse_and_upload_coverage:
     description: "Convert .xcresult → Cobertura XML and upload to Codecov"
@@ -160,8 +160,9 @@ commands:
 
 jobs:
   validate-code:
+    resource_class: m4pro.medium
     macos:
-      xcode: 16.0.0
+      xcode: 16.4.0
 
     steps:
       - checkout
@@ -177,8 +178,9 @@ jobs:
           command: make api-check
 
   test-ios-core:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -196,8 +198,9 @@ jobs:
           flag: aepcore-ios-tests
 
   test-ios-services:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -215,8 +218,9 @@ jobs:
           flag: aepservices-ios-tests
   
   test-ios-lifecycle:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -234,8 +238,9 @@ jobs:
           flag: aeplifecycle-ios-tests
 
   test-ios-identity:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -253,8 +258,9 @@ jobs:
           flag: aepidentity-ios-tests
 
   test-ios-signal:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -272,8 +278,9 @@ jobs:
           flag: aepsignal-ios-tests
 
   test-ios-integration:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
 
     steps:
@@ -288,8 +295,9 @@ jobs:
           command: make integration-test
 
   test-tvos-core:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -307,8 +315,9 @@ jobs:
           flag: aepcore-tvos-tests
 
   test-tvos-services:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -326,8 +335,9 @@ jobs:
           flag: aepservices-tvos-tests
 
   test-tvos-lifecycle:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -345,8 +355,9 @@ jobs:
           flag: aeplifecycle-tvos-tests
 
   test-tvos-identity:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -364,8 +375,9 @@ jobs:
           flag: aepidentity-tvos-tests
 
   test-tvos-signal:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -383,8 +395,9 @@ jobs:
           flag: aepsignal-tvos-tests
 
   test-tvos-integration:
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -398,8 +411,9 @@ jobs:
           command: make integration-tvos-test
 
   test-spm-podspec-archive:  
+    resource_class: m4pro.medium
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
     
     steps:
       - checkout

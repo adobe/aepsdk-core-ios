@@ -11860,6 +11860,130 @@
                 "accessorKind": "get"
               }
             ]
+          },
+          {
+            "kind": "Var",
+            "name": "meta",
+            "printedName": "meta",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Any]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Any]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ProtocolComposition",
+                        "printedName": "Any"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7AEPCore10LaunchRuleV4metaSDySSypGSgvp",
+            "mangledName": "$s7AEPCore10LaunchRuleV4metaSDySSypGSgvp",
+            "moduleName": "AEPCore",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[Swift.String : Any]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7AEPCore10LaunchRuleV4metaSDySSypGSgvg",
+                "mangledName": "$s7AEPCore10LaunchRuleV4metaSDySSypGSgvg",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "reevaluable",
+            "printedName": "reevaluable",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7AEPCore10LaunchRuleV11reevaluableSbvp",
+            "mangledName": "$s7AEPCore10LaunchRuleV11reevaluableSbvp",
+            "moduleName": "AEPCore",
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7AEPCore10LaunchRuleV11reevaluableSbvg",
+                "mangledName": "$s7AEPCore10LaunchRuleV11reevaluableSbvg",
+                "moduleName": "AEPCore",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
           }
         ],
         "declKind": "Struct",
@@ -11924,6 +12048,37 @@
             "mangledName": "$s7AEPCore17LaunchRulesEngineC4name16extensionRuntimeACSS_AA09ExtensionG0_ptcfc",
             "moduleName": "AEPCore",
             "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "setReevaluationInterceptor",
+            "printedName": "setReevaluationInterceptor(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(any AEPCore.RuleReevaluationInterceptor)?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "RuleReevaluationInterceptor",
+                    "printedName": "any AEPCore.RuleReevaluationInterceptor",
+                    "usr": "s:7AEPCore27RuleReevaluationInterceptorP"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7AEPCore17LaunchRulesEngineC26setReevaluationInterceptoryyAA04RulefG0_pSgF",
+            "mangledName": "$s7AEPCore17LaunchRulesEngineC26setReevaluationInterceptoryyAA04RulefG0_pSgF",
+            "moduleName": "AEPCore",
+            "funcSelfKind": "NonMutating"
           },
           {
             "kind": "Function",
@@ -12914,6 +13069,94 @@
             "printedName": "Escapable",
             "usr": "s:s9EscapableP",
             "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "RuleReevaluationInterceptor",
+        "printedName": "RuleReevaluationInterceptor",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "onReevaluationTriggered",
+            "printedName": "onReevaluationTriggered(event:reevaluableRules:completion:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Event",
+                "printedName": "AEPCore.Event",
+                "usr": "c:@M@AEPCore@objc(cs)AEPEvent"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[AEPCore.LaunchRule]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "LaunchRule",
+                    "printedName": "AEPCore.LaunchRule",
+                    "usr": "s:7AEPCore10LaunchRuleV"
+                  }
+                ],
+                "usr": "s:Sa"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.Bool) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7AEPCore27RuleReevaluationInterceptorP02onC9Triggered5event16reevaluableRules10completionyAA5EventC_SayAA06LaunchB0VGySbctF",
+            "mangledName": "$s7AEPCore27RuleReevaluationInterceptorP02onC9Triggered5event16reevaluableRules10completionyAA5EventC_SayAA06LaunchB0VGySbctF",
+            "moduleName": "AEPCore",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPCore.RuleReevaluationInterceptor>",
+            "sugared_genericSig": "<Self where Self : AEPCore.RuleReevaluationInterceptor>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:7AEPCore27RuleReevaluationInterceptorP",
+        "mangledName": "$s7AEPCore27RuleReevaluationInterceptorP",
+        "moduleName": "AEPCore",
+        "genericSig": "<τ_0_0 : AnyObject>",
+        "sugared_genericSig": "<Self : AnyObject>",
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
           }
         ]
       },

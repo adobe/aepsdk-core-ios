@@ -23,9 +23,9 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 
 # CI variables - using values with defaults
-IOS_DEVICE_NAME ?= iPhone 15
+IOS_DEVICE_NAME ?= iPhone 16
 # If OS version is not specified, uses the first device name match in the list of available simulators
-IOS_VERSION ?= 
+IOS_VERSION ?= 18.5
 ifeq ($(strip $(IOS_VERSION)),)
     IOS_DESTINATION = "platform=iOS Simulator,name=$(IOS_DEVICE_NAME)"
 else
@@ -34,7 +34,7 @@ endif
 
 TVOS_DEVICE_NAME ?= Apple TV
 # If OS version is not specified, uses the first device name match in the list of available simulators
-TVOS_VERSION ?=
+TVOS_VERSION ?= 18.5
 ifeq ($(strip $(TVOS_VERSION)),)
 	TVOS_DESTINATION = "platform=tvOS Simulator,name=$(TVOS_DEVICE_NAME)"
 else

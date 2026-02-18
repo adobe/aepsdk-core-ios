@@ -75,11 +75,25 @@
             mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
             messagingDelegateExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
             mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
-            messageMonitor.displayMessage()
+            _ = messageMonitor.show(message: fullscreenMessage!)
             fullscreenMessage?.dismiss()
             wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onDismissCalled)
             XCTAssertTrue(mockMessagingDelegate.onDismissCalled)
+        }
+        
+        func testDismissMessageIdNotMatching() {
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
+            fullscreenListenerExpectation?.isInverted = true
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
+            messagingDelegateExpectation?.isInverted = true
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
+            messageMonitor.displayMessage()
+            fullscreenMessage?.dismiss()
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
+            XCTAssertFalse(mockFullscreenListener.onDismissCalled)
+            XCTAssertFalse(mockMessagingDelegate.onDismissCalled)
         }
     
         func testDismissNoMessageVisible() {
@@ -460,7 +474,7 @@
         func testHandleTap() throws {
             // Setup
             fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
-            messageMonitor.displayMessage()
+            _ = messageMonitor.show(message: fullscreenMessage!)
             
             // Create expectation for dismiss
             fullscreenListenerExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")

@@ -12,14 +12,22 @@
 #if os(iOS)
     import Foundation
 
+    @available(iOSApplicationExtension, unavailable)
     class MessageMonitor: MessageMonitoring {
         private let LOG_PREFIX = "MessageMonitor"
         private var isMsgDisplayed = false
         private let messageQueue = DispatchQueue(label: "com.adobe.uiService.messageMonitor.queue")
+        private var displayedMessageId: UUID?
 
         internal func isMessageDisplayed() -> Bool {
             return messageQueue.sync {
                 self.isMsgDisplayed
+            }
+        }
+        
+        private func getDisplayedMessageId() -> UUID? {
+            return messageQueue.sync {
+                self.displayedMessageId
             }
         }
 
@@ -32,6 +40,7 @@
         internal func dismissMessage() {
             messageQueue.async {
                 self.isMsgDisplayed = false
+                self.displayedMessageId = nil
             }
         }
 
@@ -54,16 +63,35 @@
 
             // Change message monitor to display
             displayMessage()
+            
+            // if this is a FullscreenMessage, set the ID
+            if let fullscreenMessage = message as? FullscreenMessage {
+                messageQueue.sync {
+                    // set this on message queue
+                    displayedMessageId = fullscreenMessage.id
+                }
+            }
 
             return (true, nil)
         }
 
         internal func dismiss() -> Bool {
+            return dismiss(nil)
+        }
+        
+        internal func dismiss(_ message: Showable?) -> Bool {
             if !isMessageDisplayed() {
                 Log.debug(label: self.LOG_PREFIX, "Message failed to be dismissed, nothing is currently displayed.")
                 return false
             }
-
+            
+            if let fullscreenMessage = message as? FullscreenMessage {
+                if getDisplayedMessageId() != fullscreenMessage.id {
+                    Log.debug(label: self.LOG_PREFIX, "Call to dismiss the message failed. Its identifier doesn't match the currently displayed message.")
+                    return false
+                }
+            }
+            
             // Change message visibility to dismiss
             dismissMessage()
 

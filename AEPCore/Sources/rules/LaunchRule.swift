@@ -17,9 +17,13 @@ import AEPRulesEngine
 public struct LaunchRule: Rule {
     public let condition: Evaluable
     public let consequences: [RuleConsequence]
+    
+    /// Metadata dictionary for the rule, containing additional rule properties
+    public let meta: [String: Any]?
 
-    init(condition: Evaluable, consequences: [RuleConsequence]) {
+    init(condition: Evaluable, consequences: [RuleConsequence], meta: [String: Any]? = nil) {
         self.condition = condition
         self.consequences = consequences
+        self.meta = meta
     }
 }

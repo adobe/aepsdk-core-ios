@@ -25,7 +25,12 @@
         private let TEMP_FILE_NAME = "temp"
         private let FIT_TO_CONTENT_HANDLER_NAME = "inAppContentHeightHandler"
         private let ANIMATION_DURATION = 0.3
-
+        
+        // MOB-24285
+        // for fullscreen messages, generate an ID which can be used to ensure that the only the currently
+        // displayed message can activate the dismissal code in the monitor when dismiss is called
+        let id = UUID()
+        
         /// Assignable in the constructor, `settings` control the layout and behavior of the message
         @objc
         public var settings: MessageSettings?
@@ -85,7 +90,7 @@
                     return
                 }
 
-                if self.messageMonitor.dismiss() == false {
+                if self.messageMonitor.dismiss(self) == false {
                     return
                 }
                 self.dismissWithAnimation(shouldDeallocateWebView: false)
@@ -250,7 +255,7 @@
                 self.windowFrameObserver = nil
                 self.observerSet = false
 
-                if self.messageMonitor.dismiss() == false {
+                if self.messageMonitor.dismiss(self) == false {
                     return
                 }
 
