@@ -160,6 +160,7 @@ commands:
 
 jobs:
   validate-code:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
 
@@ -177,6 +178,7 @@ jobs:
           command: make api-check
 
   test-ios-core:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -196,6 +198,7 @@ jobs:
           flag: aepcore-ios-tests
 
   test-ios-services:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -215,6 +218,7 @@ jobs:
           flag: aepservices-ios-tests
   
   test-ios-lifecycle:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -234,6 +238,7 @@ jobs:
           flag: aeplifecycle-ios-tests
 
   test-ios-identity:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -253,6 +258,7 @@ jobs:
           flag: aepidentity-ios-tests
 
   test-ios-signal:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -272,6 +278,7 @@ jobs:
           flag: aepsignal-ios-tests
 
   test-ios-integration:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -288,6 +295,7 @@ jobs:
           command: make integration-test
 
   test-tvos-core:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -307,6 +315,7 @@ jobs:
           flag: aepcore-tvos-tests
 
   test-tvos-services:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -326,6 +335,7 @@ jobs:
           flag: aepservices-tvos-tests
 
   test-tvos-lifecycle:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -345,6 +355,7 @@ jobs:
           flag: aeplifecycle-tvos-tests
 
   test-tvos-identity:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -364,6 +375,7 @@ jobs:
           flag: aepidentity-tvos-tests
 
   test-tvos-signal:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -383,6 +395,7 @@ jobs:
           flag: aepsignal-tvos-tests
 
   test-tvos-integration:
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
       
@@ -398,6 +411,7 @@ jobs:
           command: make integration-tvos-test
 
   test-spm-podspec-archive:  
+    resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
     
