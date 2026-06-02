@@ -32,6 +32,7 @@ enum CoreConstants {
         static let SET_PUSH_IDENTIFIER = "Set Push Identifier"
         static let SET_ADVERTISING_IDENTIFIER = "Set Advertising Identifier"
         static let RESET_IDENTITIES_REQUEST = "Reset Identities Request"
+        static let UPDATE_PROFILE_ATTRIBUTES = "Update Profile Attributes"
     }
 
     enum Keys {
@@ -58,6 +59,10 @@ enum CoreConstants {
     enum DataStoreKeys {
         static let PERSISTED_OVERRIDDEN_CONFIG = "config.overridden.map"
         static let PERSISTED_APPID = "config.appid"
+    }
+
+    enum ProfileAttributeKeys {
+        static let TIMEZONE = "timezone"
     }
 
     enum Privacy {
