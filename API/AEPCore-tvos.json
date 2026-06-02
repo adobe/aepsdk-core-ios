@@ -1422,6 +1422,62 @@
           },
           {
             "kind": "Function",
+            "name": "updateProfileAttributes",
+            "printedName": "updateProfileAttributes(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "NSTimeZone",
+                "printedName": "Foundation.NSTimeZone",
+                "usr": "c:objc(cs)NSTimeZone"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AEPCore@objc(cs)AEPMobileCore(cm)updateProfileAttributesWithTimeZone:",
+            "mangledName": "$s7AEPCore10MobileCoreC23updateProfileAttributesyySo10NSTimeZoneCFZ",
+            "moduleName": "AEPCore",
+            "static": true,
+            "objc_name": "updateProfileAttributesWithTimeZone:",
+            "declAttributes": [
+              "Final",
+              "ObjC"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "updateProfileAttributes",
+            "printedName": "updateProfileAttributes()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ProfileAttributesBuilder",
+                "printedName": "AEPCore.ProfileAttributesBuilder",
+                "usr": "s:7AEPCore24ProfileAttributesBuilderC"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7AEPCore10MobileCoreC23updateProfileAttributesAA0eF7BuilderCyFZ",
+            "mangledName": "$s7AEPCore10MobileCoreC23updateProfileAttributesAA0eF7BuilderCyFZ",
+            "moduleName": "AEPCore",
+            "static": true,
+            "intro_iOS": "12.0",
+            "intro_tvOS": "12.0",
+            "declAttributes": [
+              "Final",
+              "DiscardableResult",
+              "Available",
+              "Available"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
             "name": "setPushIdentifier",
             "printedName": "setPushIdentifier(_:)",
             "children": [
@@ -2278,6 +2334,105 @@
             "printedName": "CustomDebugStringConvertible",
             "usr": "s:s28CustomDebugStringConvertibleP",
             "mangledName": "$ss28CustomDebugStringConvertibleP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "ProfileAttributesBuilder",
+        "printedName": "ProfileAttributesBuilder",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ProfileAttributesBuilder",
+                "printedName": "AEPCore.ProfileAttributesBuilder",
+                "usr": "s:7AEPCore24ProfileAttributesBuilderC"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:7AEPCore24ProfileAttributesBuilderCACycfc",
+            "mangledName": "$s7AEPCore24ProfileAttributesBuilderCACycfc",
+            "moduleName": "AEPCore",
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "setTimezone",
+            "printedName": "setTimezone(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "DynamicSelf",
+                "printedName": "Self"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TimeZone",
+                "printedName": "Foundation.TimeZone",
+                "usr": "s:10Foundation8TimeZoneV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXD10Foundation8TimeZoneVF",
+            "mangledName": "$s7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXD10Foundation8TimeZoneVF",
+            "moduleName": "AEPCore",
+            "declAttributes": [
+              "Final",
+              "DiscardableResult"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "send",
+            "printedName": "send()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7AEPCore24ProfileAttributesBuilderC4sendyyF",
+            "mangledName": "$s7AEPCore24ProfileAttributesBuilderC4sendyyF",
+            "moduleName": "AEPCore",
+            "declAttributes": [
+              "Final"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:7AEPCore24ProfileAttributesBuilderC",
+        "mangledName": "$s7AEPCore24ProfileAttributesBuilderC",
+        "moduleName": "AEPCore",
+        "intro_iOS": "12.0",
+        "intro_tvOS": "12.0",
+        "declAttributes": [
+          "Final",
+          "Available",
+          "Available"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
           }
         ]
       },
@@ -7157,6 +7312,58 @@
                 "declKind": "Accessor",
                 "usr": "c:@M@AEPCore@objc(cs)AEPEventType(cm)genericIdentity",
                 "mangledName": "$s7AEPCore9EventTypeC15genericIdentitySSvgZ",
+                "moduleName": "AEPCore",
+                "static": true,
+                "implicit": true,
+                "declAttributes": [
+                  "Final",
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "genericProfileAttributes",
+            "printedName": "genericProfileAttributes",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPCore@objc(cs)AEPEventType(cpy)genericProfileAttributes",
+            "mangledName": "$s7AEPCore9EventTypeC24genericProfileAttributesSSvpZ",
+            "moduleName": "AEPCore",
+            "static": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "ObjC"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPCore@objc(cs)AEPEventType(cm)genericProfileAttributes",
+                "mangledName": "$s7AEPCore9EventTypeC24genericProfileAttributesSSvgZ",
                 "moduleName": "AEPCore",
                 "static": true,
                 "implicit": true,

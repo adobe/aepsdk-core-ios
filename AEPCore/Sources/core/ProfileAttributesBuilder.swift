@@ -17,6 +17,7 @@ import Foundation
 /// ```swift
 /// MobileCore.updateProfileAttributes().setTimezone(tz).send()
 /// ```
+@available(iOS 12.0, tvOS 12.0, *)
 public final class ProfileAttributesBuilder {
 
     private var timezone: TimeZone?

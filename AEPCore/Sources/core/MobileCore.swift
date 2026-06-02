@@ -210,6 +210,7 @@ public final class MobileCore: NSObject {
     /// ```swift
     /// MobileCore.updateProfileAttributes().setTimezone(tz).send()
     /// ```
+    @available(iOS 12.0, tvOS 12.0, *)
     @discardableResult
     public static func updateProfileAttributes() -> ProfileAttributesBuilder {
         return ProfileAttributesBuilder()

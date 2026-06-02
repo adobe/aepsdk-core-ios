@@ -74,7 +74,6 @@
 		241D9B392E73429900969B09 /* EventHistoryConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B382E73428D00969B09 /* EventHistoryConstants.swift */; };
 		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
 		2438B92A29BF906F001D6F3A /* rules_testTimestampu.json in Resources */ = {isa = PBXBuildFile; fileRef = 2438B92929BF906F001D6F3A /* rules_testTimestampu.json */; };
-		REEVALUABLE0001 /* rules_reevaluable.json in Resources */ = {isa = PBXBuildFile; fileRef = REEVALUABLE0002 /* rules_reevaluable.json */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
 		243DCE4824C7AA7C00E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		245292632CA2199E00820CD4 /* PresentationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245292622CA2199400820CD4 /* PresentationErrorTests.swift */; };
@@ -266,8 +265,6 @@
 		3FB66AD724CA004400502CAF /* EventListenerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB124CA004400502CAF /* EventListenerContainer.swift */; };
 		3FB66AD824CA004400502CAF /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB224CA004400502CAF /* Extension.swift */; };
 		3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB424CA004400502CAF /* LaunchRule.swift */; };
-		AABB00DD24CA004400REEVAL /* LaunchRule+Reevaluable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */; };
-		AABB00EE24CA004400INTCPT /* RuleReevaluationInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00FF24CA004400INTCPT /* RuleReevaluationInterceptor.swift */; };
 		3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB524CA004400502CAF /* RulesDownloader.swift */; };
 		3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */; };
 		3FB66ADC24CA004400502CAF /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB724CA004400502CAF /* RulesLoader.swift */; };
@@ -504,6 +501,8 @@
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		A992DAF6408E4EF7F6023F33 /* Pods_AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 561016C58C744A0F4899C05C /* Pods_AEPLifecycle.framework */; };
+		AABB00DD24CA004400REEVAL /* LaunchRule+Reevaluable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */; };
+		AABB00EE24CA004400INTCPT /* RuleReevaluationInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00FF24CA004400INTCPT /* RuleReevaluationInterceptor.swift */; };
 		AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */; };
 		ACC7A9762A0EA51F001A04FB /* EventHistoryIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */; };
 		ACC7A97B2A12AF9D001A04FB /* rules_attach.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC7A9792A12AF9D001A04FB /* rules_attach.json */; };
@@ -559,6 +558,8 @@
 		BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */; };
 		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
 		BFFD6ECE2D4C94D7000D3224 /* MobileCoreInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */; };
+		USERATTS1111BILD00001111 /* ProfileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = USERATTS1111FILE00001111 /* ProfileAttributes.swift */; };
+		USERATTS2222BILD00002222 /* ProfileAttributesBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = USERATTS2222FILE00002222 /* ProfileAttributesBuilder.swift */; };
 		BFFD6ED02D5575D4000D3224 /* MobileCoreInitializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */; };
 		C0FC8CAF8ADDBE9FBAE4C374 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
@@ -566,6 +567,7 @@
 		D42C98A026CCB024002E3184 /* XDMEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */; };
 		E1D4AFEFF51B009BFC7BDF9E /* Pods_AEPSignalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 109359E45EEAE020AB32E187 /* Pods_AEPSignalTests.framework */; };
 		F3E5DC536F16C910B482CBE8 /* Pods_AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F45189B63F077DD02E531C58 /* Pods_AEPCoreMocks.framework */; };
+		REEVALUABLE0001 /* rules_reevaluable.json in Resources */ = {isa = PBXBuildFile; fileRef = REEVALUABLE0002 /* rules_reevaluable.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -856,7 +858,6 @@
 		241D9B382E73428D00969B09 /* EventHistoryConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryConstants.swift; sourceTree = "<group>"; };
 		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
 		2438B92929BF906F001D6F3A /* rules_testTimestampu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testTimestampu.json; sourceTree = "<group>"; };
-		REEVALUABLE0002 /* rules_reevaluable.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_reevaluable.json; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
 		245292622CA2199400820CD4 /* PresentationErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationErrorTests.swift; sourceTree = "<group>"; };
 		24543A1324E1DAFC002D8D9A /* MockURLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLService.swift; path = AEPServices/Mocks/MockURLService.swift; sourceTree = SOURCE_ROOT; };
@@ -1059,8 +1060,6 @@
 		3FB66AB124CA004400502CAF /* EventListenerContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListenerContainer.swift; sourceTree = "<group>"; };
 		3FB66AB224CA004400502CAF /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		3FB66AB424CA004400502CAF /* LaunchRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchRule.swift; sourceTree = "<group>"; };
-		AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LaunchRule+Reevaluable.swift"; sourceTree = "<group>"; };
-		AABB00FF24CA004400INTCPT /* RuleReevaluationInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RuleReevaluationInterceptor.swift; sourceTree = "<group>"; };
 		3FB66AB524CA004400502CAF /* RulesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloader.swift; sourceTree = "<group>"; };
 		3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchRulesEngine.swift; sourceTree = "<group>"; };
 		3FB66AB724CA004400502CAF /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
@@ -1276,6 +1275,8 @@
 		A6A5961CCE6FC2BC3C4808A0 /* Pods-AEPLifecycle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycle.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycle/Pods-AEPLifecycle.debug.xcconfig"; sourceTree = "<group>"; };
 		AA406DB9C15FB845D1DE51F0 /* Pods-AEPLifecycle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycle.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycle/Pods-AEPLifecycle.release.xcconfig"; sourceTree = "<group>"; };
 		AA4461A0B65C5DFE219540A5 /* Pods-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.release.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.release.xcconfig"; sourceTree = "<group>"; };
+		AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LaunchRule+Reevaluable.swift"; sourceTree = "<group>"; };
+		AABB00FF24CA004400INTCPT /* RuleReevaluationInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RuleReevaluationInterceptor.swift; sourceTree = "<group>"; };
 		AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDMLanguage.swift; sourceTree = "<group>"; };
 		AC4D8D4526D9AC0200A86435 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		AC838996795DECE800B0A11B /* Pods-AEPIdentityTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.release.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1334,6 +1335,8 @@
 		BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_dispatch_consequence.json; sourceTree = "<group>"; };
 		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
 		BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializer.swift; sourceTree = "<group>"; };
+		USERATTS1111FILE00001111 /* ProfileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAttributes.swift; sourceTree = "<group>"; };
+		USERATTS2222FILE00002222 /* ProfileAttributesBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAttributesBuilder.swift; sourceTree = "<group>"; };
 		BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializerTests.swift; sourceTree = "<group>"; };
 		CBB1F735C1AAEA1CD448B2C0 /* Pods-AEPLifecycleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CEA4853D9F0F29877DDF2DFD /* Pods-AEPCoreMocks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreMocks.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreMocks/Pods-AEPCoreMocks.release.xcconfig"; sourceTree = "<group>"; };
@@ -1343,6 +1346,7 @@
 		DDC41D5506BEDFEC2A9D479C /* Pods_AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F45189B63F077DD02E531C58 /* Pods_AEPCoreMocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCoreMocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7A9CEC59D6694933A01324 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
+		REEVALUABLE0002 /* rules_reevaluable.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_reevaluable.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2184,7 +2188,9 @@
 				BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */,
 				75FC60E929AD45C200EB7579 /* InitOptions.swift */,
 				7522C4832C233ACD004AF637 /* Event+Debug.swift */,
-			);
+				USERATTS1111FILE00001111 /* ProfileAttributes.swift */,
+				USERATTS2222FILE00002222 /* ProfileAttributesBuilder.swift */,
+				);
 			path = core;
 			sourceTree = "<group>";
 		};
@@ -3128,13 +3134,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3149,13 +3151,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3214,13 +3212,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3279,13 +3273,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3344,13 +3334,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3646,7 +3632,9 @@
 				3FB66AE824CA004400502CAF /* Cacheable.swift in Sources */,
 				3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */,
 				BFFD6ECE2D4C94D7000D3224 /* MobileCoreInitializer.swift in Sources */,
-				3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,
+				USERATTS1111BILD00001111 /* ProfileAttributes.swift in Sources */,
+				USERATTS2222BILD00002222 /* ProfileAttributesBuilder.swift in Sources */,
+					3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,
 				3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */,
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
