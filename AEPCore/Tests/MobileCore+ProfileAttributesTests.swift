@@ -91,4 +91,25 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
         XCTAssertTrue(returned === builder, "setTimezone must return self for chaining")
     }
 
+    /// The event type + source is the contract AEPEdgeIdentity's listener is registered against.
+    /// If either drifts, EdgeIdentity silently stops receiving timezone updates.
+    func testSetTimezoneEventTypeAndSource() {
+        let expectation = XCTestExpectation(description: "Event has the type/source EdgeIdentity listens for")
+
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
+            type: EventType.genericProfileAttributes, source: EventSource.requestContent
+        ) { event in
+            XCTAssertEqual(event.type, EventType.genericProfileAttributes)
+            XCTAssertEqual(event.source, EventSource.requestContent)
+            expectation.fulfill()
+        }
+
+        MobileCore.updateProfileAttributes().setTimezone(TimeZone(identifier: "Europe/London")!)
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func testUpdateProfileAttributesReturnsBuilder() {
+        XCTAssertNotNil(MobileCore.updateProfileAttributes())
+    }
+
 }
