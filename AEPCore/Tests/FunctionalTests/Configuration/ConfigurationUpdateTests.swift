@@ -51,6 +51,15 @@ class ConfigurationUpdateTests: XCTestCase {
 
     override func tearDown() {
         NamedCollectionDataStore.clear()
+        ServiceProvider.shared.reset()
+    }
+
+    /// Builds a `MockSystemInfoService` whose bundled-asset lookup resolves the test bundle's
+    /// `ADBMobileConfig-rules.zip`, mirroring what `Bundle.main` provides in a real app.
+    private func makeSystemInfoServiceWithBundledRules() -> MockSystemInfoService {
+        let systemInfoService = MockSystemInfoService()
+        systemInfoService.assetURL = Bundle(for: type(of: self)).url(forResource: RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME, withExtension: "zip")
+        return systemInfoService
     }
 
     // MARK: update shared state tests
@@ -302,6 +311,56 @@ class ConfigurationUpdateTests: XCTestCase {
         XCTAssertEqual("update2", mockRuntime.createdSharedStates[2]?["analytics.server"] as? String)
         XCTAssertEqual("newValue", mockRuntime.createdSharedStates[2]?["newKey"] as? String)
         XCTAssertNil(mockRuntime.createdSharedStates[2]?["shouldNotExist"] as? String)
+    }
+
+    // MARK: bundled rules loading tests
+
+    /// Verifies that bundled rules are loaded during onRegistered when no rules.url is set in config.
+    /// This matches Android SDK behavior where bundled rules load regardless of whether rules.url is configured.
+    func testOnRegisteredLoadsBundledRulesWhenNoRulesURL() {
+        // Setup: persist a config without rules.url via updateConfig
+        setUpForUpdate()
+        let configWithoutRulesURL = ["global.privacy": "optedin"]
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: configWithoutRulesURL))
+
+        // Resolve bundled rules from the test bundle (Bundle.main is the test runner here)
+        ServiceProvider.shared.systemInfoService = makeSystemInfoServiceWithBundledRules()
+
+        // Simulate reboot
+        mockRuntime = TestableExtensionRuntime()
+        configuration = Configuration(runtime: mockRuntime)
+
+        // Test: onRegistered should load bundled rules even without rules.url
+        configuration.onRegistered()
+
+        // Verify: a rulesEngine requestReset event is dispatched when bundled rules are successfully loaded
+        let rulesResetEvents = mockRuntime.dispatchedEvents.filter {
+            $0.type == EventType.rulesEngine && $0.source == EventSource.requestReset
+        }
+        XCTAssertFalse(rulesResetEvents.isEmpty, "Bundled rules should be loaded when no rules.url is set in config")
+    }
+
+    /// Verifies that when rules.url is set in config, the cache is tried first and bundled rules are
+    /// only loaded as a fallback (when no cached rules are found). This preserves existing behavior.
+    func testOnRegisteredTriesCacheBeforeBundledRulesWhenRulesURLPresent() {
+        // Setup: the mockConfig already has rules.url set
+        setupWithCachedConfig()
+
+        // Resolve bundled rules from the test bundle (set after setupWithCachedConfig, which resets ServiceProvider)
+        ServiceProvider.shared.systemInfoService = makeSystemInfoServiceWithBundledRules()
+
+        // Simulate reboot with manifest bundle set
+        mockRuntime = TestableExtensionRuntime()
+        configuration = Configuration(runtime: mockRuntime)
+
+        // Test: onRegistered should try cache first when rules.url is set (no cache = fall back to bundled)
+        configuration.onRegistered()
+
+        // Verify: a rulesEngine requestReset event is dispatched (bundled rules loaded as fallback since no cached rules)
+        let rulesResetEvents = mockRuntime.dispatchedEvents.filter {
+            $0.type == EventType.rulesEngine && $0.source == EventSource.requestReset
+        }
+        XCTAssertFalse(rulesResetEvents.isEmpty, "Bundled rules should be loaded as fallback when cache is empty")
     }
 
     static func createConfigUpdateEvent(configDict: [String: Any]) -> Event {

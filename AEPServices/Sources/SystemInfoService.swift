@@ -31,6 +31,12 @@ public protocol SystemInfoService {
     ///  - Return: `[UInt8]?` representation of the asset
     func getAsset(fileName: String, fileType: String) -> [UInt8]?
 
+    /// Gets the file URL for a bundled asset
+    ///  - Parameter fileName: The asset's name
+    ///  - Parameter fileType: The file's extension e.g "zip", "json"
+    ///  - Return: `URL?` to the bundled asset, or nil if not found
+    func getAssetURL(fileName: String, fileType: String) -> URL?
+
     /// Gets the device name
     /// - Return: `String` the device name
     func getDeviceName() -> String

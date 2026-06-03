@@ -70,6 +70,14 @@ class ApplicationSystemInfoService: SystemInfoService {
         return nil
     }
 
+    func getAssetURL(fileName: String, fileType: String) -> URL? {
+        if fileName.isEmpty {
+            return nil
+        }
+
+        return bundle.url(forResource: fileName, withExtension: fileType)
+    }
+
     func getDefaultUserAgent() -> String {
         // Ensure the lazy variable is initialized correctly during concurrent API calls.
         queue.sync {

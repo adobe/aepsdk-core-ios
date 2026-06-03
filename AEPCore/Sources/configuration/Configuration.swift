@@ -61,11 +61,19 @@ class Configuration: NSObject, Extension {
             if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
                 Log.trace(label: name, "Reading rules from cache for URL: \(rulesURLString)")
                 if !rulesEngine.replaceRulesWithCache(from: rulesURLString) {
-                    if let url = Bundle.main.url(forResource: RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME, withExtension: "zip") {
-                        // Attempt to load rules from manifest if none in cache
+                    Log.debug(label: name, "No cached rules found for URL: \(rulesURLString), attempting to load bundled rules as fallback.")
+                    if let url = ServiceProvider.shared.systemInfoService.getAssetURL(fileName: RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME, fileType: "zip") {
+                        Log.trace(label: name, "Loading bundled rules from manifest at: \(url.absoluteString)")
                         rulesEngine.replaceRulesWithManifest(from: url)
+                    } else {
+                        Log.debug(label: name, "No bundled rules (\(RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME).zip) found in the app bundle, skipping bundled rules load.")
                     }
                 }
+            } else if let url = ServiceProvider.shared.systemInfoService.getAssetURL(fileName: RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME, fileType: "zip") {
+                Log.trace(label: name, "No rules URL configured, loading bundled rules from manifest at: \(url.absoluteString)")
+                rulesEngine.replaceRulesWithManifest(from: url)
+            } else {
+                Log.trace(label: name, "No rules URL configured and no bundled rules found in the app bundle, skipping rules load.")
             }
         }
     }
