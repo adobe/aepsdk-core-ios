@@ -50,22 +50,23 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             }
         }
 
-        MobileCore.updateProfileAttributes().setTimezone("America/Los_Angeles")
+        MobileCore.updateProfileAttributes().setTimezone(TimeZone(identifier: "America/Los_Angeles")!)
         wait(for: [expectation], timeout: 1.0)
     }
 
     func testSetTimezoneEventContainsIdentifier() {
         let expectation = XCTestExpectation(description: "Event data contains correct timezone identifier")
+        let zone = TimeZone(identifier: "Asia/Kolkata")!
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
             type: EventType.genericProfileAttributes, source: EventSource.requestContent
         ) { event in
             guard let tz = event.data?[CoreConstants.ProfileAttributeKeys.TIMEZONE] as? String else { return }
-            XCTAssertEqual(tz, "Asia/Kolkata")
+            XCTAssertEqual(tz, zone.identifier)
             expectation.fulfill()
         }
 
-        MobileCore.updateProfileAttributes().setTimezone("Asia/Kolkata")
+        MobileCore.updateProfileAttributes().setTimezone(zone)
         wait(for: [expectation], timeout: 1.0)
     }
 
@@ -79,25 +80,14 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             expectation.fulfill()
         }
 
-        MobileCore.updateProfileAttributes().setTimezone("America/Chicago")
+        MobileCore.updateProfileAttributes().setTimezone(TimeZone(identifier: "America/Chicago")!)
         wait(for: [expectation], timeout: 1.0)
-    }
-
-    func testSetTimezoneNoOpWhenEmpty() {
-        let notExpected = XCTestExpectation(description: "No event for empty string")
-        notExpected.isInverted = true
-
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
-            type: EventType.genericProfileAttributes, source: EventSource.requestContent
-        ) { _ in notExpected.fulfill() }
-
-        MobileCore.updateProfileAttributes().setTimezone("")
-        wait(for: [notExpected], timeout: 0.3)
     }
 
     func testBuilderIsChainable() {
         let builder = MobileCore.updateProfileAttributes()
-        let returned = builder.setTimezone("Asia/Tokyo")
+        let zone = TimeZone(identifier: "Asia/Tokyo")!
+        let returned = builder.setTimezone(zone)
         XCTAssertTrue(returned === builder, "setTimezone must return self for chaining")
     }
 

@@ -21,18 +21,15 @@ public final class ProfileAttributesBuilder {
 
     public init() {}
 
-    /// Syncs the given IANA timezone identifier to the Edge Network immediately.
-    /// - Parameter timezone: An IANA timezone identifier string (e.g. `"America/New_York"`).
+    /// Syncs the given timezone to the Edge Network immediately.
+    /// - Parameter timezone: A `TimeZone` value whose IANA identifier is sent to Edge.
     /// - Returns: `self` for chaining.
     @discardableResult
-    public func setTimezone(_ timezone: String) -> Self {
-        guard !timezone.isEmpty else {
-            return self
-        }
+    public func setTimezone(_ timezone: TimeZone) -> Self {
         let event = Event(name: CoreConstants.EventNames.UPDATE_PROFILE_ATTRIBUTES,
                           type: EventType.genericProfileAttributes,
                           source: EventSource.requestContent,
-                          data: [CoreConstants.ProfileAttributeKeys.TIMEZONE: timezone])
+                          data: [CoreConstants.ProfileAttributeKeys.TIMEZONE: timezone.identifier])
         MobileCore.dispatch(event: event)
         return self
     }

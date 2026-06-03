@@ -2339,14 +2339,14 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
+                "name": "TimeZone",
+                "printedName": "Foundation.TimeZone",
+                "usr": "s:10Foundation8TimeZoneV"
               }
             ],
             "declKind": "Func",
-            "usr": "s:7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXDSSF",
-            "mangledName": "$s7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXDSSF",
+            "usr": "s:7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXD10Foundation8TimeZoneVF",
+            "mangledName": "$s7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXD10Foundation8TimeZoneVF",
             "moduleName": "AEPCore",
             "declAttributes": [
               "Final",
