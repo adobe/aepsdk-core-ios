@@ -13,32 +13,27 @@
 import Foundation
 
 /// Fluent builder for syncing profile attributes to the Adobe Edge Network.
-/// Chain setters then call `.send()` to dispatch all accumulated attributes as one Edge event:
+///
 /// ```swift
-/// MobileCore.updateProfileAttributes().setTimezone(tz).send()
+/// MobileCore.updateProfileAttributes().setTimezone("America/New_York")
 /// ```
-@available(iOS 12.0, tvOS 12.0, *)
 public final class ProfileAttributesBuilder {
-
-    private var timezone: TimeZone?
 
     public init() {}
 
-    /// Sets the timezone to sync. Chain with `.send()` to dispatch.
-    /// - Parameter value: The `TimeZone` to sync. Must be supplied explicitly by the caller.
+    /// Syncs the given IANA timezone identifier to the Edge Network immediately.
+    /// - Parameter timezone: An IANA timezone identifier string (e.g. `"America/New_York"`).
     /// - Returns: `self` for chaining.
     @discardableResult
-    public func setTimezone(_ value: TimeZone) -> Self {
-        self.timezone = value
+    public func setTimezone(_ timezone: String) -> Self {
+        guard !timezone.isEmpty else {
+            return self
+        }
+        let event = Event(name: CoreConstants.EventNames.UPDATE_PROFILE_ATTRIBUTES,
+                          type: EventType.genericProfileAttributes,
+                          source: EventSource.requestContent,
+                          data: [CoreConstants.ProfileAttributeKeys.TIMEZONE: timezone])
+        MobileCore.dispatch(event: event)
         return self
-    }
-
-    /// Dispatches all accumulated profile attributes to the Edge Network.
-    public func send() {
-        MobileCore.updateProfileAttributes(build())
-    }
-
-    func build() -> ProfileAttributes {
-        ProfileAttributes(timezone: timezone)
     }
 }

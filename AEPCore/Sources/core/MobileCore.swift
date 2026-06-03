@@ -183,34 +183,11 @@ public final class MobileCore: NSObject {
         MobileCore.dispatch(event: event)
     }
 
-    static func updateProfileAttributes(_ attributes: ProfileAttributes) {
-        var data: [String: Any] = [:]
-        if let tz = attributes.timezone {
-            data[CoreConstants.ProfileAttributeKeys.TIMEZONE] = tz.identifier
-        }
-        guard !data.isEmpty else {
-            Log.trace(label: LOG_TAG, "updateProfileAttributes - no attributes to sync, skipping dispatch.")
-            return
-        }
-        let event = Event(name: CoreConstants.EventNames.UPDATE_PROFILE_ATTRIBUTES,
-                          type: EventType.genericProfileAttributes,
-                          source: EventSource.requestContent,
-                          data: data)
-        MobileCore.dispatch(event: event)
-    }
-
-    /// Objective-C overload — accepts an `NSTimeZone` directly.
-    @objc(updateProfileAttributesWithTimeZone:)
-    public static func updateProfileAttributes(_ timeZone: NSTimeZone) {
-        updateProfileAttributes(.timezone(timeZone as TimeZone))
-    }
-
     /// Returns a builder for syncing profile attributes to the Edge Network.
-    /// Chain attribute setters then call `.send()` to dispatch:
+    /// Chain attribute setters — each setter dispatches immediately:
     /// ```swift
-    /// MobileCore.updateProfileAttributes().setTimezone(tz).send()
+    /// MobileCore.updateProfileAttributes().setTimezone("America/New_York")
     /// ```
-    @available(iOS 12.0, tvOS 12.0, *)
     @discardableResult
     public static func updateProfileAttributes() -> ProfileAttributesBuilder {
         return ProfileAttributesBuilder()

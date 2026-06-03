@@ -36,17 +36,10 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
         semaphore.wait()
     }
 
-    // MARK: - ProfileAttributesBuilder
+    // MARK: - updateProfileAttributes().setTimezone()
 
-    func testBuilderDefaultProducesNilTimezone() {
-        let attrs = ProfileAttributesBuilder().build()
-        XCTAssertNil(attrs.timezone)
-    }
-
-    // MARK: - updateProfileAttributes dispatches genericProfileAttributes event
-
-    func testUpdateProfileAttributesDispatchesEvent() {
-        let expectation = XCTestExpectation(description: "genericProfileAttributes event dispatched for timezone")
+    func testSetTimezoneDispatchesEvent() {
+        let expectation = XCTestExpectation(description: "genericProfileAttributes event dispatched")
         expectation.assertForOverFulfill = true
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
@@ -57,39 +50,26 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             }
         }
 
-        MobileCore.updateProfileAttributes(.timezone(TimeZone(identifier: "America/Los_Angeles")!))
+        MobileCore.updateProfileAttributes().setTimezone("America/Los_Angeles")
         wait(for: [expectation], timeout: 1.0)
     }
 
-    func testUpdateProfileAttributesNoOpWhenNilTimezone() {
-        let notExpected = XCTestExpectation(description: "No event should be dispatched for empty attributes")
-        notExpected.isInverted = true
-
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
-            type: EventType.genericProfileAttributes, source: EventSource.requestContent
-        ) { _ in notExpected.fulfill() }
-
-        MobileCore.updateProfileAttributes(ProfileAttributesBuilder().build())
-        wait(for: [notExpected], timeout: 0.3)
-    }
-
-    func testUpdateProfileAttributesEventContainsTimezoneIdentifier() {
-        let expectation = XCTestExpectation(description: "Event data contains timezone identifier")
-        let zone = TimeZone(identifier: "Asia/Kolkata")!
+    func testSetTimezoneEventContainsIdentifier() {
+        let expectation = XCTestExpectation(description: "Event data contains correct timezone identifier")
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
             type: EventType.genericProfileAttributes, source: EventSource.requestContent
         ) { event in
             guard let tz = event.data?[CoreConstants.ProfileAttributeKeys.TIMEZONE] as? String else { return }
-            XCTAssertEqual(tz, zone.identifier)
+            XCTAssertEqual(tz, "Asia/Kolkata")
             expectation.fulfill()
         }
 
-        MobileCore.updateProfileAttributes(.timezone(zone))
+        MobileCore.updateProfileAttributes().setTimezone("Asia/Kolkata")
         wait(for: [expectation], timeout: 1.0)
     }
 
-    func testUpdateProfileAttributesEventName() {
+    func testSetTimezoneEventName() {
         let expectation = XCTestExpectation(description: "Event has correct name")
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
@@ -99,52 +79,26 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             expectation.fulfill()
         }
 
-        MobileCore.updateProfileAttributes(.timezone(TimeZone(identifier: "America/Chicago")!))
+        MobileCore.updateProfileAttributes().setTimezone("America/Chicago")
         wait(for: [expectation], timeout: 1.0)
     }
 
-    // MARK: - Chained builder API
-
-    func testChainedBuilderSetTimezoneDispatchesEvent() {
-        let expectation = XCTestExpectation(description: "Chained builder dispatches genericProfileAttributes event")
-        expectation.assertForOverFulfill = true
-        let zone = TimeZone(identifier: "Asia/Tokyo")!
-
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
-            type: EventType.genericProfileAttributes, source: EventSource.requestContent
-        ) { event in
-            if let tz = event.data?[CoreConstants.ProfileAttributeKeys.TIMEZONE] as? String,
-               tz == zone.identifier {
-                expectation.fulfill()
-            }
-        }
-
-        MobileCore.updateProfileAttributes().setTimezone(zone).send()
-        wait(for: [expectation], timeout: 1.0)
-    }
-
-    func testChainedBuilderNoOpWhenSendNotCalled() {
-        let notExpected = XCTestExpectation(description: "No event when send() is not called")
+    func testSetTimezoneNoOpWhenEmpty() {
+        let notExpected = XCTestExpectation(description: "No event for empty string")
         notExpected.isInverted = true
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
             type: EventType.genericProfileAttributes, source: EventSource.requestContent
         ) { _ in notExpected.fulfill() }
 
-        MobileCore.updateProfileAttributes().setTimezone(TimeZone(identifier: "Asia/Tokyo")!)
+        MobileCore.updateProfileAttributes().setTimezone("")
         wait(for: [notExpected], timeout: 0.3)
     }
 
-    func testChainedBuilderNoOpWhenNoSetterCalled() {
-        let notExpected = XCTestExpectation(description: "No event when no setter called")
-        notExpected.isInverted = true
-
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(
-            type: EventType.genericProfileAttributes, source: EventSource.requestContent
-        ) { _ in notExpected.fulfill() }
-
-        MobileCore.updateProfileAttributes().send()
-        wait(for: [notExpected], timeout: 0.3)
+    func testBuilderIsChainable() {
+        let builder = MobileCore.updateProfileAttributes()
+        let returned = builder.setTimezone("Asia/Tokyo")
+        XCTAssertTrue(returned === builder, "setTimezone must return self for chaining")
     }
 
 }

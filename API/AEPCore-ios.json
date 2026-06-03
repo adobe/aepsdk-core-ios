@@ -1491,35 +1491,6 @@
           {
             "kind": "Function",
             "name": "updateProfileAttributes",
-            "printedName": "updateProfileAttributes(_:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "NSTimeZone",
-                "printedName": "Foundation.NSTimeZone",
-                "usr": "c:objc(cs)NSTimeZone"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "c:@M@AEPCore@objc(cs)AEPMobileCore(cm)updateProfileAttributesWithTimeZone:",
-            "mangledName": "$s7AEPCore10MobileCoreC23updateProfileAttributesyySo10NSTimeZoneCFZ",
-            "moduleName": "AEPCore",
-            "static": true,
-            "objc_name": "updateProfileAttributesWithTimeZone:",
-            "declAttributes": [
-              "Final",
-              "ObjC"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "updateProfileAttributes",
             "printedName": "updateProfileAttributes()",
             "children": [
               {
@@ -1534,13 +1505,9 @@
             "mangledName": "$s7AEPCore10MobileCoreC23updateProfileAttributesAA0eF7BuilderCyFZ",
             "moduleName": "AEPCore",
             "static": true,
-            "intro_iOS": "12.0",
-            "intro_tvOS": "12.0",
             "declAttributes": [
               "Final",
-              "DiscardableResult",
-              "Available",
-              "Available"
+              "DiscardableResult"
             ],
             "funcSelfKind": "NonMutating"
           },
@@ -2440,38 +2407,18 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "TimeZone",
-                "printedName": "Foundation.TimeZone",
-                "usr": "s:10Foundation8TimeZoneV"
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
               }
             ],
             "declKind": "Func",
-            "usr": "s:7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXD10Foundation8TimeZoneVF",
-            "mangledName": "$s7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXD10Foundation8TimeZoneVF",
+            "usr": "s:7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXDSSF",
+            "mangledName": "$s7AEPCore24ProfileAttributesBuilderC11setTimezoneyACXDSSF",
             "moduleName": "AEPCore",
             "declAttributes": [
               "Final",
               "DiscardableResult"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "send",
-            "printedName": "send()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:7AEPCore24ProfileAttributesBuilderC4sendyyF",
-            "mangledName": "$s7AEPCore24ProfileAttributesBuilderC4sendyyF",
-            "moduleName": "AEPCore",
-            "declAttributes": [
-              "Final"
             ],
             "funcSelfKind": "NonMutating"
           }
@@ -2480,12 +2427,8 @@
         "usr": "s:7AEPCore24ProfileAttributesBuilderC",
         "mangledName": "$s7AEPCore24ProfileAttributesBuilderC",
         "moduleName": "AEPCore",
-        "intro_iOS": "12.0",
-        "intro_tvOS": "12.0",
         "declAttributes": [
-          "Final",
-          "Available",
-          "Available"
+          "Final"
         ],
         "conformances": [
           {
