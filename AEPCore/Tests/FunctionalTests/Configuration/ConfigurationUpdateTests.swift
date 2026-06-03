@@ -51,16 +51,11 @@ class ConfigurationUpdateTests: XCTestCase {
 
     override func tearDown() {
         NamedCollectionDataStore.clear()
-        ServiceProvider.shared.reset()
     }
 
-    /// Builds a `MockSystemInfoService` whose bundled-asset lookup resolves the test bundle's
-    /// `ADBMobileConfig-rules.zip`, mirroring what `Bundle.main` provides in a real app.
-    private func makeSystemInfoServiceWithBundledRules() -> MockSystemInfoService {
-        let systemInfoService = MockSystemInfoService()
-        systemInfoService.assetURL = Bundle(for: type(of: self)).url(forResource: RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME, withExtension: "zip")
-        return systemInfoService
-    }
+    /// The test bundle containing `ADBMobileConfig-rules.zip`, used to inject bundled rules into
+    /// `Configuration` in place of `Bundle.main` (which is the test runner here).
+    private var rulesBundle: Bundle { Bundle(for: type(of: self)) }
 
     // MARK: update shared state tests
 
@@ -323,12 +318,9 @@ class ConfigurationUpdateTests: XCTestCase {
         let configWithoutRulesURL = ["global.privacy": "optedin"]
         mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: configWithoutRulesURL))
 
-        // Resolve bundled rules from the test bundle (Bundle.main is the test runner here)
-        ServiceProvider.shared.systemInfoService = makeSystemInfoServiceWithBundledRules()
-
-        // Simulate reboot
+        // Simulate reboot, injecting the test bundle that contains the bundled rules zip
         mockRuntime = TestableExtensionRuntime()
-        configuration = Configuration(runtime: mockRuntime)
+        configuration = Configuration(runtime: mockRuntime, rulesBundle: rulesBundle)
 
         // Test: onRegistered should load bundled rules even without rules.url
         configuration.onRegistered()
@@ -346,12 +338,9 @@ class ConfigurationUpdateTests: XCTestCase {
         // Setup: the mockConfig already has rules.url set
         setupWithCachedConfig()
 
-        // Resolve bundled rules from the test bundle (set after setupWithCachedConfig, which resets ServiceProvider)
-        ServiceProvider.shared.systemInfoService = makeSystemInfoServiceWithBundledRules()
-
-        // Simulate reboot with manifest bundle set
+        // Simulate reboot, injecting the test bundle that contains the bundled rules zip
         mockRuntime = TestableExtensionRuntime()
-        configuration = Configuration(runtime: mockRuntime)
+        configuration = Configuration(runtime: mockRuntime, rulesBundle: rulesBundle)
 
         // Test: onRegistered should try cache first when rules.url is set (no cache = fall back to bundled)
         configuration.onRegistered()

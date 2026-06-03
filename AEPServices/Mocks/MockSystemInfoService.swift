@@ -52,11 +52,6 @@ public class MockSystemInfoService: SystemInfoService {
         return assetImage
     }
 
-    public var assetURL: URL?
-    public func getAssetURL(fileName _: String, fileType _: String) -> URL? {
-        return assetURL
-    }
-
     public var defaultUserAgent = ""
     public func getDefaultUserAgent() -> String {
         return defaultUserAgent
