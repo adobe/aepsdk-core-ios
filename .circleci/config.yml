@@ -68,6 +68,7 @@ workflows:
               only:
                 - main
                 - staging
+                - dev-v5.9.0
 
 commands: 
   install_dependencies:
