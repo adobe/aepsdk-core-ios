@@ -50,6 +50,7 @@ final class MobileCoreInitializer {
 
         if initialized.incrementAndGet() != 1 {
             Log.debug(label: LOG_TAG, "initialize - ignoring as it was already called.")
+            completion?()
             return
         }
 
