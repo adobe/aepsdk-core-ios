@@ -99,12 +99,14 @@ class MobileCoreInitializerTests: XCTestCase {
 
         wait(for: [expectation], timeout: 10)
 
-        // Second call, callback is not called
+        // Second call, callback is still invoked so callers are not left hanging
+        let secondCallExpectation = XCTestExpectation(description: "Completion closure is invoked on subsequent calls to initialize().")
+        secondCallExpectation.assertForOverFulfill = true
         MobileCore.initialize(options: options) {
-            XCTFail("Completion closure should not be called from subsequent calls to initialize().")
+            secondCallExpectation.fulfill()
         }
 
-        sleep(1) // wait as callback to second initialize call is not called
+        wait(for: [secondCallExpectation], timeout: 10)
 
         let eventHubState = EventHub.shared.getSharedState(extensionName: EventHubConstants.NAME, event: nil)?.value
 
@@ -118,6 +120,75 @@ class MobileCoreInitializerTests: XCTestCase {
         XCTAssertTrue(registeredExtensions.keys.contains { $0 == "com.adobe.module.configuration" })
         XCTAssertTrue(registeredExtensions.keys.contains { $0 == "com.adobe.mockExtension" })
         XCTAssertFalse(registeredExtensions.keys.contains { $0 == "com.adobe.mockExtensionTwo" })
+    }
+
+    func testInitializeSecondCallInvokesCompletionWithoutReRunningInitialization() {
+        let firstCallExpectation = XCTestExpectation(description: "First initialize completion is invoked")
+        firstCallExpectation.assertForOverFulfill = true
+
+        var finderExecutionCount = 0
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
+            finderExecutionCount += 1
+            return [MockExtension.self]
+        })
+
+        MobileCore.initialize(options: InitOptions()) {
+            firstCallExpectation.fulfill()
+        }
+        wait(for: [firstCallExpectation], timeout: 10)
+
+        // Second call: completion must still fire, but extensionFinder must not run again
+        let secondCallExpectation = XCTestExpectation(description: "Second initialize completion is invoked")
+        secondCallExpectation.assertForOverFulfill = true
+        MobileCore.initialize(options: InitOptions()) {
+            secondCallExpectation.fulfill()
+        }
+        wait(for: [secondCallExpectation], timeout: 10)
+
+        XCTAssertEqual(1, finderExecutionCount, "extensionFinder should only run once across multiple initialize calls.")
+    }
+
+    func testInitializeSubsequentCallsAllInvokeCompletion() {
+        let firstCallExpectation = XCTestExpectation(description: "First initialize completion is invoked")
+        firstCallExpectation.assertForOverFulfill = true
+
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
+            return [MockExtension.self]
+        })
+
+        MobileCore.initialize(options: InitOptions()) {
+            firstCallExpectation.fulfill()
+        }
+        wait(for: [firstCallExpectation], timeout: 10)
+
+        // Every subsequent call should invoke its completion
+        let subsequentExpectation = XCTestExpectation(description: "All subsequent initialize completions are invoked")
+        subsequentExpectation.expectedFulfillmentCount = 3
+        subsequentExpectation.assertForOverFulfill = true
+
+        for _ in 0..<3 {
+            MobileCore.initialize(options: InitOptions()) {
+                subsequentExpectation.fulfill()
+            }
+        }
+        wait(for: [subsequentExpectation], timeout: 10)
+    }
+
+    func testInitializeSecondCallWithNilCompletionDoesNotCrash() {
+        let firstCallExpectation = XCTestExpectation(description: "First initialize completion is invoked")
+        firstCallExpectation.assertForOverFulfill = true
+
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
+            return [MockExtension.self]
+        })
+
+        MobileCore.initialize(options: InitOptions()) {
+            firstCallExpectation.fulfill()
+        }
+        wait(for: [firstCallExpectation], timeout: 10)
+
+        // Second call with no completion should be a safe no-op
+        MobileCore.initialize(options: InitOptions())
     }
 
     func testInitializeCallsConfigWithAppId() {
