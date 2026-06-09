@@ -13,6 +13,7 @@
 import Foundation
 
 /// Value type carrying profile attributes to sync to the Edge Network.
+@available(iOS 12.0, tvOS 12.0, *)
 public struct ProfileAttributes {
     public let timezone: TimeZone?
 

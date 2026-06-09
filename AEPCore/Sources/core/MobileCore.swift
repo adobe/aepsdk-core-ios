@@ -186,7 +186,7 @@ public final class MobileCore: NSObject {
     /// Returns a builder for syncing profile attributes to the Edge Network.
     /// Chain attribute setters — each setter dispatches immediately:
     /// ```swift
-    /// MobileCore.updateProfileAttributes().setTimezone("America/New_York")
+    /// MobileCore.updateProfileAttributes().setTimezone(TimeZone(identifier: "America/New_York")!)
     /// ```
     @discardableResult
     public static func updateProfileAttributes() -> ProfileAttributesBuilder {
