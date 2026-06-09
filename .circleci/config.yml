@@ -158,6 +158,7 @@ commands:
           flags: << parameters.flag >>
           upload_name: << parameters.flag >>
           disable_search: true
+          fail_ci_if_error: false
 
 jobs:
   validate-code:
