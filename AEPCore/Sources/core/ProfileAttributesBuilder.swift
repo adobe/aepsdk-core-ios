@@ -15,7 +15,7 @@ import Foundation
 /// Fluent builder for syncing profile attributes to the Adobe Edge Network.
 ///
 /// ```swift
-/// MobileCore.updateProfileAttributes().setTimezone("America/New_York")
+/// MobileCore.updateProfileAttributes().setTimezone(tz)
 /// ```
 public final class ProfileAttributesBuilder {
 

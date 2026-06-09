@@ -62,7 +62,7 @@ enum CoreConstants {
     }
 
     enum ProfileAttributeKeys {
-        static let TIMEZONE = "timezone"
+        static let TIMEZONE = "timeZone"
     }
 
     enum Privacy {

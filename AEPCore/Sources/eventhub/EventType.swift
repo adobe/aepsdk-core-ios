@@ -28,7 +28,7 @@ public class EventType: NSObject {
     public static let edgeMedia = "com.adobe.eventType.edgeMedia"
     public static let genericData = "com.adobe.eventType.generic.data"
     public static let genericIdentity = "com.adobe.eventType.generic.identity"
-    public static let genericProfileAttributes = "com.adobe.eventType.generic.profileAttributes"
+    public static let genericProfileAttributes = "com.adobe.eventType.profileAttribute"
     public static let genericLifecycle = "com.adobe.eventType.generic.lifecycle"
     public static let genericPii = "com.adobe.eventType.generic.pii"
     public static let genericTrack = "com.adobe.eventType.generic.track"

@@ -12,15 +12,11 @@
 
 import Foundation
 
-/// Internal value type carrying profile attributes to sync. Built by `ProfileAttributesBuilder`.
-struct ProfileAttributes {
-    let timezone: TimeZone?
+/// Value type carrying profile attributes to sync to the Edge Network.
+public struct ProfileAttributes {
+    public let timezone: TimeZone?
 
-    init(timezone: TimeZone? = nil) {
+    public init(timezone: TimeZone? = nil) {
         self.timezone = timezone
-    }
-
-    static func timezone(_ value: TimeZone) -> ProfileAttributes {
-        ProfileAttributes(timezone: value)
     }
 }
