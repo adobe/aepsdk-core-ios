@@ -1437,9 +1437,13 @@
             "mangledName": "$s7AEPCore10MobileCoreC23updateProfileAttributesAA0eF7BuilderCyFZ",
             "moduleName": "AEPCore",
             "static": true,
+            "intro_iOS": "12.0",
+            "intro_tvOS": "12.0",
             "declAttributes": [
               "Final",
-              "DiscardableResult"
+              "DiscardableResult",
+              "Available",
+              "Available"
             ],
             "funcSelfKind": "NonMutating"
           },
@@ -2484,8 +2488,12 @@
         "usr": "s:7AEPCore24ProfileAttributesBuilderC",
         "mangledName": "$s7AEPCore24ProfileAttributesBuilderC",
         "moduleName": "AEPCore",
+        "intro_iOS": "12.0",
+        "intro_tvOS": "12.0",
         "declAttributes": [
-          "Final"
+          "Final",
+          "Available",
+          "Available"
         ],
         "conformances": [
           {

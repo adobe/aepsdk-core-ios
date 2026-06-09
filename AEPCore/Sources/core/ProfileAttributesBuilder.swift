@@ -17,6 +17,7 @@ import Foundation
 /// ```swift
 /// MobileCore.updateProfileAttributes().setTimezone(tz)
 /// ```
+@available(iOS 12.0, tvOS 12.0, *)
 public final class ProfileAttributesBuilder {
 
     public init() {}
