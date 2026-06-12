@@ -9,29 +9,3 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-
-import Foundation
-
-/// Fluent builder for syncing profile attributes to the Adobe Edge Network.
-///
-/// ```swift
-/// MobileCore.updateProfileAttributes().setTimezone(tz)
-/// ```
-@available(iOS 12.0, tvOS 12.0, *)
-public final class ProfileAttributesBuilder {
-
-    public init() {}
-
-    /// Syncs the given timezone to the Edge Network immediately.
-    /// - Parameter timezone: A `TimeZone` value whose IANA identifier is sent to Edge.
-    /// - Returns: `self` for chaining.
-    @discardableResult
-    public func setTimezone(_ timezone: TimeZone) -> Self {
-        let event = Event(name: CoreConstants.EventNames.UPDATE_PROFILE_ATTRIBUTES,
-                          type: EventType.genericProfileAttributes,
-                          source: EventSource.requestContent,
-                          data: [CoreConstants.ProfileAttributeKeys.TIMEZONE: timezone.identifier])
-        MobileCore.dispatch(event: event)
-        return self
-    }
-}

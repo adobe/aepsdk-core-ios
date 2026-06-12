@@ -183,15 +183,32 @@ public final class MobileCore: NSObject {
         MobileCore.dispatch(event: event)
     }
 
-    /// Returns a builder for syncing profile attributes to the Edge Network.
-    /// Chain attribute setters — each setter dispatches immediately:
+    /// Syncs the supplied profile attributes to the Adobe Edge Network.
+    ///
+    /// Build a `ProfileAttributes` value using `ProfileAttributes.Builder`, then pass it here:
     /// ```swift
-    /// MobileCore.updateProfileAttributes().setTimezone(TimeZone(identifier: "America/New_York")!)
+    /// let attributes = ProfileAttributes.Builder()
+    ///     .setTimezone(TimeZone(identifier: "America/New_York"))
+    ///     .build()
+    /// MobileCore.updateProfileAttributes(attributes)
     /// ```
+    /// If no attributes were set on the builder, no event is dispatched.
     @available(iOS 12.0, tvOS 12.0, *)
-    @discardableResult
-    public static func updateProfileAttributes() -> ProfileAttributesBuilder {
-        return ProfileAttributesBuilder()
+    public static func updateProfileAttributes(_ attributes: ProfileAttributes) {
+        var eventData: [String: Any] = [:]
+        if let tz = attributes.timeZone {
+            eventData[CoreConstants.ProfileAttributeKeys.TIMEZONE] = tz.identifier
+        }
+        guard !eventData.isEmpty else {
+            Log.debug(label: LOG_TAG,
+                      "updateProfileAttributes - no attributes set, skipping dispatch")
+            return
+        }
+        let event = Event(name: CoreConstants.EventNames.UPDATE_PROFILE_ATTRIBUTES,
+                          type: EventType.genericProfileAttributes,
+                          source: EventSource.requestContent,
+                          data: eventData)
+        MobileCore.dispatch(event: event)
     }
 
     /// Submits a generic event containing the provided push token with event type `generic.identity`.
