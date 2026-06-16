@@ -561,7 +561,6 @@
 		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
 		BFFD6ECE2D4C94D7000D3224 /* MobileCoreInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */; };
 		USERATTS1111BILD00001111 /* ProfileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = USERATTS1111FILE00001111 /* ProfileAttributes.swift */; };
-		USERATTS2222BILD00002222 /* ProfileAttributesBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = USERATTS2222FILE00002222 /* ProfileAttributesBuilder.swift */; };
 		BFFD6ED02D5575D4000D3224 /* MobileCoreInitializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */; };
 		C0FC8CAF8ADDBE9FBAE4C374 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
@@ -1340,7 +1339,6 @@
 		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
 		BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializer.swift; sourceTree = "<group>"; };
 		USERATTS1111FILE00001111 /* ProfileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAttributes.swift; sourceTree = "<group>"; };
-		USERATTS2222FILE00002222 /* ProfileAttributesBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAttributesBuilder.swift; sourceTree = "<group>"; };
 		BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializerTests.swift; sourceTree = "<group>"; };
 		CBB1F735C1AAEA1CD448B2C0 /* Pods-AEPLifecycleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CEA4853D9F0F29877DDF2DFD /* Pods-AEPCoreMocks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreMocks.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreMocks/Pods-AEPCoreMocks.release.xcconfig"; sourceTree = "<group>"; };
@@ -2195,7 +2193,6 @@
 				75FC60E929AD45C200EB7579 /* InitOptions.swift */,
 				7522C4832C233ACD004AF637 /* Event+Debug.swift */,
 				USERATTS1111FILE00001111 /* ProfileAttributes.swift */,
-				USERATTS2222FILE00002222 /* ProfileAttributesBuilder.swift */,
 				);
 			path = core;
 			sourceTree = "<group>";
@@ -3640,7 +3637,6 @@
 				3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */,
 				BFFD6ECE2D4C94D7000D3224 /* MobileCoreInitializer.swift in Sources */,
 				USERATTS1111BILD00001111 /* ProfileAttributes.swift in Sources */,
-				USERATTS2222BILD00002222 /* ProfileAttributesBuilder.swift in Sources */,
 					3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,
 				3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */,
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,

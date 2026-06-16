@@ -34,7 +34,7 @@ public struct ProfileAttributes {
     /// Fluent builder for `ProfileAttributes`.
     public final class Builder {
 
-        private var timeZone: TimeZone?
+        fileprivate var timeZone: TimeZone?
 
         public init() {}
 

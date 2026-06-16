@@ -281,5 +281,4 @@ public final class MobileCore: NSObject {
         let event = Event(name: CoreConstants.EventNames.COLLECT_PII, type: EventType.genericPii, source: EventSource.requestContent, data: eventData)
         MobileCore.dispatch(event: event)
     }
-
 }
