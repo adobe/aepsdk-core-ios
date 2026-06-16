@@ -2377,109 +2377,37 @@
             ]
           },
           {
-            "kind": "TypeDecl",
-            "name": "Builder",
-            "printedName": "Builder",
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(timeZone:)",
             "children": [
               {
-                "kind": "Constructor",
-                "name": "init",
-                "printedName": "init()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Builder",
-                    "printedName": "AEPCore.ProfileAttributes.Builder",
-                    "usr": "s:7AEPCore17ProfileAttributesV7BuilderC"
-                  }
-                ],
-                "declKind": "Constructor",
-                "usr": "s:7AEPCore17ProfileAttributesV7BuilderCAEycfc",
-                "mangledName": "$s7AEPCore17ProfileAttributesV7BuilderCAEycfc",
-                "moduleName": "AEPCore",
-                "init_kind": "Designated"
+                "kind": "TypeNominal",
+                "name": "ProfileAttributes",
+                "printedName": "AEPCore.ProfileAttributes",
+                "usr": "s:7AEPCore17ProfileAttributesV"
               },
               {
-                "kind": "Function",
-                "name": "setTimezone",
-                "printedName": "setTimezone(_:)",
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Foundation.TimeZone?",
                 "children": [
                   {
                     "kind": "TypeNominal",
-                    "name": "Builder",
-                    "printedName": "AEPCore.ProfileAttributes.Builder",
-                    "usr": "s:7AEPCore17ProfileAttributesV7BuilderC"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "Foundation.TimeZone?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "TimeZone",
-                        "printedName": "Foundation.TimeZone",
-                        "usr": "s:10Foundation8TimeZoneV"
-                      }
-                    ],
-                    "usr": "s:Sq"
+                    "name": "TimeZone",
+                    "printedName": "Foundation.TimeZone",
+                    "usr": "s:10Foundation8TimeZoneV"
                   }
                 ],
-                "declKind": "Func",
-                "usr": "s:7AEPCore17ProfileAttributesV7BuilderC11setTimezoneyAE10Foundation8TimeZoneVSgF",
-                "mangledName": "$s7AEPCore17ProfileAttributesV7BuilderC11setTimezoneyAE10Foundation8TimeZoneVSgF",
-                "moduleName": "AEPCore",
-                "declAttributes": [
-                  "Final",
-                  "DiscardableResult"
-                ],
-                "funcSelfKind": "NonMutating"
-              },
-              {
-                "kind": "Function",
-                "name": "build",
-                "printedName": "build()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "ProfileAttributes",
-                    "printedName": "AEPCore.ProfileAttributes",
-                    "usr": "s:7AEPCore17ProfileAttributesV"
-                  }
-                ],
-                "declKind": "Func",
-                "usr": "s:7AEPCore17ProfileAttributesV7BuilderC5buildACyF",
-                "mangledName": "$s7AEPCore17ProfileAttributesV7BuilderC5buildACyF",
-                "moduleName": "AEPCore",
-                "declAttributes": [
-                  "Final"
-                ],
-                "funcSelfKind": "NonMutating"
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
               }
             ],
-            "declKind": "Class",
-            "usr": "s:7AEPCore17ProfileAttributesV7BuilderC",
-            "mangledName": "$s7AEPCore17ProfileAttributesV7BuilderC",
+            "declKind": "Constructor",
+            "usr": "s:7AEPCore17ProfileAttributesV8timeZoneAC10Foundation04TimeE0VSg_tcfc",
+            "mangledName": "$s7AEPCore17ProfileAttributesV8timeZoneAC10Foundation04TimeE0VSg_tcfc",
             "moduleName": "AEPCore",
-            "declAttributes": [
-              "Final"
-            ],
-            "conformances": [
-              {
-                "kind": "Conformance",
-                "name": "Copyable",
-                "printedName": "Copyable",
-                "usr": "s:s8CopyableP",
-                "mangledName": "$ss8CopyableP"
-              },
-              {
-                "kind": "Conformance",
-                "name": "Escapable",
-                "printedName": "Escapable",
-                "usr": "s:s9EscapableP",
-                "mangledName": "$ss9EscapableP"
-              }
-            ]
+            "init_kind": "Designated"
           }
         ],
         "declKind": "Struct",

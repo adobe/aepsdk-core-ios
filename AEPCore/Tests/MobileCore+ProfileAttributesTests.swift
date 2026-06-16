@@ -51,10 +51,9 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             }
         }
 
-        let attributes = ProfileAttributes.Builder()
-            .setTimezone(TimeZone(identifier: "America/Los_Angeles"))
-            .build()
-        MobileCore.updateProfileAttributes(attributes)
+        MobileCore.updateProfileAttributes(
+            ProfileAttributes(timeZone: TimeZone(identifier: "America/Los_Angeles"))
+        )
         wait(for: [expectation], timeout: 1.0)
     }
 
@@ -70,10 +69,7 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             expectation.fulfill()
         }
 
-        let attributes = ProfileAttributes.Builder()
-            .setTimezone(zone)
-            .build()
-        MobileCore.updateProfileAttributes(attributes)
+        MobileCore.updateProfileAttributes(ProfileAttributes(timeZone: zone))
         wait(for: [expectation], timeout: 1.0)
     }
 
@@ -87,10 +83,9 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             expectation.fulfill()
         }
 
-        let attributes = ProfileAttributes.Builder()
-            .setTimezone(TimeZone(identifier: "America/Chicago"))
-            .build()
-        MobileCore.updateProfileAttributes(attributes)
+        MobileCore.updateProfileAttributes(
+            ProfileAttributes(timeZone: TimeZone(identifier: "America/Chicago"))
+        )
         wait(for: [expectation], timeout: 1.0)
     }
 
@@ -105,10 +100,9 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             expectation.fulfill()
         }
 
-        let attributes = ProfileAttributes.Builder()
-            .setTimezone(TimeZone(identifier: "Europe/London"))
-            .build()
-        MobileCore.updateProfileAttributes(attributes)
+        MobileCore.updateProfileAttributes(
+            ProfileAttributes(timeZone: TimeZone(identifier: "Europe/London"))
+        )
         wait(for: [expectation], timeout: 1.0)
     }
 
@@ -120,8 +114,7 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
             eventDispatched = true
         }
 
-        let attributes = ProfileAttributes.Builder().build()
-        MobileCore.updateProfileAttributes(attributes)
+        MobileCore.updateProfileAttributes(ProfileAttributes())
 
         // Allow time for any spurious dispatch
         let waiter = XCTestExpectation(description: "wait")
@@ -130,9 +123,8 @@ class MobileCore_ProfileAttributesTests: XCTestCase {
         XCTAssertFalse(eventDispatched, "No event should be dispatched when no attributes are set")
     }
 
-    func testBuilderSetterIsChainable() {
-        let builder = ProfileAttributes.Builder()
-        let returned = builder.setTimezone(TimeZone(identifier: "Asia/Tokyo"))
-        XCTAssertTrue(returned === builder, "setTimezone must return self for chaining")
+    func testDefaultInitializerLeavesTimeZoneUnset() {
+        let attributes = ProfileAttributes()
+        XCTAssertNil(attributes.timeZone)
     }
 }

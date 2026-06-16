@@ -185,14 +185,12 @@ public final class MobileCore: NSObject {
 
     /// Syncs the supplied profile attributes to the Adobe Edge Network.
     ///
-    /// Build a `ProfileAttributes` value using `ProfileAttributes.Builder`, then pass it here:
     /// ```swift
-    /// let attributes = ProfileAttributes.Builder()
-    ///     .setTimezone(TimeZone(identifier: "America/New_York"))
-    ///     .build()
-    /// MobileCore.updateProfileAttributes(attributes)
+    /// MobileCore.updateProfileAttributes(
+    ///     ProfileAttributes(timeZone: TimeZone(identifier: "America/New_York"))
+    /// )
     /// ```
-    /// If no attributes were set on the builder, no event is dispatched.
+    /// If no attributes were set, no event is dispatched.
     @available(iOS 12.0, tvOS 12.0, *)
     public static func updateProfileAttributes(_ attributes: ProfileAttributes) {
         var eventData: [String: Any] = [:]
