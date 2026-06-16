@@ -30,6 +30,9 @@ class IdentityIntegrationTests: TestBase {
 
     override func tearDown() {
         unregisterExtensionsAndReset()
+        // Drain async persistence work before clearing storage (see FileSystemNamedCollectionTest).
+        usleep(200_000)
+        NamedCollectionDataStore.clear()
     }
 
     func unregisterExtensionsAndReset() {
