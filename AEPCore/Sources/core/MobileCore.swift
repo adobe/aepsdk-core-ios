@@ -183,6 +183,32 @@ public final class MobileCore: NSObject {
         MobileCore.dispatch(event: event)
     }
 
+    /// Syncs the supplied profile attributes to the Adobe Edge Network.
+    ///
+    /// ```swift
+    /// MobileCore.updateProfileAttributes(
+    ///     ProfileAttributes(timeZone: TimeZone(identifier: "America/New_York"))
+    /// )
+    /// ```
+    /// If no attributes were set, no event is dispatched.
+    @available(iOS 12.0, tvOS 12.0, *)
+    public static func updateProfileAttributes(_ attributes: ProfileAttributes) {
+        var eventData: [String: Any] = [:]
+        if let tz = attributes.timeZone {
+            eventData[CoreConstants.ProfileAttributeKeys.TIMEZONE] = tz.identifier
+        }
+        guard !eventData.isEmpty else {
+            Log.debug(label: LOG_TAG,
+                      "updateProfileAttributes - no attributes set, skipping dispatch")
+            return
+        }
+        let event = Event(name: CoreConstants.EventNames.UPDATE_PROFILE_ATTRIBUTES,
+                          type: EventType.genericProfileAttributes,
+                          source: EventSource.requestContent,
+                          data: eventData)
+        MobileCore.dispatch(event: event)
+    }
+
     /// Submits a generic event containing the provided push token with event type `generic.identity`.
     /// - Parameter deviceToken: the device token for push notifications
     @objc(setPushIdentifier:)

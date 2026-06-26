@@ -19,6 +19,16 @@ import XCTest
 class FileSystemNamedCollectionTest: XCTestCase {
     let service = FileSystemNamedCollection()
 
+    override func setUp() {
+        NamedCollectionDataStore.clear()
+    }
+
+    override func tearDown() {
+        // Drain async queue: prevents pending writes from bleeding into the next test via a stale file snapshot.
+        _ = service.get(collectionName: "_teardown", key: "_teardown")
+        NamedCollectionDataStore.clear()
+    }
+
     func testSimpleStore() {
         let collectionName = "testName"
         let testKey = "testKey"
