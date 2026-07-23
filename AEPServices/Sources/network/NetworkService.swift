@@ -17,11 +17,134 @@ public enum NetworkServiceError: Error {
     case invalidUrl
 }
 
-class NetworkService: Networking {
+class NetworkService: Networking, NetworkAvailabilityProviding {
     private let LOG_PREFIX = "NetworkService"
 
     private var sessionsQueue = DispatchQueue(label: "com.adobe.networkService.sessions")
     private var sessions: [String: URLSession] = [:]
+
+    // MARK: - Network availability
+
+    private struct CachedHealthResult {
+        let isHealthy: Bool
+        let timestamp: Date
+
+        func isValid(for ttl: TimeInterval, at now: Date = Date()) -> Bool {
+            return now.timeIntervalSince(timestamp) < ttl
+        }
+    }
+
+    private let availabilityQueue = DispatchQueue(label: "com.adobe.networkService.availability")
+    private var pathProvider: NetworkPathAvailabilityProviding
+    private var customHealthCheckProvider: NetworkHealthCheckProviding?
+    private var cachedHealthResult: CachedHealthResult?
+
+    public var configuration: NetworkAvailabilityConfiguration {
+        didSet {
+            availabilityQueue.async {
+                self.cachedHealthResult = nil
+                self.customHealthCheckProvider = nil
+            }
+        }
+    }
+
+    public init() {
+        self.pathProvider = NetworkPathMonitorProvider()
+        self.configuration = NetworkAvailabilityConfiguration()
+    }
+
+    init(pathProvider: NetworkPathAvailabilityProviding) {
+        self.pathProvider = pathProvider
+        self.configuration = NetworkAvailabilityConfiguration()
+    }
+
+    public func isNetworkAvailable() -> Bool {
+        return availabilityQueue.sync {
+            guard pathProvider.isPathAvailable() else {
+                return false
+            }
+
+            guard let healthCheck = configuration.healthCheck else {
+                return true
+            }
+
+            guard configuration.requireHealthCheckWhenConfigured else {
+                return true
+            }
+
+            if let cachedHealthResult = cachedHealthResult,
+               cachedHealthResult.isValid(for: healthCheck.cacheTTL) {
+                return cachedHealthResult.isHealthy
+            }
+
+            return false
+        }
+    }
+
+    public func checkNetworkAvailability(completion: @escaping (NetworkAvailabilityResult) -> Void) {
+        availabilityQueue.async {
+            guard self.pathProvider.isPathAvailable() else {
+                completion(NetworkAvailabilityResult(status: .deviceOffline))
+                return
+            }
+
+            guard let healthCheck = self.configuration.healthCheck else {
+                completion(NetworkAvailabilityResult(status: .pathOnly))
+                return
+            }
+
+            if let cachedHealthResult = self.cachedHealthResult,
+               cachedHealthResult.isValid(for: healthCheck.cacheTTL) {
+                let status: NetworkAvailabilityStatus = cachedHealthResult.isHealthy ? .available : .healthCheckFailed
+                completion(NetworkAvailabilityResult(status: status))
+                return
+            }
+
+            let provider = self.resolvedHealthCheckProvider(for: healthCheck)
+            provider.performHealthCheck { isHealthy in
+                self.availabilityQueue.async {
+                    self.cachedHealthResult = CachedHealthResult(isHealthy: isHealthy, timestamp: Date())
+                    let status: NetworkAvailabilityStatus = isHealthy ? .available : .healthCheckFailed
+                    completion(NetworkAvailabilityResult(status: status))
+                }
+            }
+        }
+    }
+
+    public func setPathProvider(_ provider: NetworkPathAvailabilityProviding) {
+        availabilityQueue.async {
+            self.pathProvider = provider
+        }
+    }
+
+    public func setHealthCheckProvider(_ provider: NetworkHealthCheckProviding?) {
+        availabilityQueue.async {
+            self.customHealthCheckProvider = provider
+            self.cachedHealthResult = nil
+        }
+    }
+
+    public func resetToDefaults() {
+        availabilityQueue.async {
+            self.pathProvider = NetworkPathMonitorProvider()
+            self.customHealthCheckProvider = nil
+            self.cachedHealthResult = nil
+            self.configuration = NetworkAvailabilityConfiguration()
+        }
+    }
+
+    /// Builds the default HTTP health-check provider using `ServiceProvider.shared.networkService` — the same,
+    /// customer-overridable transport used by every other AEP extension — rather than `self` directly. This way,
+    /// a customer who overrides `ServiceProvider.shared.networkService` (see: overriding NetworkService) transparently
+    /// affects the health check too, instead of it silently escaping through the SDK's own default transport.
+    private func resolvedHealthCheckProvider(for healthCheck: NetworkHealthCheckConfiguration) -> NetworkHealthCheckProviding {
+        if let customHealthCheckProvider = customHealthCheckProvider {
+            return customHealthCheckProvider
+        }
+        return NetworkHealthCheckProvider(configuration: healthCheck)
+    }
+
+    // MARK: - HTTP
 
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
         if !networkRequest.url.absoluteString.starts(with: "https") {
