@@ -36,9 +36,7 @@ public class RealNetworkService: NetworkService {
         helper.orderedNetworkRequests.count
     }
 
-    public override init() {
-        super.init()
-    }
+    public override init() {}
 
     public override func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
         helper.recordSentNetworkRequest(networkRequest)
