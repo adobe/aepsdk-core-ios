@@ -38,9 +38,43 @@ final class NetworkPathMonitorProvider {
         }
     }
 
+    func connectionInfo() -> NetworkConnectionInfo {
+        if let provider = connectionInfoProvider {
+            return provider()
+        }
+        return queue.sync {
+            let path = monitor.currentPath
+            let available = path.status == .satisfied
+
+            let interfaceType: NetworkConnectionInfo.InterfaceType
+            if !available {
+                interfaceType = .unknown
+            } else if path.usesInterfaceType(.wifi) {
+                interfaceType = .wifi
+            } else if path.usesInterfaceType(.cellular) {
+                interfaceType = .cellular
+            } else if path.usesInterfaceType(.wiredEthernet) {
+                interfaceType = .wiredEthernet
+            } else {
+                interfaceType = .other
+            }
+
+            return NetworkConnectionInfo(
+                isAvailable: available,
+                interfaceType: interfaceType,
+                isConstrained: path.isConstrained,
+                isExpensive: path.isExpensive
+            )
+        }
+    }
+
     // MARK: - Test support
 
     /// Closure injected by unit tests to supply a deterministic path status.
     /// Always `nil` in production; tests set and reset this in `setUp`/`tearDown`.
     var pathStatusProvider: (() -> Bool)? = nil
+
+    /// Closure injected by unit tests to supply a deterministic `NetworkConnectionInfo`.
+    /// Always `nil` in production; tests set and reset this in `setUp`/`tearDown`.
+    var connectionInfoProvider: (() -> NetworkConnectionInfo)? = nil
 }

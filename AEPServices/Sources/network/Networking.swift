@@ -25,10 +25,25 @@ public protocol Networking {
     /// (see: overriding `NetworkService`, `ServiceProvider.shared.networkService`) to implement custom logic —
     /// for example, pinging your own backend's health endpoint instead of relying on device connectivity alone.
     func isNetworkAvailable() -> Bool
+
+    /// Returns a point-in-time snapshot of the device's network connection state.
+    ///
+    /// The default implementation reads from `NWPathMonitor.currentPath` synchronously — no HTTP
+    /// request is made and the call returns immediately. Override this in a custom `Networking`
+    /// conformer to supply your own values (for example, from a proprietary reachability library).
+    ///
+    /// Use `isNetworkAvailable()` for a simple yes/no guard. Use `networkConnectionInfo()` when
+    /// you need richer signal — interface type, Low Data Mode, or metered-link detection — to make
+    /// payload-sizing or deferral decisions.
+    func networkConnectionInfo() -> NetworkConnectionInfo
 }
 
 public extension Networking {
     func isNetworkAvailable() -> Bool {
         return NetworkPathMonitorProvider.shared.isPathAvailable()
+    }
+
+    func networkConnectionInfo() -> NetworkConnectionInfo {
+        return NetworkPathMonitorProvider.shared.connectionInfo()
     }
 }

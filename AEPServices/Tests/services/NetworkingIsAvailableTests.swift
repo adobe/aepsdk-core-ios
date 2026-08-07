@@ -58,6 +58,29 @@ class NetworkingIsAvailableTests: XCTestCase {
         func isNetworkAvailable() -> Bool { return overrideValue }
     }
 
+    /// A conformer that overrides `networkConnectionInfo()` with injected values —
+    /// demonstrates the documented custom-override path for richer connection state.
+    private class CustomConnectionInfoNetworking: Networking {
+        let info: NetworkConnectionInfo
+
+        init(info: NetworkConnectionInfo) { self.info = info }
+
+        func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {}
+
+        func networkConnectionInfo() -> NetworkConnectionInfo { return info }
+    }
+
+    /// Helper that builds a `NetworkConnectionInfo` for injection in tests.
+    private func makeInfo(available: Bool,
+                          interfaceType: NetworkConnectionInfo.InterfaceType = .unknown,
+                          isConstrained: Bool = false,
+                          isExpensive: Bool = false) -> NetworkConnectionInfo {
+        NetworkConnectionInfo(isAvailable: available,
+                              interfaceType: interfaceType,
+                              isConstrained: isConstrained,
+                              isExpensive: isExpensive)
+    }
+
     // MARK: - Default implementation: path status via NWPathMonitor
 
     func testDefaultImpl_satisfiedPath_returnsTrue() {
@@ -148,6 +171,88 @@ class NetworkingIsAvailableTests: XCTestCase {
 
         custom.overrideValue = true
         XCTAssertTrue(ServiceProvider.shared.networkService.isNetworkAvailable())
+    }
+
+    // MARK: - networkConnectionInfo: default implementation
+
+    func testConnectionInfo_defaultImpl_unavailable_returnsUnavailableWithUnknownType() {
+        NetworkPathMonitorProvider.shared.connectionInfoProvider = { [self] in
+            makeInfo(available: false, interfaceType: .unknown)
+        }
+        let info = MinimalNetworkingConformer().networkConnectionInfo()
+        XCTAssertFalse(info.isAvailable)
+        XCTAssertEqual(info.interfaceType, .unknown)
+    }
+
+    func testConnectionInfo_defaultImpl_wifi_returnsWifiType() {
+        NetworkPathMonitorProvider.shared.connectionInfoProvider = { [self] in
+            makeInfo(available: true, interfaceType: .wifi)
+        }
+        let info = MinimalNetworkingConformer().networkConnectionInfo()
+        XCTAssertTrue(info.isAvailable)
+        XCTAssertEqual(info.interfaceType, .wifi)
+    }
+
+    func testConnectionInfo_defaultImpl_cellular_returnsCellularType() {
+        NetworkPathMonitorProvider.shared.connectionInfoProvider = { [self] in
+            makeInfo(available: true, interfaceType: .cellular)
+        }
+        let info = MinimalNetworkingConformer().networkConnectionInfo()
+        XCTAssertTrue(info.isAvailable)
+        XCTAssertEqual(info.interfaceType, .cellular)
+    }
+
+    func testConnectionInfo_defaultImpl_constrained_returnsIsConstrainedTrue() {
+        NetworkPathMonitorProvider.shared.connectionInfoProvider = { [self] in
+            makeInfo(available: true, interfaceType: .wifi, isConstrained: true)
+        }
+        let info = MinimalNetworkingConformer().networkConnectionInfo()
+        XCTAssertTrue(info.isAvailable)
+        XCTAssertTrue(info.isConstrained,
+                      "Low Data Mode path must be reflected in isConstrained.")
+    }
+
+    func testConnectionInfo_defaultImpl_expensive_returnsIsExpensiveTrue() {
+        NetworkPathMonitorProvider.shared.connectionInfoProvider = { [self] in
+            makeInfo(available: true, interfaceType: .cellular, isExpensive: true)
+        }
+        let info = MinimalNetworkingConformer().networkConnectionInfo()
+        XCTAssertTrue(info.isExpensive,
+                      "Cellular / hotspot path must be reflected in isExpensive.")
+    }
+
+    func testConnectionInfo_defaultImpl_isAvailable_consistentWithIsNetworkAvailable() {
+        // isNetworkAvailable() and networkConnectionInfo().isAvailable must agree.
+        NetworkPathMonitorProvider.shared.pathStatusProvider = { true }
+        NetworkPathMonitorProvider.shared.connectionInfoProvider = { [self] in
+            makeInfo(available: true, interfaceType: .wifi)
+        }
+        let conformer = MinimalNetworkingConformer()
+        XCTAssertEqual(conformer.isNetworkAvailable(), conformer.networkConnectionInfo().isAvailable,
+                       "isNetworkAvailable() and networkConnectionInfo().isAvailable must be consistent.")
+    }
+
+    // MARK: - networkConnectionInfo: custom override
+
+    func testConnectionInfo_customOverride_isHonored() {
+        let expected = makeInfo(available: false, interfaceType: .unknown, isConstrained: true, isExpensive: false)
+        let custom = CustomConnectionInfoNetworking(info: expected)
+
+        let result = custom.networkConnectionInfo()
+        XCTAssertEqual(result.isAvailable, expected.isAvailable)
+        XCTAssertEqual(result.interfaceType, expected.interfaceType)
+        XCTAssertEqual(result.isConstrained, expected.isConstrained)
+        XCTAssertEqual(result.isExpensive, expected.isExpensive)
+    }
+
+    func testConnectionInfo_customOverride_isHonored_viaServiceProvider() {
+        let injected = makeInfo(available: true, interfaceType: .cellular, isExpensive: true)
+        ServiceProvider.shared.networkService = CustomConnectionInfoNetworking(info: injected)
+
+        let result = ServiceProvider.shared.networkService.networkConnectionInfo()
+        XCTAssertTrue(result.isAvailable)
+        XCTAssertEqual(result.interfaceType, .cellular)
+        XCTAssertTrue(result.isExpensive)
     }
 
     // MARK: - Transport behavior is unchanged
