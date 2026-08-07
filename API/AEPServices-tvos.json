@@ -7451,6 +7451,49 @@
             "protocolReq": true,
             "reqNewWitnessTableEntry": true,
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "isNetworkAvailable",
+            "printedName": "isNetworkAvailable()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices10NetworkingP18isNetworkAvailableSbyF",
+            "mangledName": "$s11AEPServices10NetworkingP18isNetworkAvailableSbyF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.Networking>",
+            "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "isNetworkAvailable",
+            "printedName": "isNetworkAvailable()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices10NetworkingPAAE18isNetworkAvailableSbyF",
+            "mangledName": "$s11AEPServices10NetworkingPAAE18isNetworkAvailableSbyF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.Networking>",
+            "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Protocol",
