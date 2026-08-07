@@ -40,7 +40,6 @@ public class ServiceProvider {
     private var defaultCacheService = DiskCacheService()
     private var overrideLoggingService: Logging?
     private var defaultLoggingService = LoggingService()
-    private var overrideNetworkAvailabilityService: NetworkAvailabilityProviding?
 
     // Don't allow init of ServiceProvider outside the class
     private init() {}
@@ -117,30 +116,6 @@ public class ServiceProvider {
         }
     }
 
-    /// Network availability service. Backed by the same `NetworkService` instance used for `networkService`
-    /// unless explicitly overridden, so HTTP and availability checks share one underlying object.
-    public var networkAvailabilityService: NetworkAvailabilityProviding {
-        get {
-            return queue.sync {
-                return overrideNetworkAvailabilityService
-                    ?? (overrideNetworkService as? NetworkAvailabilityProviding)
-                    ?? defaultNetworkService
-            }
-        }
-        set {
-            queue.async {
-                self.overrideNetworkAvailabilityService = newValue
-            }
-        }
-    }
-
-    public func resetNetworkAvailabilityService() {
-        queue.async {
-            self.overrideNetworkAvailabilityService = nil
-            self.defaultNetworkService.resetToDefaults()
-        }
-    }
-
     internal func reset() {
         queue.async {
             self.defaultSystemInfoService = ApplicationSystemInfoService()
@@ -159,7 +134,6 @@ public class ServiceProvider {
             self.overrideNetworkService = nil
             self.overrideCacheService = nil
             self.overrideLoggingService = nil
-            self.overrideNetworkAvailabilityService = nil
         }
     }
 }

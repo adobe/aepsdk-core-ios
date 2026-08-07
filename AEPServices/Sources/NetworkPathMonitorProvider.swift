@@ -13,18 +13,34 @@
 import Foundation
 import Network
 
-/// Default device path provider backed by `NWPathMonitor`.
-public class NetworkPathMonitorProvider: NetworkPathAvailabilityProviding {
+/// Default device path check backed by `NWPathMonitor`, used by `Networking`'s default
+/// `isNetworkAvailable()` implementation. A single shared, long-lived monitor is used (rather than
+/// creating a new one per call) so `currentPath` stays continuously up to date.
+final class NetworkPathMonitorProvider {
+    static let shared = NetworkPathMonitorProvider()
+
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "com.adobe.networkPathMonitor.queue")
 
-    public init() {
+    private init() {
         monitor.start(queue: queue)
     }
 
-    public func isPathAvailable() -> Bool {
+    func isPathAvailable() -> Bool {
+        // Test seam: when injected, overrides the real NWPathMonitor result so unit tests
+        // can exercise satisfied/unsatisfied/concurrent paths deterministically without a
+        // live network. Must be nil in all production code paths.
+        if let provider = pathStatusProvider {
+            return provider()
+        }
         return queue.sync {
             monitor.currentPath.status == .satisfied
         }
     }
+
+    // MARK: - Test support
+
+    /// Closure injected by unit tests to supply a deterministic path status.
+    /// Always `nil` in production; tests set and reset this in `setUp`/`tearDown`.
+    var pathStatusProvider: (() -> Bool)? = nil
 }

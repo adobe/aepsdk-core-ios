@@ -13,44 +13,20 @@
 import AEPServices
 import Foundation
 
-/// Public Mobile Core APIs for network availability checks used by apps and extensions.
+/// Public Mobile Core API for network availability checks used by apps and extensions.
+///
+/// There is no dedicated configuration API. If you need custom availability logic (for example, pinging your
+/// own backend's health endpoint instead of relying on device connectivity alone), implement your own
+/// `Networking` conformer, override `isNetworkAvailable()`, and register it via
+/// `ServiceProvider.shared.networkService = MyCustomNetworkOverride()` — the same, already-documented override
+/// point used for customizing HTTP transport (e.g. certificate pinning, corporate proxies).
 @objc
 public extension MobileCore {
-    /// Configures optional remote health checks layered on top of device path monitoring.
-    /// - Parameter configuration: Health endpoint and gating behavior.
-    @objc(setNetworkAvailabilityConfiguration:)
-    static func setNetworkAvailabilityConfiguration(_ configuration: NetworkAvailabilityConfiguration) {
-        networkAvailabilityService.configuration = configuration
-    }
-
-    /// Performs a fresh availability evaluation, including an optional remote health check.
-    /// - Parameter completion: Called on an arbitrary queue with the availability result.
-    @objc(checkNetworkAvailabilityWithCompletion:)
-    static func checkNetworkAvailability(completion: @escaping (NetworkAvailabilityResult) -> Void) {
-        networkAvailabilityService.checkNetworkAvailability(completion: completion)
-    }
-
-    /// Replaces the entire availability implementation. Use for advanced customer integrations.
-    /// - Parameter provider: Custom `NetworkAvailabilityProviding` implementation.
-    @objc(setNetworkAvailabilityProvider:)
-    static func setNetworkAvailabilityProvider(_ provider: NetworkAvailabilityProviding) {
-        ServiceProvider.shared.networkAvailabilityService = provider
-    }
-
-    /// Restores the default network availability service and clears cached health results.
-    @objc(resetNetworkAvailabilityProvider)
-    static func resetNetworkAvailabilityProvider() {
-        ServiceProvider.shared.resetNetworkAvailabilityService()
-    }
-
-    /// Returns a fast synchronous snapshot of whether network-bound SDK work should proceed.
-    /// Uses device path monitoring and, when configured with `requireHealthCheckWhenConfigured`, a cached health result.
+    /// Returns whether network-bound SDK work should proceed right now. Delegates to
+    /// `ServiceProvider.shared.networkService.isNetworkAvailable()`, so overriding `networkService` overrides
+    /// this too.
     @objc(isNetworkAvailable)
     static func isNetworkAvailable() -> Bool {
-        return ServiceProvider.shared.networkAvailabilityService.isNetworkAvailable()
-    }
-
-    private static var networkAvailabilityService: NetworkAvailabilityProviding {
-        return ServiceProvider.shared.networkAvailabilityService
+        return ServiceProvider.shared.networkService.isNetworkAvailable()
     }
 }

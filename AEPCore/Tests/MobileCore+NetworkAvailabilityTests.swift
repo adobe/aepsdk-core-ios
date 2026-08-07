@@ -11,49 +11,38 @@
  */
 
 @testable import AEPCore
-import AEPServices
-import AEPServicesMocks
+@testable import AEPServices
 import XCTest
 
 class MobileCoreNetworkAvailabilityTests: XCTestCase {
-    private var mockService: MockNetworkAvailabilityService!
+    /// A customer's custom `Networking` override implementing their own availability logic — the
+    /// documented pattern for customizing this (see: overriding `NetworkService`).
+    private class MockNetworking: Networking {
+        var isAvailable = true
+
+        func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {}
+
+        func isNetworkAvailable() -> Bool {
+            return isAvailable
+        }
+    }
+
+    private var mockNetworking: MockNetworking!
 
     override func setUp() {
-        mockService = MockNetworkAvailabilityService(isAvailable: true)
-        ServiceProvider.shared.networkAvailabilityService = mockService
+        mockNetworking = MockNetworking()
+        ServiceProvider.shared.networkService = mockNetworking
     }
 
     override func tearDown() {
-        MobileCore.resetNetworkAvailabilityProvider()
+        ServiceProvider.shared.reset()
     }
 
-    func testIsNetworkAvailable_delegatesToServiceProvider() {
-        mockService.isAvailable = false
+    func testIsNetworkAvailable_delegatesToServiceProviderNetworkService() {
+        mockNetworking.isAvailable = false
         XCTAssertFalse(MobileCore.isNetworkAvailable())
-    }
 
-    func testSetNetworkAvailabilityConfiguration_updatesServiceConfiguration() {
-        let endpoint = URL(string: "https://health.example.com/ping")!
-        let healthCheck = NetworkHealthCheckConfiguration(endpoint: endpoint)
-        let configuration = NetworkAvailabilityConfiguration(healthCheck: healthCheck, requireHealthCheckWhenConfigured: true)
-
-        MobileCore.setNetworkAvailabilityConfiguration(configuration)
-
-        XCTAssertEqual(endpoint, mockService.configuration.healthCheck?.endpoint)
-        XCTAssertTrue(mockService.configuration.requireHealthCheckWhenConfigured)
-    }
-
-    func testCheckNetworkAvailability_delegatesToServiceProvider() {
-        let expectation = expectation(description: "checkNetworkAvailability completion")
-        mockService.checkResult = NetworkAvailabilityResult(status: .healthCheckFailed)
-
-        MobileCore.checkNetworkAvailability { result in
-            XCTAssertEqual(.healthCheckFailed, result.status)
-            XCTAssertFalse(result.isAvailable)
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: 1.0)
-        XCTAssertEqual(1, mockService.checkCallCount)
+        mockNetworking.isAvailable = true
+        XCTAssertTrue(MobileCore.isNetworkAvailable())
     }
 }

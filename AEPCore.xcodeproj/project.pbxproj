@@ -163,16 +163,10 @@
 		3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */; };
 		3F0397DD24BE5FF30019F095 /* ApplicationSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */; };
 		3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */; };
-		B8A2C00124BE5FF30019F10 /* NetworkAvailabilityResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C00024BE5FF30019F10 /* NetworkAvailabilityResult.swift */; };
-		B8A2C00224BE5FF30019F11 /* NetworkAvailabilityConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C01024BE5FF30019F11 /* NetworkAvailabilityConfiguration.swift */; };
-		B8A2C00324BE5FF30019F12 /* NetworkAvailabilityProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C02024BE5FF30019F12 /* NetworkAvailabilityProviding.swift */; };
 		B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */; };
-		B8A2C00524BE5FF30019F14 /* NetworkHealthCheckProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C04024BE5FF30019F14 /* NetworkHealthCheckProvider.swift */; };
-		B8A2C00724BE5FF30019F16 /* NetworkServiceAvailabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C06024BE5FF30019F16 /* NetworkServiceAvailabilityTests.swift */; };
+		B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */; };
 		B8A2C00824BE5FF30019F17 /* MobileCore+NetworkAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C07024BE5FF30019F17 /* MobileCore+NetworkAvailability.swift */; };
 		B8A2C00924BE5FF30019F18 /* MobileCore+NetworkAvailabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C08024BE5FF30019F18 /* MobileCore+NetworkAvailabilityTests.swift */; };
-		B8A1C01324BE5FF30019F03 /* MockNetworkAvailabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A1C00324BE5FF30019F03 /* MockNetworkAvailabilityService.swift */; };
-		B8A1C01424BE5FF30019F06 /* MockNetworkAvailabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A1C00324BE5FF30019F03 /* MockNetworkAvailabilityService.swift */; };
 		3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C024BE5FF30019F095 /* URLOpening.swift */; };
 		3F0397E024BE5FF30019F095 /* URLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C124BE5FF30019F095 /* URLService.swift */; };
 		3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E324BE60910019F095 /* HitProcessing.swift */; };
@@ -972,15 +966,10 @@
 		3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsNamedCollection.swift; sourceTree = "<group>"; };
 		3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationSystemInfoService.swift; sourceTree = "<group>"; };
 		3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoService.swift; sourceTree = "<group>"; };
-		B8A2C00024BE5FF30019F10 /* NetworkAvailabilityResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityResult.swift; sourceTree = "<group>"; };
-		B8A2C01024BE5FF30019F11 /* NetworkAvailabilityConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityConfiguration.swift; sourceTree = "<group>"; };
-		B8A2C02024BE5FF30019F12 /* NetworkAvailabilityProviding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityProviding.swift; sourceTree = "<group>"; };
 		B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkPathMonitorProvider.swift; sourceTree = "<group>"; };
-		B8A2C04024BE5FF30019F14 /* NetworkHealthCheckProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkHealthCheckProvider.swift; sourceTree = "<group>"; };
-		B8A2C06024BE5FF30019F16 /* NetworkServiceAvailabilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceAvailabilityTests.swift; sourceTree = "<group>"; };
+		B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingIsAvailableTests.swift; sourceTree = "<group>"; };
 		B8A2C07024BE5FF30019F17 /* MobileCore+NetworkAvailability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+NetworkAvailability.swift"; sourceTree = "<group>"; };
 		B8A2C08024BE5FF30019F18 /* MobileCore+NetworkAvailabilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+NetworkAvailabilityTests.swift"; sourceTree = "<group>"; };
-		B8A1C00324BE5FF30019F03 /* MockNetworkAvailabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNetworkAvailabilityService.swift; path = AEPServices/Mocks/MockNetworkAvailabilityService.swift; sourceTree = SOURCE_ROOT; };
 		3F0397C024BE5FF30019F095 /* URLOpening.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLOpening.swift; sourceTree = "<group>"; };
 		3F0397C124BE5FF30019F095 /* URLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLService.swift; sourceTree = "<group>"; };
 		3F0397E324BE60910019F095 /* HitProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitProcessing.swift; sourceTree = "<group>"; };
@@ -1761,11 +1750,7 @@
 				3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */,
 				3F0397A524BE5FF30019F095 /* ServiceProvider.swift */,
 				3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */,
-				B8A2C00024BE5FF30019F10 /* NetworkAvailabilityResult.swift */,
-				B8A2C01024BE5FF30019F11 /* NetworkAvailabilityConfiguration.swift */,
-				B8A2C02024BE5FF30019F12 /* NetworkAvailabilityProviding.swift */,
 				B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */,
-				B8A2C04024BE5FF30019F14 /* NetworkHealthCheckProvider.swift */,
 				3F0397C024BE5FF30019F095 /* URLOpening.swift */,
 				3F0397C124BE5FF30019F095 /* URLService.swift */,
 				78B36A7725CA0D7700D6D25F /* UIUtils.swift */,
@@ -1785,7 +1770,6 @@
 				31DF174E297030D300B4B07F /* MockLoggingService.swift */,
 				24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */,
 				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
-				B8A1C00324BE5FF30019F03 /* MockNetworkAvailabilityService.swift */,
 				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
 				2467E43C24CB54B70022F6BE /* MockUnzipper.swift */,
 				24543A1324E1DAFC002D8D9A /* MockURLService.swift */,
@@ -2012,7 +1996,7 @@
 				3F03980724BE61520019F095 /* FileSystemNamedCollectionTest.swift */,
 				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
 				78F2E2D327FF7B900073CE00 /* ServiceProviderTests.swift */,
-				B8A2C06024BE5FF30019F16 /* NetworkServiceAvailabilityTests.swift */,
+				B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */,
 				75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */,
 			);
 			path = services;
@@ -3837,11 +3821,7 @@
 				3F0397D524BE5FF30019F095 /* DataQueue.swift in Sources */,
 				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,
-				B8A2C00124BE5FF30019F10 /* NetworkAvailabilityResult.swift in Sources */,
-				B8A2C00224BE5FF30019F11 /* NetworkAvailabilityConfiguration.swift in Sources */,
-				B8A2C00324BE5FF30019F12 /* NetworkAvailabilityProviding.swift in Sources */,
 				B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */,
-				B8A2C00524BE5FF30019F14 /* NetworkHealthCheckProvider.swift in Sources */,
 				3F0397F624BE60910019F095 /* FileUnzipper.swift in Sources */,
 				3F0397D424BE5FF30019F095 /* SQLiteWrapper.swift in Sources */,
 				3F0397D024BE5FF30019F095 /* HttpMethod.swift in Sources */,
@@ -3884,7 +3864,7 @@
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
 				3F03981B24BE61520019F095 /* FileSystemNamedCollectionTest.swift in Sources */,
 				78F2E2D427FF7B900073CE00 /* ServiceProviderTests.swift in Sources */,
-				B8A2C00724BE5FF30019F16 /* NetworkServiceAvailabilityTests.swift in Sources */,
+				B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */,
 				24B860492CB5B0A00072868A /* HttpConnectionTests.swift in Sources */,
 				2EF54C292BF6C87500685C07 /* URLError+RecoverableTests.swift in Sources */,
 				786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */,
@@ -3951,7 +3931,6 @@
 				4CF028742C2CCBD3008ADE05 /* MockLoggingService.swift in Sources */,
 				4CF028752C2CCBD3008ADE05 /* MockMessagingDelegate.swift in Sources */,
 				4CF028762C2CCBD3008ADE05 /* MockSystemInfoService.swift in Sources */,
-				B8A1C01324BE5FF30019F03 /* MockNetworkAvailabilityService.swift in Sources */,
 				4CF028772C2CCBD3008ADE05 /* MockTask.swift in Sources */,
 				4CF028782C2CCBD3008ADE05 /* MockUnzipper.swift in Sources */,
 				4CF028792C2CCBD3008ADE05 /* MockURLService.swift in Sources */,
@@ -4077,7 +4056,6 @@
 				4CF791902CAB517F003C1FD8 /* MockLoggingService.swift in Sources */,
 				4CF791912CAB517F003C1FD8 /* MockMessagingDelegate.swift in Sources */,
 				4CF791922CAB517F003C1FD8 /* MockSystemInfoService.swift in Sources */,
-				B8A1C01424BE5FF30019F06 /* MockNetworkAvailabilityService.swift in Sources */,
 				4CF791932CAB517F003C1FD8 /* MockTask.swift in Sources */,
 				4CF791942CAB517F003C1FD8 /* MockUnzipper.swift in Sources */,
 				4CF791952CAB517F003C1FD8 /* MockURLService.swift in Sources */,

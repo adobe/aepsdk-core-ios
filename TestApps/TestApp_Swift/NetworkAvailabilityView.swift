@@ -14,72 +14,48 @@ import SwiftUI
 import AEPCore
 import AEPServices
 
-struct NetworkAvailabilityView: View {
-    @State private var healthCheckEndpoint: String = "https://www.google.com"
-    @State private var requireHealthCheck: Bool = false
-    @State private var configurationStatus: String = ""
+/// A custom `Networking` override demonstrating the documented override pattern — implements
+/// `connectAsync` (standard `URLSession`-based transport, same shape as Adobe's own sample) and overrides
+/// `isNetworkAvailable()` with custom logic (here, a toggle standing in for e.g. pinging your own backend).
+private class CustomNetworkOverride: Networking {
+    var forcedAvailability: Bool
 
+    init(forcedAvailability: Bool) {
+        self.forcedAvailability = forcedAvailability
+    }
+
+    func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
+        let urlRequest = URLRequest(url: networkRequest.url)
+        let task = URLSession(configuration: .default).dataTask(with: urlRequest) { data, response, error in
+            completionHandler?(HttpConnection(data: data, response: response as? HTTPURLResponse, error: error))
+        }
+        task.resume()
+    }
+
+    func isNetworkAvailable() -> Bool {
+        return forcedAvailability
+    }
+}
+
+struct NetworkAvailabilityView: View {
     @State private var isNetworkAvailableResult: String = ""
 
-    @State private var checkStatusResult: String = ""
-    @State private var checkIsAvailableResult: String = ""
+    @State private var forcedAvailability: Bool = true
+    @State private var overrideStatus: String = ""
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                configurationSection
                 syncCheckSection
-                asyncCheckSection
+                overrideSection
             }.padding()
-        }
-    }
-
-    var configurationSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Health Check Configuration").bold()
-
-            TextField("Health check endpoint", text: $healthCheckEndpoint)
-                #if os(iOS)
-                    .autocapitalization(.none)
-                #endif
-                .disableAutocorrection(true)
-
-            Toggle("Require health check for isNetworkAvailable()", isOn: $requireHealthCheck)
-
-            Button(action: {
-                guard let url = URL(string: healthCheckEndpoint) else {
-                    configurationStatus = "Invalid endpoint URL"
-                    return
-                }
-                let healthCheck = NetworkHealthCheckConfiguration(endpoint: url)
-                let configuration = NetworkAvailabilityConfiguration(healthCheck: healthCheck,
-                                                                      requireHealthCheckWhenConfigured: requireHealthCheck)
-                MobileCore.setNetworkAvailabilityConfiguration(configuration)
-                configurationStatus = "Applied: \(url.absoluteString), requireHealthCheck: \(requireHealthCheck)"
-            }) {
-                Text("Apply Configuration")
-            }.buttonStyle(CustomButtonStyle())
-
-            Button(action: {
-                MobileCore.resetNetworkAvailabilityProvider()
-                configurationStatus = "Reset to defaults"
-                isNetworkAvailableResult = ""
-                checkStatusResult = ""
-                checkIsAvailableResult = ""
-            }) {
-                Text("Reset to Defaults")
-            }.buttonStyle(CustomButtonStyle())
-
-            if !configurationStatus.isEmpty {
-                Text(configurationStatus)
-            }
         }
     }
 
     var syncCheckSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Synchronous Check").bold()
-            Text("Uses device path monitoring and, if configured, the last cached health check result.")
+            Text("Default implementation checks device-level NWPathMonitor status.")
                 .font(.caption)
 
             Button(action: {
@@ -94,26 +70,23 @@ struct NetworkAvailabilityView: View {
         }
     }
 
-    var asyncCheckSection: some View {
+    var overrideSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Asynchronous Check").bold()
-            Text("Performs a fresh evaluation, including a live health check against the configured endpoint.")
+            Text("Custom Override").bold()
+            Text("There is no dedicated configuration API — override isNetworkAvailable() in your own Networking conformer and register it via ServiceProvider.shared.networkService, the same override point used for HTTP transport customization. Applying this persists for the rest of the app session.")
                 .font(.caption)
 
+            Toggle("Forced availability", isOn: $forcedAvailability)
+
             Button(action: {
-                MobileCore.checkNetworkAvailability { result in
-                    DispatchQueue.main.async {
-                        checkStatusResult = "\(result.status)"
-                        checkIsAvailableResult = result.isAvailable ? "Available" : "Not Available"
-                    }
-                }
+                ServiceProvider.shared.networkService = CustomNetworkOverride(forcedAvailability: forcedAvailability)
+                overrideStatus = "Applied: isNetworkAvailable() will now always report \(forcedAvailability)"
             }) {
-                Text("Check Network Availability")
+                Text("Apply Custom Override")
             }.buttonStyle(CustomButtonStyle())
 
-            if !checkStatusResult.isEmpty {
-                Text("Status: \(checkStatusResult)")
-                Text("Is Available: \(checkIsAvailableResult)")
+            if !overrideStatus.isEmpty {
+                Text(overrideStatus)
             }
         }
     }

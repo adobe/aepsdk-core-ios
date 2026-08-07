@@ -86,26 +86,6 @@ class ServiceProviderTests: XCTestCase {
         XCTAssertTrue(ServiceProvider.shared.loggingService is LoggingService)
     }
 
-    func testOverridingNetworkAvailabilityService() {
-        let mockNetworkAvailabilityService = MockNetworkAvailabilityService(isAvailable: false)
-        ServiceProvider.shared.networkAvailabilityService = mockNetworkAvailabilityService
-        XCTAssertFalse(ServiceProvider.shared.networkAvailabilityService.isNetworkAvailable())
-    }
-
-    func testResettingNetworkAvailabilityService() {
-        let mockNetworkAvailabilityService = MockNetworkAvailabilityService(isAvailable: false)
-        ServiceProvider.shared.networkAvailabilityService = mockNetworkAvailabilityService
-        ServiceProvider.shared.resetNetworkAvailabilityService()
-        XCTAssertTrue(ServiceProvider.shared.networkAvailabilityService is NetworkService)
-    }
-
-    func testNetworkAvailabilityService_defaultsToSameInstanceAsNetworkService() {
-        ServiceProvider.shared.reset()
-        let networkService = ServiceProvider.shared.networkService
-        let networkAvailabilityService = ServiceProvider.shared.networkAvailabilityService
-        XCTAssertTrue((networkService as AnyObject) === (networkAvailabilityService as AnyObject))
-    }
-    
     #if os(iOS)
         func testOverridingAppOnlyServices() {
             let mockUIService = MockUIService()
