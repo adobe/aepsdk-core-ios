@@ -22,21 +22,10 @@ governing permissions and limitations under the License.
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self exerciseNetworkAvailabilityAPIs];
 }
 
 - (IBAction)testButtonClicked:(id)sender {
     [AEPMobileCore setAdvertisingIdentifier:@"adid"];
-}
-
-/// Exercises the Network Availability API exposed to Objective-C. `isNetworkAvailable` is the only
-/// dedicated MobileCore entry point. There is no dedicated configuration API — a custom availability
-/// check (e.g. pinging your own backend) is implemented by overriding `Networking` in Swift and
-/// registering it via `ServiceProvider.shared.networkService`; `ServiceProvider` is not bridged to
-/// Objective-C, so that override point is Swift-only (see `TestApp_Swift/NetworkAvailabilityView.swift`).
-- (void)exerciseNetworkAvailabilityAPIs {
-    BOOL isAvailable = [AEPMobileCore isNetworkAvailable];
-    NSLog(@"[NetworkAvailability][ObjC] isNetworkAvailable = %d", isAvailable);
 }
 
 @end

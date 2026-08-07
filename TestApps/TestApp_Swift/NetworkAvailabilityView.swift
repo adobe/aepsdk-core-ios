@@ -10,13 +10,14 @@
  */
 
 import SwiftUI
-
-import AEPCore
 import AEPServices
 
-/// A custom `Networking` override demonstrating the documented override pattern — implements
-/// `connectAsync` (standard `URLSession`-based transport, same shape as Adobe's own sample) and overrides
-/// `isNetworkAvailable()` with custom logic (here, a toggle standing in for e.g. pinging your own backend).
+/// Demonstrates `isNetworkAvailable()` from the `Networking` protocol.
+///
+/// The default implementation (backed by `NWPathMonitor`) is accessed via
+/// `ServiceProvider.shared.networkService.isNetworkAvailable()`.
+/// A custom override registers a `Networking` conformer via the documented
+/// `ServiceProvider.shared.networkService` override point.
 private class CustomNetworkOverride: Networking {
     var forcedAvailability: Bool
 
@@ -39,7 +40,6 @@ private class CustomNetworkOverride: Networking {
 
 struct NetworkAvailabilityView: View {
     @State private var isNetworkAvailableResult: String = ""
-
     @State private var forcedAvailability: Bool = true
     @State private var overrideStatus: String = ""
 
@@ -59,7 +59,8 @@ struct NetworkAvailabilityView: View {
                 .font(.caption)
 
             Button(action: {
-                isNetworkAvailableResult = MobileCore.isNetworkAvailable() ? "Available" : "Not Available"
+                let available = ServiceProvider.shared.networkService.isNetworkAvailable()
+                isNetworkAvailableResult = available ? "Available" : "Not Available"
             }) {
                 Text("Check isNetworkAvailable()")
             }.buttonStyle(CustomButtonStyle())
@@ -73,7 +74,7 @@ struct NetworkAvailabilityView: View {
     var overrideSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Custom Override").bold()
-            Text("There is no dedicated configuration API — override isNetworkAvailable() in your own Networking conformer and register it via ServiceProvider.shared.networkService, the same override point used for HTTP transport customization. Applying this persists for the rest of the app session.")
+            Text("Override isNetworkAvailable() in your own Networking conformer and register it via ServiceProvider.shared.networkService — the same override point used for HTTP transport customization.")
                 .font(.caption)
 
             Toggle("Forced availability", isOn: $forcedAvailability)

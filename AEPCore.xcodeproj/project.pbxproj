@@ -165,8 +165,6 @@
 		3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */; };
 		B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */; };
 		B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */; };
-		B8A2C00824BE5FF30019F17 /* MobileCore+NetworkAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C07024BE5FF30019F17 /* MobileCore+NetworkAvailability.swift */; };
-		B8A2C00924BE5FF30019F18 /* MobileCore+NetworkAvailabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C08024BE5FF30019F18 /* MobileCore+NetworkAvailabilityTests.swift */; };
 		3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C024BE5FF30019F095 /* URLOpening.swift */; };
 		3F0397E024BE5FF30019F095 /* URLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C124BE5FF30019F095 /* URLService.swift */; };
 		3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E324BE60910019F095 /* HitProcessing.swift */; };
@@ -968,8 +966,6 @@
 		3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoService.swift; sourceTree = "<group>"; };
 		B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkPathMonitorProvider.swift; sourceTree = "<group>"; };
 		B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingIsAvailableTests.swift; sourceTree = "<group>"; };
-		B8A2C07024BE5FF30019F17 /* MobileCore+NetworkAvailability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+NetworkAvailability.swift"; sourceTree = "<group>"; };
-		B8A2C08024BE5FF30019F18 /* MobileCore+NetworkAvailabilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+NetworkAvailabilityTests.swift"; sourceTree = "<group>"; };
 		3F0397C024BE5FF30019F095 /* URLOpening.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLOpening.swift; sourceTree = "<group>"; };
 		3F0397C124BE5FF30019F095 /* URLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLService.swift; sourceTree = "<group>"; };
 		3F0397E324BE60910019F095 /* HitProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitProcessing.swift; sourceTree = "<group>"; };
@@ -1608,7 +1604,6 @@
 				BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */,
 				7522C4852C234180004AF637 /* DebugEventTests.swift */,
 				3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */,
-				B8A2C08024BE5FF30019F18 /* MobileCore+NetworkAvailabilityTests.swift */,
 				A1413D8083BF435BB07D29C9 /* MobileCore+ProfileAttributesTests.swift */,
 				3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */,
 				24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */,
@@ -2196,7 +2191,6 @@
 				3FB66A9F24CA004400502CAF /* MobileCore.swift */,
 				BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */,
 				3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */,
-				B8A2C07024BE5FF30019F17 /* MobileCore+NetworkAvailability.swift */,
 				3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */,
 				24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */,
 				213F8A0324D8DC5A0003B8AF /* WrapperType.swift */,
@@ -3605,7 +3599,6 @@
 				21F79ABB24E70CDC003204C3 /* IDParsing.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
 				3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */,
-				B8A2C00824BE5FF30019F17 /* MobileCore+NetworkAvailability.swift in Sources */,
 				216A15C8257818B200D43848 /* Data+HexString.swift in Sources */,
 				241D9B352E71E8C800969B09 /* EventHistoryDatabaseMigrator.swift in Sources */,
 				3F2B1DC5263221580030F50B /* LaunchRulesEngine+Downloader.swift in Sources */,
@@ -3667,7 +3660,6 @@
 			files = (
 				BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */,
 				3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */,
-				B8A2C00924BE5FF30019F18 /* MobileCore+NetworkAvailabilityTests.swift in Sources */,
 				10CD5DC52252468CACB01314 /* MobileCore+ProfileAttributesTests.swift in Sources */,
 				4C2157812DC0620C0055C8C9 /* EventHubEventHistoryTests.swift in Sources */,
 				246B1A2B272B48A80017716A /* EventTests.swift in Sources */,
