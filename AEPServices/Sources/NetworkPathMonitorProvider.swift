@@ -59,10 +59,16 @@ final class NetworkPathMonitorProvider {
                 interfaceType = .other
             }
 
+            let isConstrained: Bool
+            if #available(iOS 13.0, *) {
+                isConstrained = path.isConstrained
+            } else {
+                isConstrained = false
+            }
             return NetworkConnectionInfo(
                 isAvailable: available,
                 interfaceType: interfaceType,
-                isConstrained: path.isConstrained,
+                isConstrained: isConstrained,
                 isExpensive: path.isExpensive
             )
         }
