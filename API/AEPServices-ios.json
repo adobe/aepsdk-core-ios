@@ -34,6 +34,13 @@
       },
       {
         "kind": "Import",
+        "name": "Network",
+        "printedName": "Network",
+        "declKind": "Import",
+        "moduleName": "AEPServices"
+      },
+      {
+        "kind": "Import",
         "name": "SQLite3",
         "printedName": "SQLite3",
         "declKind": "Import",
@@ -6302,6 +6309,527 @@
       },
       {
         "kind": "TypeDecl",
+        "name": "NetworkConnectionInfo",
+        "printedName": "NetworkConnectionInfo",
+        "children": [
+          {
+            "kind": "TypeDecl",
+            "name": "InterfaceType",
+            "printedName": "InterfaceType",
+            "children": [
+              {
+                "kind": "Var",
+                "name": "wifi",
+                "printedName": "wifi",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "InterfaceType",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Metatype",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "InterfaceType",
+                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "EnumElement",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO4wifiyA2EmF",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO4wifiyA2EmF",
+                "moduleName": "AEPServices"
+              },
+              {
+                "kind": "Var",
+                "name": "cellular",
+                "printedName": "cellular",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "InterfaceType",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Metatype",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "InterfaceType",
+                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "EnumElement",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO8cellularyA2EmF",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO8cellularyA2EmF",
+                "moduleName": "AEPServices"
+              },
+              {
+                "kind": "Var",
+                "name": "wiredEthernet",
+                "printedName": "wiredEthernet",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "InterfaceType",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Metatype",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "InterfaceType",
+                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "EnumElement",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO13wiredEthernetyA2EmF",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO13wiredEthernetyA2EmF",
+                "moduleName": "AEPServices"
+              },
+              {
+                "kind": "Var",
+                "name": "other",
+                "printedName": "other",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "InterfaceType",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Metatype",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "InterfaceType",
+                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "EnumElement",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO5otheryA2EmF",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO5otheryA2EmF",
+                "moduleName": "AEPServices"
+              },
+              {
+                "kind": "Var",
+                "name": "unknown",
+                "printedName": "unknown",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "InterfaceType",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Metatype",
+                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "InterfaceType",
+                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "EnumElement",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO7unknownyA2EmF",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO7unknownyA2EmF",
+                "moduleName": "AEPServices"
+              },
+              {
+                "kind": "Function",
+                "name": "==",
+                "printedName": "==(_:_:)",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "InterfaceType",
+                    "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                    "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "InterfaceType",
+                    "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                    "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                  }
+                ],
+                "declKind": "Func",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO2eeoiySbAE_AEtFZ",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO2eeoiySbAE_AEtFZ",
+                "moduleName": "AEPServices",
+                "static": true,
+                "implicit": true,
+                "funcSelfKind": "NonMutating"
+              },
+              {
+                "kind": "Function",
+                "name": "hash",
+                "printedName": "hash(into:)",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Hasher",
+                    "printedName": "Swift.Hasher",
+                    "paramValueOwnership": "InOut",
+                    "usr": "s:s6HasherV"
+                  }
+                ],
+                "declKind": "Func",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO4hash4intoys6HasherVz_tF",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO4hash4intoys6HasherVz_tF",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "funcSelfKind": "NonMutating"
+              },
+              {
+                "kind": "Var",
+                "name": "hashValue",
+                "printedName": "hashValue",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO9hashValueSivp",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO9hashValueSivp",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "accessors": [
+                  {
+                    "kind": "Accessor",
+                    "name": "Get",
+                    "printedName": "Get()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Int",
+                        "printedName": "Swift.Int",
+                        "usr": "s:Si"
+                      }
+                    ],
+                    "declKind": "Accessor",
+                    "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO9hashValueSivg",
+                    "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO9hashValueSivg",
+                    "moduleName": "AEPServices",
+                    "implicit": true,
+                    "accessorKind": "get"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Enum",
+            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO",
+            "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO",
+            "moduleName": "AEPServices",
+            "conformances": [
+              {
+                "kind": "Conformance",
+                "name": "Equatable",
+                "printedName": "Equatable",
+                "usr": "s:SQ",
+                "mangledName": "$sSQ"
+              },
+              {
+                "kind": "Conformance",
+                "name": "Hashable",
+                "printedName": "Hashable",
+                "usr": "s:SH",
+                "mangledName": "$sSH"
+              },
+              {
+                "kind": "Conformance",
+                "name": "Copyable",
+                "printedName": "Copyable",
+                "usr": "s:s8CopyableP",
+                "mangledName": "$ss8CopyableP"
+              },
+              {
+                "kind": "Conformance",
+                "name": "Escapable",
+                "printedName": "Escapable",
+                "usr": "s:s9EscapableP",
+                "mangledName": "$ss9EscapableP"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "isAvailable",
+            "printedName": "isAvailable",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices21NetworkConnectionInfoV11isAvailableSbvp",
+            "mangledName": "$s11AEPServices21NetworkConnectionInfoV11isAvailableSbvp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV11isAvailableSbvg",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV11isAvailableSbvg",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "interfaceType",
+            "printedName": "interfaceType",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "InterfaceType",
+                "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices21NetworkConnectionInfoV13interfaceTypeAC09InterfaceF0Ovp",
+            "mangledName": "$s11AEPServices21NetworkConnectionInfoV13interfaceTypeAC09InterfaceF0Ovp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "InterfaceType",
+                    "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
+                    "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13interfaceTypeAC09InterfaceF0Ovg",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13interfaceTypeAC09InterfaceF0Ovg",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "isConstrained",
+            "printedName": "isConstrained",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices21NetworkConnectionInfoV13isConstrainedSbvp",
+            "mangledName": "$s11AEPServices21NetworkConnectionInfoV13isConstrainedSbvp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV13isConstrainedSbvg",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13isConstrainedSbvg",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "isExpensive",
+            "printedName": "isExpensive",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices21NetworkConnectionInfoV11isExpensiveSbvp",
+            "mangledName": "$s11AEPServices21NetworkConnectionInfoV11isExpensiveSbvp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices21NetworkConnectionInfoV11isExpensiveSbvg",
+                "mangledName": "$s11AEPServices21NetworkConnectionInfoV11isExpensiveSbvg",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:11AEPServices21NetworkConnectionInfoV",
+        "mangledName": "$s11AEPServices21NetworkConnectionInfoV",
+        "moduleName": "AEPServices",
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
         "name": "NetworkRequest",
         "printedName": "NetworkRequest",
         "children": [
@@ -7678,27 +8206,6 @@
           },
           {
             "kind": "Function",
-            "name": "isNetworkAvailable",
-            "printedName": "isNetworkAvailable()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:11AEPServices10NetworkingPAAE18isNetworkAvailableSbyF",
-            "mangledName": "$s11AEPServices10NetworkingPAAE18isNetworkAvailableSbyF",
-            "moduleName": "AEPServices",
-            "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.Networking>",
-            "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
             "name": "networkConnectionInfo",
             "printedName": "networkConnectionInfo()",
             "children": [
@@ -7717,6 +8224,27 @@
             "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
             "protocolReq": true,
             "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "isNetworkAvailable",
+            "printedName": "isNetworkAvailable()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices10NetworkingPAAE18isNetworkAvailableSbyF",
+            "mangledName": "$s11AEPServices10NetworkingPAAE18isNetworkAvailableSbyF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.Networking>",
+            "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
+            "isFromExtension": true,
             "funcSelfKind": "NonMutating"
           },
           {
@@ -7759,527 +8287,6 @@
             "printedName": "Copyable",
             "usr": "s:s8CopyableP",
             "mangledName": "$ss8CopyableP"
-          }
-        ]
-      },
-      {
-        "kind": "TypeDecl",
-        "name": "NetworkConnectionInfo",
-        "printedName": "NetworkConnectionInfo",
-        "children": [
-          {
-            "kind": "TypeDecl",
-            "name": "InterfaceType",
-            "printedName": "InterfaceType",
-            "children": [
-              {
-                "kind": "Var",
-                "name": "wifi",
-                "printedName": "wifi",
-                "children": [
-                  {
-                    "kind": "TypeFunc",
-                    "name": "Function",
-                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "InterfaceType",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Metatype",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "InterfaceType",
-                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ],
-                "declKind": "EnumElement",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO4wifiyA2EmF",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO4wifiyA2EmF",
-                "moduleName": "AEPServices"
-              },
-              {
-                "kind": "Var",
-                "name": "cellular",
-                "printedName": "cellular",
-                "children": [
-                  {
-                    "kind": "TypeFunc",
-                    "name": "Function",
-                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "InterfaceType",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Metatype",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "InterfaceType",
-                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ],
-                "declKind": "EnumElement",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO8cellularyA2EmF",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO8cellularyA2EmF",
-                "moduleName": "AEPServices"
-              },
-              {
-                "kind": "Var",
-                "name": "wiredEthernet",
-                "printedName": "wiredEthernet",
-                "children": [
-                  {
-                    "kind": "TypeFunc",
-                    "name": "Function",
-                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "InterfaceType",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Metatype",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "InterfaceType",
-                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ],
-                "declKind": "EnumElement",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO13wiredEthernetyA2EmF",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO13wiredEthernetyA2EmF",
-                "moduleName": "AEPServices"
-              },
-              {
-                "kind": "Var",
-                "name": "other",
-                "printedName": "other",
-                "children": [
-                  {
-                    "kind": "TypeFunc",
-                    "name": "Function",
-                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "InterfaceType",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Metatype",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "InterfaceType",
-                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ],
-                "declKind": "EnumElement",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO5otheryA2EmF",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO5otheryA2EmF",
-                "moduleName": "AEPServices"
-              },
-              {
-                "kind": "Var",
-                "name": "unknown",
-                "printedName": "unknown",
-                "children": [
-                  {
-                    "kind": "TypeFunc",
-                    "name": "Function",
-                    "printedName": "(AEPServices.NetworkConnectionInfo.InterfaceType.Type) -> AEPServices.NetworkConnectionInfo.InterfaceType",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "InterfaceType",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                        "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                      },
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Metatype",
-                        "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType.Type",
-                        "children": [
-                          {
-                            "kind": "TypeNominal",
-                            "name": "InterfaceType",
-                            "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ],
-                "declKind": "EnumElement",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO7unknownyA2EmF",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO7unknownyA2EmF",
-                "moduleName": "AEPServices"
-              },
-              {
-                "kind": "Function",
-                "name": "==",
-                "printedName": "==(_:_:)",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Bool",
-                    "printedName": "Swift.Bool",
-                    "usr": "s:Sb"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "InterfaceType",
-                    "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                    "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "InterfaceType",
-                    "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                    "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                  }
-                ],
-                "declKind": "Func",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO2eeoiySbAE_AEtFZ",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO2eeoiySbAE_AEtFZ",
-                "moduleName": "AEPServices",
-                "static": true,
-                "implicit": true,
-                "funcSelfKind": "NonMutating"
-              },
-              {
-                "kind": "Function",
-                "name": "hash",
-                "printedName": "hash(into:)",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Hasher",
-                    "printedName": "Swift.Hasher",
-                    "paramValueOwnership": "InOut",
-                    "usr": "s:s6HasherV"
-                  }
-                ],
-                "declKind": "Func",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO4hash4intoys6HasherVz_tF",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO4hash4intoys6HasherVz_tF",
-                "moduleName": "AEPServices",
-                "implicit": true,
-                "funcSelfKind": "NonMutating"
-              },
-              {
-                "kind": "Var",
-                "name": "hashValue",
-                "printedName": "hashValue",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
-                  }
-                ],
-                "declKind": "Var",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO9hashValueSivp",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO9hashValueSivp",
-                "moduleName": "AEPServices",
-                "implicit": true,
-                "accessors": [
-                  {
-                    "kind": "Accessor",
-                    "name": "Get",
-                    "printedName": "Get()",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Int",
-                        "printedName": "Swift.Int",
-                        "usr": "s:Si"
-                      }
-                    ],
-                    "declKind": "Accessor",
-                    "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO9hashValueSivg",
-                    "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO9hashValueSivg",
-                    "moduleName": "AEPServices",
-                    "implicit": true,
-                    "accessorKind": "get"
-                  }
-                ]
-              }
-            ],
-            "declKind": "Enum",
-            "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO",
-            "mangledName": "$s11AEPServices21NetworkConnectionInfoV13InterfaceTypeO",
-            "moduleName": "AEPServices",
-            "conformances": [
-              {
-                "kind": "Conformance",
-                "name": "Copyable",
-                "printedName": "Copyable",
-                "usr": "s:s8CopyableP",
-                "mangledName": "$ss8CopyableP"
-              },
-              {
-                "kind": "Conformance",
-                "name": "Equatable",
-                "printedName": "Equatable",
-                "usr": "s:SQ",
-                "mangledName": "$sSQ"
-              },
-              {
-                "kind": "Conformance",
-                "name": "Escapable",
-                "printedName": "Escapable",
-                "usr": "s:s9EscapableP",
-                "mangledName": "$ss9EscapableP"
-              },
-              {
-                "kind": "Conformance",
-                "name": "Hashable",
-                "printedName": "Hashable",
-                "usr": "s:SH",
-                "mangledName": "$sSH"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "isAvailable",
-            "printedName": "isAvailable",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:11AEPServices21NetworkConnectionInfoV11isAvailableSbvp",
-            "mangledName": "$s11AEPServices21NetworkConnectionInfoV11isAvailableSbvp",
-            "moduleName": "AEPServices",
-            "declAttributes": [
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Bool",
-                    "printedName": "Swift.Bool",
-                    "usr": "s:Sb"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV11isAvailableSbvg",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV11isAvailableSbvg",
-                "moduleName": "AEPServices",
-                "implicit": true,
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "interfaceType",
-            "printedName": "interfaceType",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "InterfaceType",
-                "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:11AEPServices21NetworkConnectionInfoV13interfaceTypeAC09InterfaceF0Ovp",
-            "mangledName": "$s11AEPServices21NetworkConnectionInfoV13interfaceTypeAC09InterfaceF0Ovp",
-            "moduleName": "AEPServices",
-            "declAttributes": [
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "InterfaceType",
-                    "printedName": "AEPServices.NetworkConnectionInfo.InterfaceType",
-                    "usr": "s:11AEPServices21NetworkConnectionInfoV13InterfaceTypeO"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13interfaceTypeAC09InterfaceF0Ovg",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13interfaceTypeAC09InterfaceF0Ovg",
-                "moduleName": "AEPServices",
-                "implicit": true,
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "isConstrained",
-            "printedName": "isConstrained",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:11AEPServices21NetworkConnectionInfoV13isConstrainedSbvp",
-            "mangledName": "$s11AEPServices21NetworkConnectionInfoV13isConstrainedSbvp",
-            "moduleName": "AEPServices",
-            "declAttributes": [
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Bool",
-                    "printedName": "Swift.Bool",
-                    "usr": "s:Sb"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV13isConstrainedSbvg",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV13isConstrainedSbvg",
-                "moduleName": "AEPServices",
-                "implicit": true,
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "isExpensive",
-            "printedName": "isExpensive",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:11AEPServices21NetworkConnectionInfoV11isExpensiveSbvp",
-            "mangledName": "$s11AEPServices21NetworkConnectionInfoV11isExpensiveSbvp",
-            "moduleName": "AEPServices",
-            "declAttributes": [
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Bool",
-                    "printedName": "Swift.Bool",
-                    "usr": "s:Sb"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:11AEPServices21NetworkConnectionInfoV11isExpensiveSbvg",
-                "mangledName": "$s11AEPServices21NetworkConnectionInfoV11isExpensiveSbvg",
-                "moduleName": "AEPServices",
-                "implicit": true,
-                "accessorKind": "get"
-              }
-            ]
-          }
-        ],
-        "declKind": "Struct",
-        "usr": "s:11AEPServices21NetworkConnectionInfoV",
-        "mangledName": "$s11AEPServices21NetworkConnectionInfoV",
-        "moduleName": "AEPServices",
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Copyable",
-            "printedName": "Copyable",
-            "usr": "s:s8CopyableP",
-            "mangledName": "$ss8CopyableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Escapable",
-            "printedName": "Escapable",
-            "usr": "s:s9EscapableP",
-            "mangledName": "$ss9EscapableP"
           }
         ]
       },

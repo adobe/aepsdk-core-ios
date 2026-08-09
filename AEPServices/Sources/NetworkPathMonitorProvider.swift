@@ -60,7 +60,7 @@ final class NetworkPathMonitorProvider {
             }
 
             let isConstrained: Bool
-            if #available(iOS 13.0, *) {
+            if #available(iOS 13.0, tvOS 13.0, *) {
                 isConstrained = path.isConstrained
             } else {
                 isConstrained = false
