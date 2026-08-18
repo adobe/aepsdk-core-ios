@@ -24,11 +24,11 @@ public protocol Networking {
     /// device-level path status only (`NWPathMonitor`). Override this in a custom `Networking` conformer
     /// (see: overriding `NetworkService`, `ServiceProvider.shared.networkService`) to implement custom logic —
     /// for example, pinging your own backend's health endpoint instead of relying on device connectivity alone.
-    func isNetworkAvailable() -> Bool
+    func isInternetAvailable() -> Bool
 }
 
 public extension Networking {
-    func isNetworkAvailable() -> Bool {
+    func isInternetAvailable() -> Bool {
         return NetworkPathMonitorProvider.shared.isPathAvailable()
     }
 }

@@ -16,8 +16,8 @@ import Foundation
 public extension MobileCore {
     /// Returns whether network-bound SDK work should proceed right now.
     /// Backed by `NWPathMonitor` via the registered `Networking` service.
-    @objc static func isNetworkAvailable() -> Bool {
-        ServiceProvider.shared.networkService.isNetworkAvailable()
+    @objc static func isInternetAvailable() -> Bool {
+        ServiceProvider.shared.networkService.isInternetAvailable()
     }
 
 }

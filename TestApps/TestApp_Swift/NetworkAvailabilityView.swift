@@ -65,7 +65,7 @@ struct NetworkAvailabilityView: View {
             Text("Reads the current network path from NWPathMonitor synchronously.")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            Button("Check isNetworkAvailable()") {
+            Button("Check isInternetAvailable()") {
                 runCheck()
             }
             .buttonStyle(CustomButtonStyle())
@@ -75,7 +75,7 @@ struct NetworkAvailabilityView: View {
     // MARK: - Helpers
 
     private func runCheck() {
-        isAvailable = ServiceProvider.shared.networkService.isNetworkAvailable()
+        isAvailable = ServiceProvider.shared.networkService.isInternetAvailable()
         lastChecked = Date()
     }
 

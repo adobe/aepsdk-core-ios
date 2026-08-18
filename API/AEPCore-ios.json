@@ -2171,8 +2171,8 @@
           },
           {
             "kind": "Function",
-            "name": "isNetworkAvailable",
-            "printedName": "isNetworkAvailable()",
+            "name": "isInternetAvailable",
+            "printedName": "isInternetAvailable()",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -2182,8 +2182,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "c:@CM@AEPCore@objc(cs)AEPMobileCore(cm)isNetworkAvailable",
-            "mangledName": "$s7AEPCore10MobileCoreC18isNetworkAvailableSbyFZ",
+            "usr": "c:@CM@AEPCore@objc(cs)AEPMobileCore(cm)isInternetAvailable",
+            "mangledName": "$s7AEPCore10MobileCoreC19isInternetAvailableSbyFZ",
             "moduleName": "AEPCore",
             "static": true,
             "declAttributes": [

@@ -14,7 +14,7 @@ import Foundation
 import Network
 
 /// Default device path check backed by `NWPathMonitor`, used by `Networking`'s default
-/// `isNetworkAvailable()` implementation. A single shared, long-lived monitor is used (rather than
+/// `isInternetAvailable()` implementation. A single shared, long-lived monitor is used (rather than
 /// creating a new one per call) so `currentPath` stays continuously up to date.
 final class NetworkPathMonitorProvider {
     static let shared = NetworkPathMonitorProvider()

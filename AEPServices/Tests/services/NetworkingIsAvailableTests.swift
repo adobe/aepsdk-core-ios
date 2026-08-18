@@ -13,7 +13,7 @@
 @testable import AEPServices
 import XCTest
 
-/// Tests for `Networking.isNetworkAvailable()`.
+/// Tests for `Networking.isInternetAvailable()`.
 ///
 /// All deterministic coverage uses mock `Networking` conformers — no test seams live in
 /// production code. Custom conformers exercise the override path; the default-implementation
@@ -27,7 +27,7 @@ class NetworkingIsAvailableTests: XCTestCase {
 
     // MARK: - Test fixtures
 
-    /// Minimal conformer that does NOT override `isNetworkAvailable()` — receives the protocol
+    /// Minimal conformer that does NOT override `isInternetAvailable()` — receives the protocol
     /// extension default for free. Source-compatible with all pre-existing `Networking` conformers
     /// across AEP repos.
     private class MinimalNetworkingConformer: Networking {
@@ -46,7 +46,7 @@ class NetworkingIsAvailableTests: XCTestCase {
             connectAsyncCallCount += 1
         }
 
-        func isNetworkAvailable() -> Bool { return overrideValue }
+        func isInternetAvailable() -> Bool { return overrideValue }
     }
 
     // MARK: - Default implementation (live NWPathMonitor)
@@ -54,13 +54,13 @@ class NetworkingIsAvailableTests: XCTestCase {
     func testDefaultImpl_returnsValidBool() {
         // Verifies the protocol extension is wired up and returns without crashing.
         // Result depends on the test host's network state (intentional).
-        let result = MinimalNetworkingConformer().isNetworkAvailable()
+        let result = MinimalNetworkingConformer().isInternetAvailable()
         XCTAssertTrue(result == true || result == false)
     }
 
     func testDefaultImpl_repeatedReads_noCrashOrLeak() {
         let conformer = MinimalNetworkingConformer()
-        for _ in 0..<1_000 { _ = conformer.isNetworkAvailable() }
+        for _ in 0..<1_000 { _ = conformer.isInternetAvailable() }
     }
 
     func testDefaultImpl_concurrentReads_noDataRaceOrDeadlock() {
@@ -69,29 +69,29 @@ class NetworkingIsAvailableTests: XCTestCase {
         let q = DispatchQueue(label: "com.adobe.test.concurrent", attributes: .concurrent)
         for _ in 0..<50 {
             group.enter()
-            q.async { _ = conformer.isNetworkAvailable(); group.leave() }
+            q.async { _ = conformer.isInternetAvailable(); group.leave() }
         }
         XCTAssertEqual(group.wait(timeout: .now() + 5), .success,
                        "Concurrent reads timed out — possible deadlock.")
     }
 
-    // MARK: - Custom override: isNetworkAvailable
+    // MARK: - Custom override: isInternetAvailable
 
     func testCustomOverride_returnsTrue_whenOverrideIsTrue() {
-        XCTAssertTrue(CustomNetworking(true).isNetworkAvailable())
+        XCTAssertTrue(CustomNetworking(true).isInternetAvailable())
     }
 
     func testCustomOverride_returnsFalse_whenOverrideIsFalse() {
-        XCTAssertFalse(CustomNetworking(false).isNetworkAvailable())
+        XCTAssertFalse(CustomNetworking(false).isInternetAvailable())
     }
 
     func testCustomOverride_isHonored_viaServiceProvider() {
         let custom = CustomNetworking(false)
         ServiceProvider.shared.networkService = custom
-        XCTAssertFalse(ServiceProvider.shared.networkService.isNetworkAvailable())
+        XCTAssertFalse(ServiceProvider.shared.networkService.isInternetAvailable())
 
         custom.overrideValue = true
-        XCTAssertTrue(ServiceProvider.shared.networkService.isNetworkAvailable())
+        XCTAssertTrue(ServiceProvider.shared.networkService.isInternetAvailable())
     }
 
     // MARK: - Transport behaviour is unchanged
@@ -102,6 +102,6 @@ class NetworkingIsAvailableTests: XCTestCase {
         let request = NetworkRequest(url: URL(string: "https://example.com")!)
         ServiceProvider.shared.networkService.connectAsync(networkRequest: request, completionHandler: nil)
         XCTAssertEqual(custom.connectAsyncCallCount, 1,
-                       "connectAsync must be dispatched regardless of isNetworkAvailable() result.")
+                       "connectAsync must be dispatched regardless of isInternetAvailable() result.")
     }
 }

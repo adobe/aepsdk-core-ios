@@ -7461,8 +7461,8 @@
           },
           {
             "kind": "Function",
-            "name": "isNetworkAvailable",
-            "printedName": "isNetworkAvailable()",
+            "name": "isInternetAvailable",
+            "printedName": "isInternetAvailable()",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -7472,8 +7472,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:11AEPServices10NetworkingP18isNetworkAvailableSbyF",
-            "mangledName": "$s11AEPServices10NetworkingP18isNetworkAvailableSbyF",
+            "usr": "s:11AEPServices10NetworkingP19isInternetAvailableSbyF",
+            "mangledName": "$s11AEPServices10NetworkingP19isInternetAvailableSbyF",
             "moduleName": "AEPServices",
             "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.Networking>",
             "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
@@ -7483,8 +7483,8 @@
           },
           {
             "kind": "Function",
-            "name": "isNetworkAvailable",
-            "printedName": "isNetworkAvailable()",
+            "name": "isInternetAvailable",
+            "printedName": "isInternetAvailable()",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -7494,8 +7494,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:11AEPServices10NetworkingPAAE18isNetworkAvailableSbyF",
-            "mangledName": "$s11AEPServices10NetworkingPAAE18isNetworkAvailableSbyF",
+            "usr": "s:11AEPServices10NetworkingPAAE19isInternetAvailableSbyF",
+            "mangledName": "$s11AEPServices10NetworkingPAAE19isInternetAvailableSbyF",
             "moduleName": "AEPServices",
             "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.Networking>",
             "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
