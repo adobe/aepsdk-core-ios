@@ -85,7 +85,7 @@ class ServiceProviderTests: XCTestCase {
         ServiceProvider.shared.reset()
         XCTAssertTrue(ServiceProvider.shared.loggingService is LoggingService)
     }
-    
+
     #if os(iOS)
         func testOverridingAppOnlyServices() {
             let mockUIService = MockUIService()

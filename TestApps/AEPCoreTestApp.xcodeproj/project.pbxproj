@@ -102,6 +102,8 @@
 		7A08C6747E305D5BF9CE2A3D /* Pods_TestApp_Objc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B889355E99E7CE85BE01DA34 /* Pods_TestApp_Objc.framework */; };
 		9F65FBBE14E3EB518B8FA743 /* Pods_TestApp_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148E88836D30DB0A4542D6F1 /* Pods_TestApp_Swift.framework */; };
 		AC0BC7342C66C34A0034105C /* UIServicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0BC7312C66ADB70034105C /* UIServicesView.swift */; };
+		63D2236E7BE63ECCE605679E /* NetworkAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */; };
+		C50E6C71BF4F7B2D9C39627F /* NetworkAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */; };
 		ACC05DC22C6AC15A005101D7 /* ADBMobileConfig_custom.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */; };
 		ACC05DC32C6AC15A005101D7 /* ADBMobileConfig_custom.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */; };
 		ACC05DC52C6AC997005101D7 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC42C6AC997005101D7 /* ADBMobileConfig.json */; };
@@ -354,6 +356,7 @@
 		8DD57656B2661DC8D3B4EB5D /* Pods-TestAppExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestAppExtension.release.xcconfig"; path = "Target Support Files/Pods-TestAppExtension/Pods-TestAppExtension.release.xcconfig"; sourceTree = "<group>"; };
 		9E695D276A2D5CA7797EF41F /* Pods-PerformanceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PerformanceApp.debug.xcconfig"; path = "Target Support Files/Pods-PerformanceApp/Pods-PerformanceApp.debug.xcconfig"; sourceTree = "<group>"; };
 		AC0BC7312C66ADB70034105C /* UIServicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServicesView.swift; sourceTree = "<group>"; };
+		74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityView.swift; sourceTree = "<group>"; };
 		AC0BC7352C66C8D60034105C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig_custom.json; sourceTree = "<group>"; };
 		ACC05DC42C6AC997005101D7 /* ADBMobileConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
@@ -556,6 +559,7 @@
 				780888A626D56F3800F5A665 /* LifecycleView.swift */,
 				ACC05DCA2C6ACB39005101D7 /* SignalView.swift */,
 				AC0BC7312C66ADB70034105C /* UIServicesView.swift */,
+				74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */,
 				78A69819289C70B700F67FEC /* ButtonStyle.swift */,
 				780888B126D56F3800F5A665 /* Assets.xcassets */,
 				780888A926D56F3800F5A665 /* Base.lproj */,
@@ -1367,6 +1371,7 @@
 				780888B526D56F3800F5A665 /* LifecycleView.swift in Sources */,
 				ACC05DCB2C6ACB39005101D7 /* SignalView.swift in Sources */,
 				AC0BC7342C66C34A0034105C /* UIServicesView.swift in Sources */,
+				63D2236E7BE63ECCE605679E /* NetworkAvailabilityView.swift in Sources */,
 				780888B626D56F3800F5A665 /* MenuView.swift in Sources */,
 				780888B926D56F3800F5A665 /* SceneDelegate.swift in Sources */,
 				78A6981A289C70B700F67FEC /* ButtonStyle.swift in Sources */,
@@ -1393,6 +1398,7 @@
 				78A26DD3284A9D6B004A91B9 /* CoreView.swift in Sources */,
 				78A26DD5284A9D71004A91B9 /* LifecycleView.swift in Sources */,
 				ACC05DCC2C6ACB39005101D7 /* SignalView.swift in Sources */,
+				C50E6C71BF4F7B2D9C39627F /* NetworkAvailabilityView.swift in Sources */,
 				78A26DD2284A9D69004A91B9 /* MenuView.swift in Sources */,
 				78A26DD1284A9D66004A91B9 /* SceneDelegate.swift in Sources */,
 				7816BBCC289DB32600FCBCDF /* ButtonStyle.swift in Sources */,

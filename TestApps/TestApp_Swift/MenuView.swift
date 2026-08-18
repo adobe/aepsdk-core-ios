@@ -31,6 +31,10 @@ struct MenuView: View {
                     NavigationLink(destination: SignalView().navigationBarTitle("Signal")) {
                         Text("Signal")
                     }
+
+                    NavigationLink(destination: NetworkAvailabilityView().navigationBarTitle("Network Availability")) {
+                        Text("Network Availability")
+                    }
                     #if os(iOS)
                         NavigationLink(destination: UIServicesView().navigationBarTitle("UIServices")) {
                             Text("UIServices")

@@ -19,4 +19,16 @@ public protocol Networking {
     ///   - completionHandler:Optional completion handler which is called once the `HttpConnection` is available; it can be called from an `HttpConnectionPerformer` if `NetworkServiceOverrider` is enabled.
     ///   In case of a network error, timeout or an unexpected error, the `HttpConnection` is nil
     func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?)
+
+    /// Returns whether network-bound SDK work should proceed right now. The default implementation checks
+    /// device-level path status only (`NWPathMonitor`). Override this in a custom `Networking` conformer
+    /// (see: overriding `NetworkService`, `ServiceProvider.shared.networkService`) to implement custom logic —
+    /// for example, pinging your own backend's health endpoint instead of relying on device connectivity alone.
+    func isInternetAvailable() -> Bool
+}
+
+public extension Networking {
+    func isInternetAvailable() -> Bool {
+        return NetworkPathMonitorProvider.shared.isPathAvailable()
+    }
 }
