@@ -2171,30 +2171,6 @@
           },
           {
             "kind": "Function",
-            "name": "isInternetAvailable",
-            "printedName": "isInternetAvailable()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "c:@CM@AEPCore@objc(cs)AEPMobileCore(cm)isInternetAvailable",
-            "mangledName": "$s7AEPCore10MobileCoreC19isInternetAvailableSbyFZ",
-            "moduleName": "AEPCore",
-            "static": true,
-            "declAttributes": [
-              "Final",
-              "ObjC"
-            ],
-            "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
             "name": "track",
             "printedName": "track(action:data:)",
             "children": [
