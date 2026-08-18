@@ -163,6 +163,8 @@
 		3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */; };
 		3F0397DD24BE5FF30019F095 /* ApplicationSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */; };
 		3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */; };
+		B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */; };
+		B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */; };
 		3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C024BE5FF30019F095 /* URLOpening.swift */; };
 		3F0397E024BE5FF30019F095 /* URLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C124BE5FF30019F095 /* URLService.swift */; };
 		3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E324BE60910019F095 /* HitProcessing.swift */; };
@@ -962,6 +964,8 @@
 		3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsNamedCollection.swift; sourceTree = "<group>"; };
 		3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationSystemInfoService.swift; sourceTree = "<group>"; };
 		3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoService.swift; sourceTree = "<group>"; };
+		B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkPathMonitorProvider.swift; sourceTree = "<group>"; };
+		B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingIsAvailableTests.swift; sourceTree = "<group>"; };
 		3F0397C024BE5FF30019F095 /* URLOpening.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLOpening.swift; sourceTree = "<group>"; };
 		3F0397C124BE5FF30019F095 /* URLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLService.swift; sourceTree = "<group>"; };
 		3F0397E324BE60910019F095 /* HitProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitProcessing.swift; sourceTree = "<group>"; };
@@ -1741,6 +1745,7 @@
 				3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */,
 				3F0397A524BE5FF30019F095 /* ServiceProvider.swift */,
 				3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */,
+				B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */,
 				3F0397C024BE5FF30019F095 /* URLOpening.swift */,
 				3F0397C124BE5FF30019F095 /* URLService.swift */,
 				78B36A7725CA0D7700D6D25F /* UIUtils.swift */,
@@ -1986,6 +1991,7 @@
 				3F03980724BE61520019F095 /* FileSystemNamedCollectionTest.swift */,
 				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
 				78F2E2D327FF7B900073CE00 /* ServiceProviderTests.swift */,
+				B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */,
 				75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */,
 			);
 			path = services;
@@ -3807,6 +3813,7 @@
 				3F0397D524BE5FF30019F095 /* DataQueue.swift in Sources */,
 				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,
+				B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */,
 				3F0397F624BE60910019F095 /* FileUnzipper.swift in Sources */,
 				3F0397D424BE5FF30019F095 /* SQLiteWrapper.swift in Sources */,
 				3F0397D024BE5FF30019F095 /* HttpMethod.swift in Sources */,
@@ -3849,6 +3856,7 @@
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
 				3F03981B24BE61520019F095 /* FileSystemNamedCollectionTest.swift in Sources */,
 				78F2E2D427FF7B900073CE00 /* ServiceProviderTests.swift in Sources */,
+				B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */,
 				24B860492CB5B0A00072868A /* HttpConnectionTests.swift in Sources */,
 				2EF54C292BF6C87500685C07 /* URLError+RecoverableTests.swift in Sources */,
 				786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */,

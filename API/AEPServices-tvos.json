@@ -27,6 +27,13 @@
       },
       {
         "kind": "Import",
+        "name": "Network",
+        "printedName": "Network",
+        "declKind": "Import",
+        "moduleName": "AEPServices"
+      },
+      {
+        "kind": "Import",
         "name": "SQLite3",
         "printedName": "SQLite3",
         "declKind": "Import",
@@ -7450,6 +7457,49 @@
             "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
             "protocolReq": true,
             "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "isInternetAvailable",
+            "printedName": "isInternetAvailable()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices10NetworkingP19isInternetAvailableSbyF",
+            "mangledName": "$s11AEPServices10NetworkingP19isInternetAvailableSbyF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.Networking>",
+            "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "isInternetAvailable",
+            "printedName": "isInternetAvailable()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices10NetworkingPAAE19isInternetAvailableSbyF",
+            "mangledName": "$s11AEPServices10NetworkingPAAE19isInternetAvailableSbyF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.Networking>",
+            "sugared_genericSig": "<Self where Self : AEPServices.Networking>",
+            "isFromExtension": true,
             "funcSelfKind": "NonMutating"
           }
         ],
