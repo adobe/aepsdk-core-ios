@@ -12,84 +12,81 @@
 import SwiftUI
 import AEPServices
 
-/// Demonstrates `isNetworkAvailable()` from the `Networking` protocol.
-///
-/// The default implementation (backed by `NWPathMonitor`) is accessed via
-/// `ServiceProvider.shared.networkService.isNetworkAvailable()`.
-/// A custom override registers a `Networking` conformer via the documented
-/// `ServiceProvider.shared.networkService` override point.
-private class CustomNetworkOverride: Networking {
-    var forcedAvailability: Bool
-
-    init(forcedAvailability: Bool) {
-        self.forcedAvailability = forcedAvailability
-    }
-
-    func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
-        let urlRequest = URLRequest(url: networkRequest.url)
-        let task = URLSession(configuration: .default).dataTask(with: urlRequest) { data, response, error in
-            completionHandler?(HttpConnection(data: data, response: response as? HTTPURLResponse, error: error))
-        }
-        task.resume()
-    }
-
-    func isNetworkAvailable() -> Bool {
-        return forcedAvailability
-    }
-}
+private let timeFormatter: DateFormatter = {
+    let f = DateFormatter()
+    f.dateFormat = "HH:mm:ss"
+    return f
+}()
 
 struct NetworkAvailabilityView: View {
-    @State private var isNetworkAvailableResult: String = ""
-    @State private var forcedAvailability: Bool = true
-    @State private var overrideStatus: String = ""
+    @State private var isAvailable: Bool? = nil
+    @State private var lastChecked: Date? = nil
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                syncCheckSection
-                overrideSection
-            }.padding()
+            VStack(alignment: .leading, spacing: 20) {
+                statusSection
+                checkSection
+            }
+            .padding()
+        }
+        .onAppear { runCheck() }
+    }
+
+    // MARK: - Sections
+
+    private var statusSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Current Status").font(.headline)
+            HStack(spacing: 10) {
+                Circle()
+                    .fill(statusColor)
+                    .frame(width: 14, height: 14)
+                Text(statusLabel)
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .foregroundColor(statusColor)
+                Spacer()
+                if let date = lastChecked {
+                    Text("at \(timeFormatter.string(from: date))")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(12)
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
         }
     }
 
-    var syncCheckSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Synchronous Check").bold()
-            Text("Default implementation checks device-level NWPathMonitor status.")
+    private var checkSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Check Now").font(.headline)
+            Text("Reads the current network path from NWPathMonitor synchronously.")
                 .font(.caption)
-
-            Button(action: {
-                let available = ServiceProvider.shared.networkService.isNetworkAvailable()
-                isNetworkAvailableResult = available ? "Available" : "Not Available"
-            }) {
-                Text("Check isNetworkAvailable()")
-            }.buttonStyle(CustomButtonStyle())
-
-            if !isNetworkAvailableResult.isEmpty {
-                Text("Result: \(isNetworkAvailableResult)")
+                .foregroundColor(.secondary)
+            Button("Check isNetworkAvailable()") {
+                runCheck()
             }
+            .buttonStyle(CustomButtonStyle())
         }
     }
 
-    var overrideSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Custom Override").bold()
-            Text("Override isNetworkAvailable() in your own Networking conformer and register it via ServiceProvider.shared.networkService — the same override point used for HTTP transport customization.")
-                .font(.caption)
+    // MARK: - Helpers
 
-            Toggle("Forced availability", isOn: $forcedAvailability)
+    private func runCheck() {
+        isAvailable = ServiceProvider.shared.networkService.isNetworkAvailable()
+        lastChecked = Date()
+    }
 
-            Button(action: {
-                ServiceProvider.shared.networkService = CustomNetworkOverride(forcedAvailability: forcedAvailability)
-                overrideStatus = "Applied: isNetworkAvailable() will now always report \(forcedAvailability)"
-            }) {
-                Text("Apply Custom Override")
-            }.buttonStyle(CustomButtonStyle())
+    private var statusColor: Color {
+        guard let available = isAvailable else { return .gray }
+        return available ? .green : .red
+    }
 
-            if !overrideStatus.isEmpty {
-                Text(overrideStatus)
-            }
-        }
+    private var statusLabel: String {
+        guard let available = isAvailable else { return "Unknown" }
+        return available ? "Available" : "Not Available"
     }
 }
 
