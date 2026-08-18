@@ -32,36 +32,4 @@ final class NetworkPathMonitorProvider {
         }
     }
 
-    func connectionInfo() -> NetworkConnectionInfo {
-        return queue.sync {
-            let path = monitor.currentPath
-            let available = path.status == .satisfied
-
-            let interfaceType: NetworkConnectionInfo.InterfaceType
-            if !available {
-                interfaceType = .unknown
-            } else if path.usesInterfaceType(.wifi) {
-                interfaceType = .wifi
-            } else if path.usesInterfaceType(.cellular) {
-                interfaceType = .cellular
-            } else if path.usesInterfaceType(.wiredEthernet) {
-                interfaceType = .wiredEthernet
-            } else {
-                interfaceType = .other
-            }
-
-            let isConstrained: Bool
-            if #available(iOS 13.0, tvOS 13.0, *) {
-                isConstrained = path.isConstrained
-            } else {
-                isConstrained = false
-            }
-            return NetworkConnectionInfo(
-                isAvailable: available,
-                interfaceType: interfaceType,
-                isConstrained: isConstrained,
-                isExpensive: path.isExpensive
-            )
-        }
-    }
 }

@@ -13,7 +13,7 @@
 @testable import AEPServices
 import XCTest
 
-/// Tests for `Networking.isNetworkAvailable()` and `Networking.networkConnectionInfo()`.
+/// Tests for `Networking.isNetworkAvailable()`.
 ///
 /// All deterministic coverage uses mock `Networking` conformers — no test seams live in
 /// production code. Custom conformers exercise the override path; the default-implementation
@@ -27,9 +27,9 @@ class NetworkingIsAvailableTests: XCTestCase {
 
     // MARK: - Test fixtures
 
-    /// Minimal conformer that does NOT override `isNetworkAvailable()` or
-    /// `networkConnectionInfo()` — receives the protocol extension defaults for free.
-    /// Source-compatible with all pre-existing `Networking` conformers across AEP repos.
+    /// Minimal conformer that does NOT override `isNetworkAvailable()` — receives the protocol
+    /// extension default for free. Source-compatible with all pre-existing `Networking` conformers
+    /// across AEP repos.
     private class MinimalNetworkingConformer: Networking {
         func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {}
     }
@@ -47,35 +47,6 @@ class NetworkingIsAvailableTests: XCTestCase {
         }
 
         func isNetworkAvailable() -> Bool { return overrideValue }
-
-        func networkConnectionInfo() -> NetworkConnectionInfo {
-            return NetworkConnectionInfo(isAvailable: overrideValue,
-                                         interfaceType: overrideValue ? .wifi : .unknown,
-                                         isConstrained: false,
-                                         isExpensive: false)
-        }
-    }
-
-    /// Conformer that overrides `networkConnectionInfo()` with injected values —
-    /// demonstrates the custom-override path for richer connection state.
-    private class CustomConnectionInfoNetworking: Networking {
-        let info: NetworkConnectionInfo
-
-        init(info: NetworkConnectionInfo) { self.info = info }
-
-        func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {}
-
-        func networkConnectionInfo() -> NetworkConnectionInfo { return info }
-    }
-
-    private func makeInfo(available: Bool,
-                          interfaceType: NetworkConnectionInfo.InterfaceType = .unknown,
-                          isConstrained: Bool = false,
-                          isExpensive: Bool = false) -> NetworkConnectionInfo {
-        NetworkConnectionInfo(isAvailable: available,
-                              interfaceType: interfaceType,
-                              isConstrained: isConstrained,
-                              isExpensive: isExpensive)
     }
 
     // MARK: - Default implementation (live NWPathMonitor)
@@ -104,16 +75,6 @@ class NetworkingIsAvailableTests: XCTestCase {
                        "Concurrent reads timed out — possible deadlock.")
     }
 
-    func testDefaultImpl_connectionInfo_returnsConsistentAvailability() {
-        let conformer = MinimalNetworkingConformer()
-        let info = conformer.networkConnectionInfo()
-        // isAvailable and interfaceType must agree
-        if !info.isAvailable {
-            XCTAssertEqual(info.interfaceType, .unknown,
-                           "Unavailable path must report .unknown interface type.")
-        }
-    }
-
     // MARK: - Custom override: isNetworkAvailable
 
     func testCustomOverride_returnsTrue_whenOverrideIsTrue() {
@@ -131,45 +92,6 @@ class NetworkingIsAvailableTests: XCTestCase {
 
         custom.overrideValue = true
         XCTAssertTrue(ServiceProvider.shared.networkService.isNetworkAvailable())
-    }
-
-    // MARK: - Custom override: networkConnectionInfo
-
-    func testConnectionInfo_unavailable_returnsUnknownInterfaceType() {
-        let info = CustomConnectionInfoNetworking(info: makeInfo(available: false)).networkConnectionInfo()
-        XCTAssertFalse(info.isAvailable)
-        XCTAssertEqual(info.interfaceType, .unknown)
-    }
-
-    func testConnectionInfo_wifi_returnsWifiType() {
-        let info = CustomConnectionInfoNetworking(info: makeInfo(available: true, interfaceType: .wifi)).networkConnectionInfo()
-        XCTAssertTrue(info.isAvailable)
-        XCTAssertEqual(info.interfaceType, .wifi)
-    }
-
-    func testConnectionInfo_cellular_returnsCellularType() {
-        let info = CustomConnectionInfoNetworking(info: makeInfo(available: true, interfaceType: .cellular)).networkConnectionInfo()
-        XCTAssertTrue(info.isAvailable)
-        XCTAssertEqual(info.interfaceType, .cellular)
-    }
-
-    func testConnectionInfo_constrained_isReflected() {
-        let info = CustomConnectionInfoNetworking(info: makeInfo(available: true, interfaceType: .wifi, isConstrained: true)).networkConnectionInfo()
-        XCTAssertTrue(info.isConstrained, "Low Data Mode must be reflected in isConstrained.")
-    }
-
-    func testConnectionInfo_expensive_isReflected() {
-        let info = CustomConnectionInfoNetworking(info: makeInfo(available: true, interfaceType: .cellular, isExpensive: true)).networkConnectionInfo()
-        XCTAssertTrue(info.isExpensive, "Cellular / hotspot must be reflected in isExpensive.")
-    }
-
-    func testConnectionInfo_customOverride_isHonored_viaServiceProvider() {
-        let injected = makeInfo(available: true, interfaceType: .cellular, isExpensive: true)
-        ServiceProvider.shared.networkService = CustomConnectionInfoNetworking(info: injected)
-        let result = ServiceProvider.shared.networkService.networkConnectionInfo()
-        XCTAssertTrue(result.isAvailable)
-        XCTAssertEqual(result.interfaceType, .cellular)
-        XCTAssertTrue(result.isExpensive)
     }
 
     // MARK: - Transport behaviour is unchanged

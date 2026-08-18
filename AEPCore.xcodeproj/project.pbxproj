@@ -164,7 +164,6 @@
 		3F0397DD24BE5FF30019F095 /* ApplicationSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */; };
 		3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */; };
 		B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */; };
-		C9A1B00124BE5FF30019F20 /* NetworkConnectionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A1B00224BE5FF30019F20 /* NetworkConnectionInfo.swift */; };
 		B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */; };
 		3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C024BE5FF30019F095 /* URLOpening.swift */; };
 		3F0397E024BE5FF30019F095 /* URLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C124BE5FF30019F095 /* URLService.swift */; };
@@ -966,7 +965,6 @@
 		3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationSystemInfoService.swift; sourceTree = "<group>"; };
 		3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoService.swift; sourceTree = "<group>"; };
 		B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkPathMonitorProvider.swift; sourceTree = "<group>"; };
-		C9A1B00224BE5FF30019F20 /* NetworkConnectionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkConnectionInfo.swift; sourceTree = "<group>"; };
 		B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingIsAvailableTests.swift; sourceTree = "<group>"; };
 		3F0397C024BE5FF30019F095 /* URLOpening.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLOpening.swift; sourceTree = "<group>"; };
 		3F0397C124BE5FF30019F095 /* URLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLService.swift; sourceTree = "<group>"; };
@@ -1888,7 +1886,6 @@
 				3F0397AB24BE5FF30019F095 /* NetworkService.swift */,
 				3F0397AC24BE5FF30019F095 /* NetworkServiceConstants.swift */,
 				3F0397AE24BE5FF30019F095 /* Networking.swift */,
-				C9A1B00224BE5FF30019F20 /* NetworkConnectionInfo.swift */,
 				786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */,
 				786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */,
 			);
@@ -3817,7 +3814,6 @@
 				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,
 				B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */,
-				C9A1B00124BE5FF30019F20 /* NetworkConnectionInfo.swift in Sources */,
 				3F0397F624BE60910019F095 /* FileUnzipper.swift in Sources */,
 				3F0397D424BE5FF30019F095 /* SQLiteWrapper.swift in Sources */,
 				3F0397D024BE5FF30019F095 /* HttpMethod.swift in Sources */,
