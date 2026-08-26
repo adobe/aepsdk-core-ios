@@ -14,6 +14,7 @@ import XCTest
 import SQLite3
 
 @testable import AEPCore
+import AEPServices
 
 class EventHistoryDatabaseTests: XCTestCase {
     let testDispatchQueue: DispatchQueue = DispatchQueue(label: "testEventHistoryQueue")
@@ -34,12 +35,21 @@ class EventHistoryDatabaseTests: XCTestCase {
         sqlite3_close(dbConnection)
         if let dbFile = dbFileUrl {
             try? FileManager.default.removeItem(at: dbFile)
+            // SQLite names WAL sidecars "<dbname>-wal" / "<dbname>-shm" (hyphen suffix on the full name).
+            try? FileManager.default.removeItem(atPath: dbFile.path + "-wal")
+            try? FileManager.default.removeItem(atPath: dbFile.path + "-shm")
         }
     }
     
     func testInit() throws {
         XCTAssertTrue(FileManager.default.fileExists(atPath: dbFileUrl?.path ?? ""), "The database file failed to initialize")
         XCTAssertNotNil(eventHistoryDatabase.connection)
+    }
+
+    func testDatabaseUsesWALJournalMode() throws {
+        let connection = try XCTUnwrap(eventHistoryDatabase.connection)
+        let mode = SQLiteWrapper.query(database: connection, sql: "PRAGMA journal_mode;")?.first?.values.first
+        XCTAssertEqual("wal", mode?.lowercased())
     }
     
     func testInsert() throws {

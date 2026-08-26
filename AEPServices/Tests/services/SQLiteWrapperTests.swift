@@ -18,6 +18,8 @@ class SQLiteWrapperTests: XCTestCase {
 
     override func setUp() {
         DataQueueServiceTests.removeDbFileIfExists(databaseName)
+        DataQueueServiceTests.removeDbFileIfExists(databaseName + "-wal")
+        DataQueueServiceTests.removeDbFileIfExists(databaseName + "-shm")
     }
 
     override func tearDown() {}
@@ -89,6 +91,57 @@ class SQLiteWrapperTests: XCTestCase {
         XCTAssertTrue(result.isEmpty)
     }
     
+    // MARK: - WAL
+
+    /// enableWAL() should switch the database into WAL journal mode.
+    func testEnableWAL_enablesWalJournalMode() {
+        // Given
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: connection) }
+
+        // When
+        let enabled = SQLiteWrapper.enableWAL(database: connection)
+
+        // Then
+        XCTAssertTrue(enabled)
+        let mode = SQLiteWrapper.query(database: connection, sql: "PRAGMA journal_mode;")?.first?.values.first
+        XCTAssertEqual("wal", mode?.lowercased())
+    }
+
+    /// enableWAL() should relax the synchronous setting to NORMAL (reported as "1" by SQLite).
+    func testEnableWAL_setsSynchronousToNormal() {
+        // Given
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: connection) }
+
+        // When
+        _ = SQLiteWrapper.enableWAL(database: connection)
+
+        // Then
+        let synchronous = SQLiteWrapper.query(database: connection, sql: "PRAGMA synchronous;")?.first?.values.first
+        XCTAssertEqual("1", synchronous)
+    }
+
+    /// setWalSafeFileProtection() should run without error and leave the database usable.
+    /// Note: file protection is not enforced on the Simulator, so this verifies the call is a safe
+    /// no-op there rather than asserting the resulting protection class.
+    func testSetWalSafeFileProtection_keepsDatabaseUsable() {
+        // Given - a WAL database with a table and its sidecar files
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: connection) }
+        _ = SQLiteWrapper.enableWAL(database: connection)
+        _ = SQLiteWrapper.execute(database: connection, sql: "CREATE TABLE t (id INTEGER);")
+        _ = SQLiteWrapper.execute(database: connection, sql: "INSERT INTO t VALUES (1);")
+
+        // When
+        SQLiteWrapper.setWalSafeFileProtection(databaseFilePath: .cachesDirectory, databaseName: databaseName)
+
+        // Then - the database remains readable and writable
+        XCTAssertTrue(SQLiteWrapper.execute(database: connection, sql: "INSERT INTO t VALUES (2);"))
+        let count = SQLiteWrapper.query(database: connection, sql: "SELECT COUNT(*) FROM t;")?.first?.values.first
+        XCTAssertEqual("2", count)
+    }
+
     // MARK: - Subdirectory Connection Tests
     
     func testConnectWithSubdirectory_CreatesDirectoryStructure() {

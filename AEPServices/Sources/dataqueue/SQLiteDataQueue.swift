@@ -26,6 +26,7 @@ class SQLiteDataQueue: DataQueue {
     private let TB_KEY_TIMESTAMP = "timestamp"
     private let TB_KEY_DATA = "data"
     private var isClosed = false
+    private var connection: OpaquePointer?
 
     private let LOG_PREFIX = "SQLiteDataQueue"
 
@@ -39,15 +40,32 @@ class SQLiteDataQueue: DataQueue {
         self.databaseName = databaseName
         self.databaseFilePath = databaseFilePath
         self.serialQueue = serialQueue
+
+        guard let connection = SQLiteWrapper.connect(databaseFilePath: databaseFilePath, databaseName: databaseName) else {
+            Log.warning(label: LOG_PREFIX, "Failed to connect to database: '\(databaseName)'.")
+            return nil
+        }
+        self.connection = connection
+
+        SQLiteWrapper.enableWAL(database: connection)
+        SQLiteWrapper.setWalSafeFileProtection(databaseFilePath: databaseFilePath, databaseName: databaseName)
+
         guard createTableIfNotExists(tableName: SQLiteDataQueue.TABLE_NAME) else {
             Log.warning(label: LOG_PREFIX, "Failed to initialize SQLiteDataQueue with database name '\(databaseName)'.")
             return nil
         }
     }
 
+    deinit {
+        if let connection = connection {
+            SQLiteWrapper.disconnect(database: connection)
+        }
+    }
+
     func add(dataEntity: DataEntity) -> Bool {
         return serialQueue.sync {
             if isClosed { return false}
+            guard let connection = connection else { return false }
 
             var dataString = ""
             if let data = dataEntity.data {
@@ -62,16 +80,7 @@ class SQLiteDataQueue: DataQueue {
             VALUES ("\(dataEntity.uniqueIdentifier)", \(dataEntity.timestamp.millisecondsSince1970), '\(sanitizedString)');
             """
 
-            guard let connection = connect() else {
-                return false
-            }
-
-            defer {
-                disconnect(database: connection)
-            }
-
-            let result = SQLiteWrapper.execute(database: connection, sql: insertRowStatement)
-            return result
+            return SQLiteWrapper.execute(database: connection, sql: insertRowStatement)
         }
     }
 
@@ -79,16 +88,11 @@ class SQLiteDataQueue: DataQueue {
         guard n > 0 else { return nil }
         return serialQueue.sync {
             if isClosed { return nil }
+            guard let connection = connection else { return nil }
 
             let queryRowStatement = """
             SELECT id,uniqueIdentifier,timestamp,data FROM \(SQLiteDataQueue.TABLE_NAME) ORDER BY id ASC LIMIT \(n);
             """
-            guard let connection = connect() else {
-                return nil
-            }
-            defer {
-                disconnect(database: connection)
-            }
             guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement) else {
                 Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
                 return nil
@@ -107,13 +111,8 @@ class SQLiteDataQueue: DataQueue {
         guard n > 0 else { return false }
         return serialQueue.sync {
             if isClosed { return false }
+            guard let connection = connection else { return false }
 
-            guard let connection = connect() else {
-                return false
-            }
-            defer {
-                disconnect(database: connection)
-            }
             let deleteRowStatement = """
             DELETE FROM \(SQLiteDataQueue.TABLE_NAME) WHERE id IN
                 (SELECT id from \(SQLiteDataQueue.TABLE_NAME) ORDER BY id ASC LIMIT \(n));
@@ -133,16 +132,11 @@ class SQLiteDataQueue: DataQueue {
     func clear() -> Bool {
         return serialQueue.sync {
             if isClosed { return false}
+            guard let connection = connection else { return false }
 
             let dropTableStatement = """
             DELETE FROM \(SQLiteDataQueue.TABLE_NAME);
             """
-            guard let connection = connect() else {
-                return false
-            }
-            defer {
-                disconnect(database: connection)
-            }
             guard SQLiteWrapper.execute(database: connection, sql: dropTableStatement) else {
                 Log.warning(label: LOG_PREFIX, "Failed to clear table '\(SQLiteDataQueue.TABLE_NAME)' in database: \(self.databaseName).")
                 return false
@@ -155,16 +149,11 @@ class SQLiteDataQueue: DataQueue {
     func count() -> Int {
         return serialQueue.sync {
             if isClosed { return 0 }
+            guard let connection = connection else { return 0 }
 
             let queryRowStatement = """
             SELECT count(id) FROM \(SQLiteDataQueue.TABLE_NAME);
             """
-            guard let connection = connect() else {
-                return 0
-            }
-            defer {
-                disconnect(database: connection)
-            }
             guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), let countAsString = result.first?.first?.value else {
                 Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
                 return 0
@@ -177,28 +166,16 @@ class SQLiteDataQueue: DataQueue {
     func close() {
         serialQueue.sync {
             isClosed = true
+            if let connection = connection {
+                SQLiteWrapper.disconnect(database: connection)
+                self.connection = nil
+            }
         }
-    }
-
-    private func connect() -> OpaquePointer? {
-        if let database = SQLiteWrapper.connect(databaseFilePath: databaseFilePath, databaseName: databaseName) {
-            return database
-        } else {
-            Log.warning(label: LOG_PREFIX, "Failed to connect to database: \(databaseName).")
-            return nil
-        }
-    }
-
-    private func disconnect(database: OpaquePointer) {
-        SQLiteWrapper.disconnect(database: database)
     }
 
     private func createTableIfNotExists(tableName: String) -> Bool {
-        guard let connection = connect() else {
+        guard let connection = connection else {
             return false
-        }
-        defer {
-            disconnect(database: connection)
         }
         if SQLiteWrapper.tableExists(database: connection, tableName: SQLiteDataQueue.TABLE_NAME) {
             return true
