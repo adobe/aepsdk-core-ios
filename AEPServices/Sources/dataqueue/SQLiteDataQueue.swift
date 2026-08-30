@@ -41,8 +41,7 @@ class SQLiteDataQueue: DataQueue {
         self.databaseFilePath = databaseFilePath
         self.serialQueue = serialQueue
 
-        guard let connection = SQLiteWrapper.connect(databaseFilePath: databaseFilePath, databaseName: databaseName) else {
-            Log.warning(label: LOG_PREFIX, "Failed to connect to database: '\(databaseName)'.")
+        guard let connection = connect() else {
             return nil
         }
         self.connection = connection
@@ -57,7 +56,7 @@ class SQLiteDataQueue: DataQueue {
 
     deinit {
         if let connection = connection {
-            SQLiteWrapper.disconnect(database: connection)
+            disconnect(database: connection)
         }
     }
 
@@ -166,10 +165,23 @@ class SQLiteDataQueue: DataQueue {
         serialQueue.sync {
             isClosed = true
             if let connection = connection {
-                SQLiteWrapper.disconnect(database: connection)
+                disconnect(database: connection)
                 self.connection = nil
             }
         }
+    }
+
+    private func connect() -> OpaquePointer? {
+        if let database = SQLiteWrapper.connect(databaseFilePath: databaseFilePath, databaseName: databaseName) {
+            return database
+        } else {
+            Log.warning(label: LOG_PREFIX, "Failed to connect to database: \(databaseName).")
+            return nil
+        }
+    }
+
+    private func disconnect(database: OpaquePointer) {
+        SQLiteWrapper.disconnect(database: database)
     }
 
     private func createTableIfNotExists(tableName: String) -> Bool {
