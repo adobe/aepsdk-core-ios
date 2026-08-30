@@ -196,18 +196,14 @@ class EventHistoryDatabase: EventHistoryStore {
     // MARK: - private methods
 
     private func connect() -> OpaquePointer? {
-        guard let database = SQLiteWrapper.connect(databaseDirectoryPath: EventHistoryConstants.applicationSupportDirectory,
-                                                    subDirectory: EventHistoryConstants.dbSubdirectoryName,
-                                                    databaseName: EventHistoryConstants.dbName) else {
+        if let database = SQLiteWrapper.connect(databaseDirectoryPath: EventHistoryConstants.applicationSupportDirectory,
+                                                subDirectory: EventHistoryConstants.dbSubdirectoryName,
+                                                databaseName: EventHistoryConstants.dbName) {
+            return database
+        } else {
             Log.warning(label: Self.LOG_PREFIX, "Failed to connect to database: \(EventHistoryConstants.dbName).")
             return nil
         }
-
-        SQLiteWrapper.enableWAL(database: database)
-        SQLiteWrapper.setWalSafeFileProtection(databaseFilePath: EventHistoryConstants.applicationSupportDirectory,
-                                               databaseName: EventHistoryConstants.dbNameWithSubdirectory)
-
-        return database
     }
 
     private func disconnect(database: OpaquePointer) {

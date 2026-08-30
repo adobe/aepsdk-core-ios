@@ -47,8 +47,7 @@ class SQLiteDataQueue: DataQueue {
         }
         self.connection = connection
 
-        SQLiteWrapper.enableWAL(database: connection)
-        SQLiteWrapper.setWalSafeFileProtection(databaseFilePath: databaseFilePath, databaseName: databaseName)
+        SQLiteWrapper.enableWAL(database: connection, databaseFilePath: databaseFilePath, databaseName: databaseName)
 
         guard createTableIfNotExists(tableName: SQLiteDataQueue.TABLE_NAME) else {
             Log.warning(label: LOG_PREFIX, "Failed to initialize SQLiteDataQueue with database name '\(databaseName)'.")
