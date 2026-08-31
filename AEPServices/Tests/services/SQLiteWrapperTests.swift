@@ -194,6 +194,29 @@ class SQLiteWrapperTests: XCTestCase {
         XCTAssertEqual("1", count)
     }
 
+    /// An existing rollback-journal database must convert to WAL on upgrade with no data loss.
+    func testEnableWAL_migratesExistingRollbackDatabase() {
+        // Given - a database created the old way (default journal), with a row
+        let first = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        let modeBefore = SQLiteWrapper.query(database: first, sql: "PRAGMA journal_mode;")?.first?.values.first
+        XCTAssertEqual("delete", modeBefore?.lowercased()) // default rollback journal
+        _ = SQLiteWrapper.execute(database: first, sql: "CREATE TABLE t (id INTEGER);")
+        _ = SQLiteWrapper.execute(database: first, sql: "INSERT INTO t VALUES (1);")
+        _ = SQLiteWrapper.disconnect(database: first)
+
+        // When - the upgraded SDK reopens the same file and enables WAL
+        let second = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: second) }
+        _ = SQLiteWrapper.enableWAL(database: second, databaseFilePath: .cachesDirectory, databaseName: databaseName)
+
+        // Then - mode is WAL, the old row is intact, and new writes work
+        let modeAfter = SQLiteWrapper.query(database: second, sql: "PRAGMA journal_mode;")?.first?.values.first
+        XCTAssertEqual("wal", modeAfter?.lowercased())
+        XCTAssertTrue(SQLiteWrapper.execute(database: second, sql: "INSERT INTO t VALUES (2);"))
+        let count = SQLiteWrapper.query(database: second, sql: "SELECT COUNT(*) FROM t;")?.first?.values.first
+        XCTAssertEqual("2", count) // 1 old + 1 new, nothing lost
+    }
+
     // MARK: - Subdirectory Connection Tests
     
     func testConnectWithSubdirectory_CreatesDirectoryStructure() {
