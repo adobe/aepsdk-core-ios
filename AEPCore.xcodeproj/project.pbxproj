@@ -164,6 +164,8 @@
 		3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */; };
 		3F0397DD24BE5FF30019F095 /* ApplicationSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */; };
 		3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */; };
+		B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */; };
+		B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */; };
 		3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C024BE5FF30019F095 /* URLOpening.swift */; };
 		3F0397E024BE5FF30019F095 /* URLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C124BE5FF30019F095 /* URLService.swift */; };
 		3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E324BE60910019F095 /* HitProcessing.swift */; };
@@ -966,6 +968,8 @@
 		3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsNamedCollection.swift; sourceTree = "<group>"; };
 		3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationSystemInfoService.swift; sourceTree = "<group>"; };
 		3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoService.swift; sourceTree = "<group>"; };
+		B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkPathMonitorProvider.swift; sourceTree = "<group>"; };
+		B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingIsAvailableTests.swift; sourceTree = "<group>"; };
 		3F0397C024BE5FF30019F095 /* URLOpening.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLOpening.swift; sourceTree = "<group>"; };
 		3F0397C124BE5FF30019F095 /* URLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLService.swift; sourceTree = "<group>"; };
 		3F0397E324BE60910019F095 /* HitProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitProcessing.swift; sourceTree = "<group>"; };
