@@ -18,4 +18,9 @@ import Foundation
     /// - Parameter label: the label you assigned to the `DataQueue` at creation time.
     /// - Returns: the object of `DataQueue`, return false if failed to create an object
     func getDataQueue(label: String) -> DataQueue?
+
+    /// Registers configuration for the queue identified by `label`, applied when that queue is first
+    /// created. A consumer calls this before `getDataQueue(label:)`. Optional so existing conformers are
+    /// unaffected, and so an older Core simply falls back to default configuration.
+    @objc optional func setConfig(_ config: DataQueueConfig, forLabel label: String)
 }

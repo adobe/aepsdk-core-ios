@@ -100,7 +100,7 @@ class SQLiteWrapperTests: XCTestCase {
         defer { _ = SQLiteWrapper.disconnect(database: connection) }
 
         // When
-        let enabled = SQLiteWrapper.enableWAL(database: connection, databaseFilePath: .cachesDirectory, databaseName: databaseName)
+        let enabled = SQLiteWrapper.enableWAL(database: connection)
 
         // Then
         XCTAssertTrue(enabled)
@@ -115,31 +115,11 @@ class SQLiteWrapperTests: XCTestCase {
         defer { _ = SQLiteWrapper.disconnect(database: connection) }
 
         // When
-        _ = SQLiteWrapper.enableWAL(database: connection, databaseFilePath: .cachesDirectory, databaseName: databaseName)
+        _ = SQLiteWrapper.enableWAL(database: connection)
 
         // Then
         let synchronous = SQLiteWrapper.query(database: connection, sql: "PRAGMA synchronous;")?.first?.values.first
         XCTAssertEqual("1", synchronous)
-    }
-
-    /// setWalSafeFileProtection() should run without error and leave the database usable.
-    /// Note: file protection is not enforced on the Simulator, so this verifies the call is a safe
-    /// no-op there rather than asserting the resulting protection class.
-    func testSetWalSafeFileProtection_keepsDatabaseUsable() {
-        // Given - a WAL database with a table and its sidecar files
-        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
-        defer { _ = SQLiteWrapper.disconnect(database: connection) }
-        _ = SQLiteWrapper.enableWAL(database: connection, databaseFilePath: .cachesDirectory, databaseName: databaseName)
-        _ = SQLiteWrapper.execute(database: connection, sql: "CREATE TABLE t (id INTEGER);")
-        _ = SQLiteWrapper.execute(database: connection, sql: "INSERT INTO t VALUES (1);")
-
-        // When
-        SQLiteWrapper.setWalSafeFileProtection(databaseFilePath: .cachesDirectory, databaseName: databaseName)
-
-        // Then - the database remains readable and writable
-        XCTAssertTrue(SQLiteWrapper.execute(database: connection, sql: "INSERT INTO t VALUES (2);"))
-        let count = SQLiteWrapper.query(database: connection, sql: "SELECT COUNT(*) FROM t;")?.first?.values.first
-        XCTAssertEqual("2", count)
     }
 
     /// journal_mode=WAL is written to the database header, so a fresh connection to the same file
@@ -147,7 +127,7 @@ class SQLiteWrapperTests: XCTestCase {
     func testEnableWAL_journalModePersistsAcrossReconnect() {
         // Given - a database switched to WAL, then closed
         let first = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
-        _ = SQLiteWrapper.enableWAL(database: first, databaseFilePath: .cachesDirectory, databaseName: databaseName)
+        _ = SQLiteWrapper.enableWAL(database: first)
         _ = SQLiteWrapper.disconnect(database: first)
 
         // When - reopening the same database file without calling enableWAL again
@@ -164,7 +144,7 @@ class SQLiteWrapperTests: XCTestCase {
         // Given - a WAL database
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
         defer { _ = SQLiteWrapper.disconnect(database: connection) }
-        _ = SQLiteWrapper.enableWAL(database: connection, databaseFilePath: .cachesDirectory, databaseName: databaseName)
+        _ = SQLiteWrapper.enableWAL(database: connection)
 
         // When - writing to the database
         _ = SQLiteWrapper.execute(database: connection, sql: "CREATE TABLE t (id INTEGER);")
@@ -174,24 +154,6 @@ class SQLiteWrapperTests: XCTestCase {
         let caches = try XCTUnwrap(FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first)
         let walPath = caches.appendingPathComponent(databaseName).path + "-wal"
         XCTAssertTrue(FileManager.default.fileExists(atPath: walPath))
-    }
-
-    /// enableWAL() applies WAL-safe file protection as part of the same call. The database should
-    /// remain readable and writable afterward, confirming the folded protection step is a safe no-op.
-    func testEnableWAL_appliesFileProtectionAndKeepsDatabaseUsable() {
-        // Given - a database with a table
-        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
-        defer { _ = SQLiteWrapper.disconnect(database: connection) }
-        _ = SQLiteWrapper.execute(database: connection, sql: "CREATE TABLE t (id INTEGER);")
-
-        // When - enabling WAL, which also sets file protection internally
-        let enabled = SQLiteWrapper.enableWAL(database: connection, databaseFilePath: .cachesDirectory, databaseName: databaseName)
-
-        // Then - the database remains usable
-        XCTAssertTrue(enabled)
-        XCTAssertTrue(SQLiteWrapper.execute(database: connection, sql: "INSERT INTO t VALUES (1);"))
-        let count = SQLiteWrapper.query(database: connection, sql: "SELECT COUNT(*) FROM t;")?.first?.values.first
-        XCTAssertEqual("1", count)
     }
 
     /// An existing rollback-journal database must convert to WAL on upgrade with no data loss.
@@ -207,7 +169,7 @@ class SQLiteWrapperTests: XCTestCase {
         // When - the upgraded SDK reopens the same file and enables WAL
         let second = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
         defer { _ = SQLiteWrapper.disconnect(database: second) }
-        _ = SQLiteWrapper.enableWAL(database: second, databaseFilePath: .cachesDirectory, databaseName: databaseName)
+        _ = SQLiteWrapper.enableWAL(database: second)
 
         // Then - mode is WAL, the old row is intact, and new writes work
         let modeAfter = SQLiteWrapper.query(database: second, sql: "PRAGMA journal_mode;")?.first?.values.first

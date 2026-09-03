@@ -36,7 +36,8 @@ class SQLiteDataQueue: DataQueue {
     ///   - databaseName: the database name used to create SQLite database
     ///   - databaseFilePath: the SQLite database file will be stored in this directory, the default value is `.cachesDirectory`
     ///   - serialQueue: a serial dispatch queue used to perform database operations
-    init?(databaseName: String, databaseFilePath: FileManager.SearchPathDirectory = .cachesDirectory, serialQueue: DispatchQueue) {
+    ///   - config: tuning applied to the queue's database. Defaults reproduce a rollback-journal queue.
+    init?(databaseName: String, databaseFilePath: FileManager.SearchPathDirectory = .cachesDirectory, serialQueue: DispatchQueue, config: DataQueueConfig = DataQueueConfig()) {
         self.databaseName = databaseName
         self.databaseFilePath = databaseFilePath
         self.serialQueue = serialQueue
@@ -46,7 +47,9 @@ class SQLiteDataQueue: DataQueue {
         }
         self.connection = connection
 
-        SQLiteWrapper.enableWAL(database: connection, databaseFilePath: databaseFilePath, databaseName: databaseName)
+        if config.journalMode == .wal {
+            SQLiteWrapper.enableWAL(database: connection)
+        }
 
         guard createTableIfNotExists(tableName: SQLiteDataQueue.TABLE_NAME) else {
             Log.warning(label: LOG_PREFIX, "Failed to initialize SQLiteDataQueue with database name '\(databaseName)'.")

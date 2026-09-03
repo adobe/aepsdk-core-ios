@@ -25,17 +25,24 @@ public class DataQueueService: DataQueuing {
         private var store: [String: DataQueue] = [:]
     #endif
 
+    private var configs: [String: DataQueueConfig] = [:]
+
     public init() {}
+
+    public func setConfig(_ config: DataQueueConfig, forLabel label: String) {
+        storeQueue.sync { configs[label] = config }
+    }
 
     public func getDataQueue(label databaseName: String) -> DataQueue? {
         storeQueue.sync {
             if let queue = store[databaseName] {
                 return queue
-            } else {
-                let dataQueue = SQLiteDataQueue(databaseName: databaseName, serialQueue: dbQueue)
-                store[databaseName] = dataQueue
-                return dataQueue
             }
+            // Config is read at creation only, so the label's first request fixes its tuning.
+            let config = configs[databaseName] ?? DataQueueConfig()
+            let dataQueue = SQLiteDataQueue(databaseName: databaseName, serialQueue: dbQueue, config: config)
+            store[databaseName] = dataQueue
+            return dataQueue
         }
     }
 }

@@ -170,20 +170,10 @@ public struct SQLiteWrapper {
     /// not part of `connect(...)`: WAL is opt-in per database
     /// so that each caller's journal mode remains an explicit decision and unrelated databases are not
     /// affected.
-    ///
-    /// WAL-safe file protection is applied to the database and its `-wal`/`-shm` sidecars as part of
-    /// enabling WAL, reusing the same `databaseFilePath` and `databaseName` used to open the connection,
-    /// so callers configure both in a single step. See `setWalSafeFileProtection(databaseFilePath:databaseName:)`.
-    /// - Parameters:
-    ///   - database: the database connection to configure
-    ///   - databaseFilePath: the `SearchPathDirectory` containing the database, used to locate the files
-    ///     for file protection
-    ///   - databaseName: the database file name (may include a subdirectory prefix, e.g. "subdir/name")
+    /// - Parameter database: the database connection to configure
     /// - Returns: True if WAL journal mode was successfully enabled, otherwise false
     @discardableResult
-    public static func enableWAL(database: OpaquePointer,
-                                 databaseFilePath: FileManager.SearchPathDirectory,
-                                 databaseName: String) -> Bool {
+    public static func enableWAL(database: OpaquePointer) -> Bool {
         guard let result = query(database: database, sql: "PRAGMA journal_mode=WAL;"),
               let mode = result.first?.values.first, mode.lowercased() == "wal" else {
             Log.warning(label: LOG_PREFIX, "Failed to enable WAL journal mode.")
@@ -194,34 +184,6 @@ public struct SQLiteWrapper {
             Log.warning(label: LOG_PREFIX, "Failed to set synchronous=NORMAL.")
         }
 
-        setWalSafeFileProtection(databaseFilePath: databaseFilePath, databaseName: databaseName)
-
         return true
-    }
-
-    /// Sets file protection to `.completeUntilFirstUserAuthentication` on the database file and its
-    /// `-wal`/`-shm` sidecars, if present. A WAL database memory-maps its `-shm` file; under a stricter
-    /// class such as `.complete` that mapping becomes inaccessible while the device is locked, which can
-    /// crash the app if it runs in the background. `.completeUntilFirstUserAuthentication` stays readable
-    /// while locked once the user has unlocked the device after boot, so WAL keeps working in the
-    /// background, while still keeping the contents encrypted at rest before that first unlock. Setting
-    /// this explicitly per file overrides a stricter host-app default (for example `.complete`).
-    /// - Parameters:
-    ///   - databaseFilePath: the `SearchPathDirectory` containing the database
-    ///   - databaseName: the database file name (may include a subdirectory prefix, e.g. "subdir/name")
-    public static func setWalSafeFileProtection(databaseFilePath: FileManager.SearchPathDirectory, databaseName: String) {
-        guard let baseUrl = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: false) else {
-            return
-        }
-        let dbPath = baseUrl.appendingPathComponent(databaseName).path
-        for suffix in ["", "-wal", "-shm"] {
-            let path = dbPath + suffix
-            guard FileManager.default.fileExists(atPath: path) else { continue }
-            do {
-                try FileManager.default.setAttributes([FileAttributeKey.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication], ofItemAtPath: path)
-            } catch {
-                Log.warning(label: LOG_PREFIX, "Failed to set file protection on \(path): \(error.localizedDescription).")
-            }
-        }
     }
 }

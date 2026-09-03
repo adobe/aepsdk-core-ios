@@ -571,10 +571,12 @@ class DataQueueTests: XCTestCase {
 
     // MARK: - WAL
 
-    /// The queue's database should be in WAL journal mode (persisted in the file header).
+    /// A queue configured with `.wal` should be in WAL journal mode (persisted in the file header).
     func testDataQueueUsesWALJournalMode() {
         // Given
-        let queue = DataQueueService().getDataQueue(label: fileName)!
+        let service = DataQueueService()
+        service.setConfig(DataQueueConfig(journalMode: .wal), forLabel: fileName)
+        let queue = service.getDataQueue(label: fileName)!
         _ = queue.add(dataEntity: DataEntity(data: nil))
 
         // When - read the journal mode via an independent connection to the same file
@@ -589,10 +591,12 @@ class DataQueueTests: XCTestCase {
         XCTAssertEqual("wal", mode?.lowercased())
     }
 
-    /// A write should produce the `-wal` sidecar file while the queue's connection is open.
+    /// A write should produce the `-wal` sidecar file while a `.wal` queue's connection is open.
     func testWALSidecarFileCreatedAfterWrite() throws {
         // Given
-        let queue = DataQueueService().getDataQueue(label: fileName)!
+        let service = DataQueueService()
+        service.setConfig(DataQueueConfig(journalMode: .wal), forLabel: fileName)
+        let queue = service.getDataQueue(label: fileName)!
         defer { queue.close() }
 
         // When
