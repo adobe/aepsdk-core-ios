@@ -20,12 +20,14 @@ class SQLiteDataQueue: DataQueue {
     public let databaseName: String
     public let databaseFilePath: FileManager.SearchPathDirectory
     public static let TABLE_NAME: String = "TB_AEP_DATA_ENTITY"
+    public let config: DataQueueConfig
 
     private let serialQueue: DispatchQueue
     private let TB_KEY_UNIQUE_IDENTIFIER = "uniqueIdentifier"
     private let TB_KEY_TIMESTAMP = "timestamp"
     private let TB_KEY_DATA = "data"
     private var isClosed = false
+    private var connection: OpaquePointer?
 
     private let LOG_PREFIX = "SQLiteDataQueue"
 
@@ -35,19 +37,42 @@ class SQLiteDataQueue: DataQueue {
     ///   - databaseName: the database name used to create SQLite database
     ///   - databaseFilePath: the SQLite database file will be stored in this directory, the default value is `.cachesDirectory`
     ///   - serialQueue: a serial dispatch queue used to perform database operations
-    init?(databaseName: String, databaseFilePath: FileManager.SearchPathDirectory = .cachesDirectory, serialQueue: DispatchQueue) {
+    ///   - config: tuning applied to the queue's database. Defaults reproduce a rollback-journal queue.
+    init?(databaseName: String, databaseFilePath: FileManager.SearchPathDirectory = .cachesDirectory, serialQueue: DispatchQueue, config: DataQueueConfig = DataQueueConfig()) {
         self.databaseName = databaseName
         self.databaseFilePath = databaseFilePath
         self.serialQueue = serialQueue
+        self.config = config
+
+        guard let connection = openConnection() else {
+            return nil
+        }
+        self.connection = connection
+
         guard createTableIfNotExists(tableName: SQLiteDataQueue.TABLE_NAME) else {
             Log.warning(label: LOG_PREFIX, "Failed to initialize SQLiteDataQueue with database name '\(databaseName)'.")
+            disconnect(database: connection)
+            self.connection = nil
             return nil
+        }
+    }
+
+    deinit {
+        serialQueue.sync {
+            if let connection = connection {
+                disconnect(database: connection)
+                self.connection = nil
+            }
         }
     }
 
     func add(dataEntity: DataEntity) -> Bool {
         return serialQueue.sync {
             if isClosed { return false}
+            guard let connection = ensureConnection() else {
+                Log.warning(label: LOG_PREFIX, "Failed to add data entity to SQLiteDataQueue. Database connection is nil.")
+                return false
+            }
 
             var dataString = ""
             if let data = dataEntity.data {
@@ -62,16 +87,7 @@ class SQLiteDataQueue: DataQueue {
             VALUES ("\(dataEntity.uniqueIdentifier)", \(dataEntity.timestamp.millisecondsSince1970), '\(sanitizedString)');
             """
 
-            guard let connection = connect() else {
-                return false
-            }
-
-            defer {
-                disconnect(database: connection)
-            }
-
-            let result = SQLiteWrapper.execute(database: connection, sql: insertRowStatement)
-            return result
+            return SQLiteWrapper.execute(database: connection, sql: insertRowStatement)
         }
     }
 
@@ -79,16 +95,14 @@ class SQLiteDataQueue: DataQueue {
         guard n > 0 else { return nil }
         return serialQueue.sync {
             if isClosed { return nil }
+            guard let connection = ensureConnection() else {
+                Log.warning(label: LOG_PREFIX, "Failed to peek data entity from SQLiteDataQueue. Database connection is nil.")
+                return nil
+            }
 
             let queryRowStatement = """
             SELECT id,uniqueIdentifier,timestamp,data FROM \(SQLiteDataQueue.TABLE_NAME) ORDER BY id ASC LIMIT \(n);
             """
-            guard let connection = connect() else {
-                return nil
-            }
-            defer {
-                disconnect(database: connection)
-            }
             guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement) else {
                 Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
                 return nil
@@ -107,13 +121,11 @@ class SQLiteDataQueue: DataQueue {
         guard n > 0 else { return false }
         return serialQueue.sync {
             if isClosed { return false }
-
-            guard let connection = connect() else {
+            guard let connection = ensureConnection() else {
+                Log.warning(label: LOG_PREFIX, "Failed to remove data entity from SQLiteDataQueue. Database connection is nil.")
                 return false
             }
-            defer {
-                disconnect(database: connection)
-            }
+
             let deleteRowStatement = """
             DELETE FROM \(SQLiteDataQueue.TABLE_NAME) WHERE id IN
                 (SELECT id from \(SQLiteDataQueue.TABLE_NAME) ORDER BY id ASC LIMIT \(n));
@@ -133,16 +145,13 @@ class SQLiteDataQueue: DataQueue {
     func clear() -> Bool {
         return serialQueue.sync {
             if isClosed { return false}
-
+            guard let connection = ensureConnection() else {
+                Log.warning(label: LOG_PREFIX, "Failed to clear SQLiteDataQueue. Database connection is nil.")
+                return false
+            }
             let dropTableStatement = """
             DELETE FROM \(SQLiteDataQueue.TABLE_NAME);
             """
-            guard let connection = connect() else {
-                return false
-            }
-            defer {
-                disconnect(database: connection)
-            }
             guard SQLiteWrapper.execute(database: connection, sql: dropTableStatement) else {
                 Log.warning(label: LOG_PREFIX, "Failed to clear table '\(SQLiteDataQueue.TABLE_NAME)' in database: \(self.databaseName).")
                 return false
@@ -155,16 +164,13 @@ class SQLiteDataQueue: DataQueue {
     func count() -> Int {
         return serialQueue.sync {
             if isClosed { return 0 }
-
+            guard let connection = ensureConnection() else {
+                Log.warning(label: LOG_PREFIX, "Failed to count SQLiteDataQueue entities. Database connection is nil.")
+                return 0
+            }
             let queryRowStatement = """
             SELECT count(id) FROM \(SQLiteDataQueue.TABLE_NAME);
             """
-            guard let connection = connect() else {
-                return 0
-            }
-            defer {
-                disconnect(database: connection)
-            }
             guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), let countAsString = result.first?.first?.value else {
                 Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
                 return 0
@@ -177,6 +183,10 @@ class SQLiteDataQueue: DataQueue {
     func close() {
         serialQueue.sync {
             isClosed = true
+            if let connection = connection {
+                disconnect(database: connection)
+                self.connection = nil
+            }
         }
     }
 
@@ -189,16 +199,60 @@ class SQLiteDataQueue: DataQueue {
         }
     }
 
+    /// This method opens connections and setup the db according to configurations
+    private func openConnection() -> OpaquePointer? {
+        guard let connection = connect() else {
+            return nil
+        }
+        if config.journalMode == .wal, !SQLiteWrapper.enableWAL(database: connection) {
+            Log.warning(label: LOG_PREFIX, "Failed to enable WAL mode for database '\(databaseName)'.")
+        }
+        return connection
+    }
+
+    /// This method helps in scenario when iOS purged db file from .cachesDirectory while app
+    /// is still running. so this method will ensure that the connection is still valid and self heal
+    /// if require. and returns connection
+    private func ensureConnection() -> OpaquePointer? {
+        if let connection = connection, databaseFileExists() {
+            return connection
+        }
+        if let stale = connection {
+            disconnect(database: stale)
+            self.connection = nil
+        }
+        guard let connection = openConnection() else {
+            return nil
+        }
+        self.connection = connection
+        guard createTableIfNotExists(tableName: SQLiteDataQueue.TABLE_NAME) else {
+            Log.warning(label: LOG_PREFIX, "Failed to create table for database: \(databaseName)")
+            disconnect(database: connection)
+            self.connection = nil
+            return nil
+        }
+        return connection
+    }
+
+    /// checks that the database files are exists or not
+    private func databaseFileExists() -> Bool {
+        guard let url = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(databaseName) else {
+            Log.warning(label: LOG_PREFIX, "Failed to get database file URL for database: \(databaseName)")
+            return false
+        }
+        return FileManager.default.fileExists(atPath: url.path)
+    }
+
     private func disconnect(database: OpaquePointer) {
-        SQLiteWrapper.disconnect(database: database)
+        if !SQLiteWrapper.disconnect(database: database) {
+            Log.warning(label: LOG_PREFIX, "Failed to close database connection for '\(databaseName)'.")
+        }
     }
 
     private func createTableIfNotExists(tableName: String) -> Bool {
-        guard let connection = connect() else {
+        guard let connection = connection else {
+            Log.warning(label: LOG_PREFIX, "Failed to create table '\(tableName)' in SQLiteDataQueue. Database connection is nil.")
             return false
-        }
-        defer {
-            disconnect(database: connection)
         }
         if SQLiteWrapper.tableExists(database: connection, tableName: SQLiteDataQueue.TABLE_NAME) {
             return true

@@ -159,4 +159,31 @@ public struct SQLiteWrapper {
         let res = query(database: database, sql: sql)?.first?["COUNT(*)"]
         return res == "0"
     }
+
+    /// Enables Write-Ahead Logging (WAL) journal mode on the provided connection and relaxes the
+    /// synchronous setting to `NORMAL`. Together these reduce disk I/O by appending writes to a `-wal`
+    /// file and batching `fsync` calls into periodic checkpoints, rather than syncing on every write.
+    ///
+    /// `journal_mode=WAL` is persisted in the database file header and therefore survives reopening,
+    /// while `synchronous` is a per-connection setting that must be re-applied on every connection.
+    /// The `wal_autocheckpoint` value is left at the SQLite default of 1000 pages. This is intentionally
+    /// not part of `connect(...)`: WAL is opt-in per database
+    /// so that each caller's journal mode remains an explicit decision and unrelated databases are not
+    /// affected.
+    /// - Parameter database: the database connection to configure
+    /// - Returns: True if WAL journal mode was successfully enabled, otherwise false
+    @discardableResult
+    public static func enableWAL(database: OpaquePointer) -> Bool {
+        guard let result = query(database: database, sql: "PRAGMA journal_mode=WAL;"),
+              let mode = result.first?.values.first, mode.lowercased() == "wal" else {
+            Log.warning(label: LOG_PREFIX, "Failed to enable WAL journal mode for database.")
+            return false
+        }
+
+        if !execute(database: database, sql: "PRAGMA synchronous=NORMAL;") {
+            Log.warning(label: LOG_PREFIX, "Failed to set synchronous=NORMAL.")
+        }
+
+        return true
+    }
 }
