@@ -18,6 +18,8 @@ class SQLiteWrapperTests: XCTestCase {
 
     override func setUp() {
         DataQueueServiceTests.removeDbFileIfExists(databaseName)
+        DataQueueServiceTests.removeDbFileIfExists(databaseName + "-wal")
+        DataQueueServiceTests.removeDbFileIfExists(databaseName + "-shm")
     }
 
     override func tearDown() {}
@@ -89,6 +91,94 @@ class SQLiteWrapperTests: XCTestCase {
         XCTAssertTrue(result.isEmpty)
     }
     
+    // MARK: - WAL
+
+    /// enableWAL() should switch the database into WAL journal mode.
+    func testEnableWAL_enablesWalJournalMode() {
+        // Given
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: connection) }
+
+        // When
+        let enabled = SQLiteWrapper.enableWAL(database: connection)
+
+        // Then
+        XCTAssertTrue(enabled)
+        let mode = SQLiteWrapper.query(database: connection, sql: "PRAGMA journal_mode;")?.first?.values.first
+        XCTAssertEqual("wal", mode?.lowercased())
+    }
+
+    /// enableWAL() should relax the synchronous setting to NORMAL (reported as "1" by SQLite).
+    func testEnableWAL_setsSynchronousToNormal() {
+        // Given
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: connection) }
+
+        // When
+        _ = SQLiteWrapper.enableWAL(database: connection)
+
+        // Then
+        let synchronous = SQLiteWrapper.query(database: connection, sql: "PRAGMA synchronous;")?.first?.values.first
+        XCTAssertEqual("1", synchronous)
+    }
+
+    /// journal_mode=WAL is written to the database header, so a fresh connection to the same file
+    /// reports WAL without re-enabling it.
+    func testEnableWAL_journalModePersistsAcrossReconnect() {
+        // Given - a database switched to WAL, then closed
+        let first = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        _ = SQLiteWrapper.enableWAL(database: first)
+        _ = SQLiteWrapper.disconnect(database: first)
+
+        // When - reopening the same database file without calling enableWAL again
+        let second = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: second) }
+
+        // Then - it is still in WAL mode
+        let mode = SQLiteWrapper.query(database: second, sql: "PRAGMA journal_mode;")?.first?.values.first
+        XCTAssertEqual("wal", mode?.lowercased())
+    }
+
+    /// A WAL database appends writes to a "-wal" sidecar file, which should exist on disk after a write.
+    func testEnableWAL_createsWalSidecarFileOnWrite() throws {
+        // Given - a WAL database
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: connection) }
+        _ = SQLiteWrapper.enableWAL(database: connection)
+
+        // When - writing to the database
+        _ = SQLiteWrapper.execute(database: connection, sql: "CREATE TABLE t (id INTEGER);")
+        _ = SQLiteWrapper.execute(database: connection, sql: "INSERT INTO t VALUES (1);")
+
+        // Then - the -wal sidecar is present
+        let caches = try XCTUnwrap(FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first)
+        let walPath = caches.appendingPathComponent(databaseName).path + "-wal"
+        XCTAssertTrue(FileManager.default.fileExists(atPath: walPath))
+    }
+
+    /// An existing rollback-journal database must convert to WAL on upgrade with no data loss.
+    func testEnableWAL_migratesExistingRollbackDatabase() {
+        // Given - a database created the old way (default journal), with a row
+        let first = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        let modeBefore = SQLiteWrapper.query(database: first, sql: "PRAGMA journal_mode;")?.first?.values.first
+        XCTAssertEqual("delete", modeBefore?.lowercased()) // default rollback journal
+        _ = SQLiteWrapper.execute(database: first, sql: "CREATE TABLE t (id INTEGER);")
+        _ = SQLiteWrapper.execute(database: first, sql: "INSERT INTO t VALUES (1);")
+        _ = SQLiteWrapper.disconnect(database: first)
+
+        // When - the upgraded SDK reopens the same file and enables WAL
+        let second = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: second) }
+        _ = SQLiteWrapper.enableWAL(database: second)
+
+        // Then - mode is WAL, the old row is intact, and new writes work
+        let modeAfter = SQLiteWrapper.query(database: second, sql: "PRAGMA journal_mode;")?.first?.values.first
+        XCTAssertEqual("wal", modeAfter?.lowercased())
+        XCTAssertTrue(SQLiteWrapper.execute(database: second, sql: "INSERT INTO t VALUES (2);"))
+        let count = SQLiteWrapper.query(database: second, sql: "SELECT COUNT(*) FROM t;")?.first?.values.first
+        XCTAssertEqual("2", count) // 1 old + 1 new, nothing lost
+    }
+
     // MARK: - Subdirectory Connection Tests
     
     func testConnectWithSubdirectory_CreatesDirectoryStructure() {

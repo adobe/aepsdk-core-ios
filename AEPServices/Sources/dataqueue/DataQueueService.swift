@@ -28,14 +28,18 @@ public class DataQueueService: DataQueuing {
     public init() {}
 
     public func getDataQueue(label databaseName: String) -> DataQueue? {
+        return getDataQueue(label: databaseName, config: DataQueueConfig())
+    }
+
+    public func getDataQueue(label databaseName: String, config: DataQueueConfig) -> DataQueue? {
         storeQueue.sync {
             if let queue = store[databaseName] {
                 return queue
-            } else {
-                let dataQueue = SQLiteDataQueue(databaseName: databaseName, serialQueue: dbQueue)
-                store[databaseName] = dataQueue
-                return dataQueue
             }
+            // Config is applied at creation, so the label's first request fixes its tuning.
+            let dataQueue = SQLiteDataQueue(databaseName: databaseName, serialQueue: dbQueue, config: config)
+            store[databaseName] = dataQueue
+            return dataQueue
         }
     }
 }

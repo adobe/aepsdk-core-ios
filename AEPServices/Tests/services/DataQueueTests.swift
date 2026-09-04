@@ -18,6 +18,8 @@ class DataQueueTests: XCTestCase {
 
     override func setUp() {
         DataQueueServiceTests.removeDbFileIfExists(fileName)
+        DataQueueServiceTests.removeDbFileIfExists(fileName + "-wal")
+        DataQueueServiceTests.removeDbFileIfExists(fileName + "-shm")
     }
 
     override func tearDown() {}
@@ -565,5 +567,68 @@ class DataQueueTests: XCTestCase {
         let dataString = String(data: data, encoding: .utf8)!
         XCTAssertEqual(dataString, row[0]["data"])
         XCTAssertEqual(event.timestamp.millisecondsSince1970, Int64(row[0]["timestamp"]!))
+    }
+
+    // MARK: - WAL
+
+    /// A queue configured with `.wal` should be in WAL journal mode (persisted in the file header).
+    func testDataQueueUsesWALJournalMode() {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName, config: DataQueueConfig(journalMode: .wal))!
+        _ = queue.add(dataEntity: DataEntity(data: nil))
+
+        // When - read the journal mode via an independent connection to the same file
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+            queue.close()
+        }
+        let mode = SQLiteWrapper.query(database: connection, sql: "PRAGMA journal_mode;")?.first?.values.first
+
+        // Then
+        XCTAssertEqual("wal", mode?.lowercased())
+    }
+
+    /// A write should produce the `-wal` sidecar file while a `.wal` queue's connection is open.
+    func testWALSidecarFileCreatedAfterWrite() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName, config: DataQueueConfig(journalMode: .wal))!
+        defer { queue.close() }
+
+        // When
+        _ = queue.add(dataEntity: DataEntity(data: "x".data(using: .utf8)))
+
+        // Then
+        let cachesUrl = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let walPath = cachesUrl.appendingPathComponent(fileName + "-wal").path
+        XCTAssertTrue(FileManager.default.fileExists(atPath: walPath))
+    }
+
+    /// After `close()`, every operation should safely no-op instead of touching a closed connection.
+    func testOperationsReturnDefaultsAfterClose() {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        _ = queue.add(dataEntity: DataEntity(data: "x".data(using: .utf8)))
+
+        // When
+        queue.close()
+
+        // Then
+        XCTAssertFalse(queue.add(dataEntity: DataEntity(data: nil)))
+        XCTAssertNil(queue.peek())
+        XCTAssertNil(queue.peek(n: 3))
+        XCTAssertFalse(queue.remove())
+        XCTAssertFalse(queue.clear())
+        XCTAssertEqual(0, queue.count())
+    }
+
+    /// Calling `close()` more than once should be safe.
+    func testCloseIsIdempotent() {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+
+        // When / Then - no crash on repeated close
+        queue.close()
+        queue.close()
     }
 }
