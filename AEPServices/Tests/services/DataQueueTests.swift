@@ -631,4 +631,29 @@ class DataQueueTests: XCTestCase {
         queue.close()
         queue.close()
     }
+
+    /// If the database file is purged while the queue is alive (e.g. iOS reclaiming space in
+    /// `.cachesDirectory`), the next operation should reopen the file and succeed instead of
+    /// silently writing to the now unlinked inode and losing the data.
+    func testReopensDatabaseAfterFileIsPurged() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        _ = queue.add(dataEntity: DataEntity(data: "first".data(using: .utf8)))
+
+        // When - simulate iOS purging the database file underneath the open connection
+        let cachesUrl = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        try FileManager.default.removeItem(at: cachesUrl.appendingPathComponent(fileName))
+        let addResult = queue.add(dataEntity: DataEntity(data: "second".data(using: .utf8)))
+
+        // Then - the write succeeds and lands in a real, reopened file
+        XCTAssertTrue(addResult)
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+            queue.close()
+        }
+        let row = SQLiteWrapper.query(database: connection, sql: "SELECT * from \(SQLiteDataQueue.TABLE_NAME)")!
+        XCTAssertEqual(1, row.count)
+        XCTAssertEqual("second", String(data: queue.peek()!.data!, encoding: .utf8))
+    }
 }

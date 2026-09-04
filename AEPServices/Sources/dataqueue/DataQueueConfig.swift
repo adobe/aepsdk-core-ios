@@ -11,10 +11,8 @@
  */
 
 import Foundation
-/// Tuning a consumer registers for its `DataQueue` ahead of creating it.
-///
-/// The defaults here reproduce the behavior of a queue created without any configuration, so consumers
-/// only set what they need to change.
+
+/// Configuration a consumer registers for a DataQueue before it is created
 @objc(AEPDataQueueConfig) public class DataQueueConfig: NSObject {
     @objc public var journalMode: SQLiteJournalMode
 

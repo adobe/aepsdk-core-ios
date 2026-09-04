@@ -34,9 +34,14 @@ public class DataQueueService: DataQueuing {
     public func getDataQueue(label databaseName: String, config: DataQueueConfig) -> DataQueue? {
         storeQueue.sync {
             if let queue = store[databaseName] {
+                if let existing = queue as? SQLiteDataQueue, existing.config.journalMode != config.journalMode {
+                    Log.warning(
+                        label: "DataQueueService",
+                        "DataQueue '\(databaseName)' already exists with journalMode \(existing.config.journalMode); ignoring requested \(config.journalMode). The first getDataQueue call for a label fixes its config.")
+                }
                 return queue
             }
-            // Config is applied at creation, so the label's first request fixes its tuning.
+            
             let dataQueue = SQLiteDataQueue(databaseName: databaseName, serialQueue: dbQueue, config: config)
             store[databaseName] = dataQueue
             return dataQueue
