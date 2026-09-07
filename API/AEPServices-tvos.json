@@ -4548,7 +4548,7 @@
           {
             "kind": "Function",
             "name": "enableWAL",
-            "printedName": "enableWAL(database:)",
+            "printedName": "enableWAL(database:autocheckpoint:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -4561,11 +4561,17 @@
                 "name": "OpaquePointer",
                 "printedName": "Swift.OpaquePointer",
                 "usr": "s:s13OpaquePointerV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
               }
             ],
             "declKind": "Func",
-            "usr": "s:11AEPServices13SQLiteWrapperV9enableWAL8databaseSbs13OpaquePointerV_tFZ",
-            "mangledName": "$s11AEPServices13SQLiteWrapperV9enableWAL8databaseSbs13OpaquePointerV_tFZ",
+            "usr": "s:11AEPServices13SQLiteWrapperV9enableWAL8database14autocheckpointSbs13OpaquePointerV_SitFZ",
+            "mangledName": "$s11AEPServices13SQLiteWrapperV9enableWAL8database14autocheckpointSbs13OpaquePointerV_SitFZ",
             "moduleName": "AEPServices",
             "static": true,
             "declAttributes": [
