@@ -3776,9 +3776,100 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "walAutocheckpoint",
+            "printedName": "walAutocheckpoint",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPServices@objc(cs)AEPDataQueueConfig(py)walAutocheckpoint",
+            "mangledName": "$s11AEPServices15DataQueueConfigC17walAutocheckpointSivp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "ObjC",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPServices@objc(cs)AEPDataQueueConfig(im)walAutocheckpoint",
+                "mangledName": "$s11AEPServices15DataQueueConfigC17walAutocheckpointSivg",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPServices@objc(cs)AEPDataQueueConfig(im)setWalAutocheckpoint:",
+                "mangledName": "$s11AEPServices15DataQueueConfigC17walAutocheckpointSivs",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices15DataQueueConfigC17walAutocheckpointSivM",
+                "mangledName": "$s11AEPServices15DataQueueConfigC17walAutocheckpointSivM",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(journalMode:)",
+            "printedName": "init(journalMode:walAutocheckpoint:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -3792,13 +3883,20 @@
                 "printedName": "AEPServices.SQLiteJournalMode",
                 "hasDefaultArg": true,
                 "usr": "c:@M@AEPServices@E@AEPSQLiteJournalMode"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "hasDefaultArg": true,
+                "usr": "s:Si"
               }
             ],
             "declKind": "Constructor",
-            "usr": "c:@M@AEPServices@objc(cs)AEPDataQueueConfig(im)initWithJournalMode:",
-            "mangledName": "$s11AEPServices15DataQueueConfigC11journalModeAcA013SQLiteJournalF0O_tcfc",
+            "usr": "c:@M@AEPServices@objc(cs)AEPDataQueueConfig(im)initWithJournalMode:walAutocheckpoint:",
+            "mangledName": "$s11AEPServices15DataQueueConfigC11journalMode17walAutocheckpointAcA013SQLiteJournalF0O_Sitcfc",
             "moduleName": "AEPServices",
-            "objc_name": "initWithJournalMode:",
+            "objc_name": "initWithJournalMode:walAutocheckpoint:",
             "declAttributes": [
               "ObjC"
             ],

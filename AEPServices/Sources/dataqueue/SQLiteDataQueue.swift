@@ -204,7 +204,7 @@ class SQLiteDataQueue: DataQueue {
         guard let connection = connect() else {
             return nil
         }
-        if config.journalMode == .wal, !SQLiteWrapper.enableWAL(database: connection) {
+        if config.journalMode == .wal, !SQLiteWrapper.enableWAL(database: connection, autocheckpoint: config.walAutocheckpoint) {
             Log.warning(label: LOG_PREFIX, "Failed to enable WAL mode for database '\(databaseName)'.")
         }
         return connection

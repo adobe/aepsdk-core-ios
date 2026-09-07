@@ -100,7 +100,7 @@ class SQLiteWrapperTests: XCTestCase {
         defer { _ = SQLiteWrapper.disconnect(database: connection) }
 
         // When
-        let enabled = SQLiteWrapper.enableWAL(database: connection)
+        let enabled = SQLiteWrapper.enableWAL(database: connection, autocheckpoint: 200)
 
         // Then
         XCTAssertTrue(enabled)
@@ -115,11 +115,25 @@ class SQLiteWrapperTests: XCTestCase {
         defer { _ = SQLiteWrapper.disconnect(database: connection) }
 
         // When
-        _ = SQLiteWrapper.enableWAL(database: connection)
+        _ = SQLiteWrapper.enableWAL(database: connection, autocheckpoint: 200)
 
         // Then
         let synchronous = SQLiteWrapper.query(database: connection, sql: "PRAGMA synchronous;")?.first?.values.first
         XCTAssertEqual("1", synchronous)
+    }
+
+    /// enableWAL() should apply the provided wal_autocheckpoint page count.
+    func testEnableWAL_setsWalAutocheckpoint() {
+        // Given
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
+        defer { _ = SQLiteWrapper.disconnect(database: connection) }
+
+        // When
+        _ = SQLiteWrapper.enableWAL(database: connection, autocheckpoint: 200)
+
+        // Then
+        let value = SQLiteWrapper.query(database: connection, sql: "PRAGMA wal_autocheckpoint;")?.first?.values.first
+        XCTAssertEqual("200", value)
     }
 
     /// journal_mode=WAL is written to the database header, so a fresh connection to the same file
@@ -127,7 +141,7 @@ class SQLiteWrapperTests: XCTestCase {
     func testEnableWAL_journalModePersistsAcrossReconnect() {
         // Given - a database switched to WAL, then closed
         let first = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
-        _ = SQLiteWrapper.enableWAL(database: first)
+        _ = SQLiteWrapper.enableWAL(database: first, autocheckpoint: 200)
         _ = SQLiteWrapper.disconnect(database: first)
 
         // When - reopening the same database file without calling enableWAL again
@@ -144,7 +158,7 @@ class SQLiteWrapperTests: XCTestCase {
         // Given - a WAL database
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
         defer { _ = SQLiteWrapper.disconnect(database: connection) }
-        _ = SQLiteWrapper.enableWAL(database: connection)
+        _ = SQLiteWrapper.enableWAL(database: connection, autocheckpoint: 200)
 
         // When - writing to the database
         _ = SQLiteWrapper.execute(database: connection, sql: "CREATE TABLE t (id INTEGER);")
@@ -169,7 +183,7 @@ class SQLiteWrapperTests: XCTestCase {
         // When - the upgraded SDK reopens the same file and enables WAL
         let second = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: databaseName)!
         defer { _ = SQLiteWrapper.disconnect(database: second) }
-        _ = SQLiteWrapper.enableWAL(database: second)
+        _ = SQLiteWrapper.enableWAL(database: second, autocheckpoint: 200)
 
         // Then - mode is WAL, the old row is intact, and new writes work
         let modeAfter = SQLiteWrapper.query(database: second, sql: "PRAGMA journal_mode;")?.first?.values.first

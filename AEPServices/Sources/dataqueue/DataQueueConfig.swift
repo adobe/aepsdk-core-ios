@@ -16,7 +16,11 @@ import Foundation
 @objc(AEPDataQueueConfig) public class DataQueueConfig: NSObject {
     @objc public var journalMode: SQLiteJournalMode
 
-    @objc public init(journalMode: SQLiteJournalMode = .rollback) {
+    /// Number of WAL pages that trigger an automatic checkpoint. Only applies when `journalMode` is `.wal`.
+    @objc public var walAutocheckpoint: Int
+
+    @objc public init(journalMode: SQLiteJournalMode = .rollback, walAutocheckpoint: Int = 200) {
         self.journalMode = journalMode
+        self.walAutocheckpoint = walAutocheckpoint
     }
 }
