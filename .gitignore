@@ -47,6 +47,9 @@ playground.xcworkspace
 # hence it is not needed unless you have added a package configuration file to your project
 .swiftpm
 
+# Resolved SPM package graph cache written into shared Xcode workspace/project data
+**/xcshareddata/swiftpm/
+
 .build/
 
 # CocoaPods
@@ -93,7 +96,5 @@ iOSInjectionProject/
 .DS_Store
 
 *.log
-
-Pods/
 
 .vscode/

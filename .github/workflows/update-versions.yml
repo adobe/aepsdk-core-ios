@@ -26,7 +26,7 @@ on:
         required: true
 
       rules-engine-dependency:
-        description: 'If a version is provided, update AEPRulesEngine dependency in podspec and Package.swift.'
+        description: 'If a version is provided, update the AEPRulesEngine dependency in Package.swift.'
         type: string
         required: false
         default: ''
@@ -36,23 +36,18 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: adobe/aepsdk-commons/.github/workflows/versions.yml@gha-ios-5.3.2
+    uses: shushinde/aepsdk-commons/.github/workflows/versions.yml@spm-only-release-flag
     with:
       version: ${{ github.event.inputs.version }}
       branch: ${{ github.event.inputs.branch }}
-      dependencies: AEPRulesEngine ${{ github.event.inputs.rules-engine-dependency }}, AEPCore ${{ github.event.inputs.version }}, AEPServices ${{ github.event.inputs.version }}
+      dependencies: AEPRulesEngine ${{ github.event.inputs.rules-engine-dependency }}
       paths: >
-        AEPCore.xcodeproj/project.pbxproj, 
-        Package.swift:swift_spm, 
-        AEPCore.podspec, 
-        AEPIdentity.podspec, 
-        AEPLifecycle.podspec, 
-        AEPSignal.podspec, 
-        AEPServices.podspec, 
-        AEPCore/Sources/configuration/ConfigurationConstants.swift, 
-        AEPCore/Sources/eventhub/EventHubConstants.swift:swift_version_number, 
-        AEPCore/Tests/MobileCoreTests.swift:swift_test_version, 
-        AEPIdentity/Sources/IdentityConstants.swift, 
-        AEPLifecycle/Sources/LifecycleConstants.swift, 
-        AEPSignal/Sources/SignalConstants.swift, 
+        AEPCore.xcodeproj/project.pbxproj,
+        Package.swift:swift_spm,
+        AEPCore/Sources/configuration/ConfigurationConstants.swift,
+        AEPCore/Sources/eventhub/EventHubConstants.swift:swift_version_number,
+        AEPCore/Tests/MobileCoreTests.swift:swift_test_version,
+        AEPIdentity/Sources/IdentityConstants.swift,
+        AEPLifecycle/Sources/LifecycleConstants.swift,
+        AEPSignal/Sources/SignalConstants.swift
       update: true

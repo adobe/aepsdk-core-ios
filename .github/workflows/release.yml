@@ -26,88 +26,21 @@ on:
         required: true
         default: true
 
-      pod-publish-AEPServices:
-        description: 'Publish AEPServices to Cocoapods.'
-        type: boolean
-        required: true
-        default: true
-
-      pod-publish-AEPCore:
-        description: 'Publish AEPCore to Cocoapods.'
-        type: boolean
-        required: true
-        default: true
-
-      pod-publish-AEPIdentity:
-        description: 'Publish AEPIdentity to Cocoapods.'
-        type: boolean
-        required: true
-        default: true
-
-      pod-publish-AEPLifecycle:
-        description: 'Publish AEPLifecycle to Cocoapods.'
-        type: boolean
-        required: true
-        default: true
-
-      pod-publish-AEPSignal:
-        description: 'Publish AEPSignal to Cocoapods.'
-        type: boolean
-        required: true
-        default: true
-
 jobs:
-  setup-configuration:
-    name: Set up configuration
-    runs-on: ubuntu-24.04
-    outputs:
-      pod-publish-extensions: ${{ steps.define-configuration.outputs.pod-publish-extensions }}
-    steps:
-      - name: Define configuration
-        id: define-configuration
-        shell: bash
-        run: |
-          # Build the list of pods to publish based on booleans
-          extension_list=""
-          if [ "${{ inputs.pod-publish-AEPServices }}" = "true" ]; then
-            extension_list="$extension_list, AEPServices"
-          fi
-          if [ "${{ inputs.pod-publish-AEPCore }}" = "true" ]; then
-            extension_list="$extension_list, AEPCore"
-          fi
-          if [ "${{ inputs.pod-publish-AEPIdentity }}" = "true" ]; then
-            extension_list="$extension_list, AEPIdentity"
-          fi
-          if [ "${{ inputs.pod-publish-AEPLifecycle }}" = "true" ]; then
-            extension_list="$extension_list, AEPLifecycle"
-          fi
-          if [ "${{ inputs.pod-publish-AEPSignal }}" = "true" ]; then
-            extension_list="$extension_list, AEPSignal"
-          fi
-          # Remove the leading ", " if the list is not empty
-          pod_publish_extensions=$(echo "$extension_list" | sed 's/^, //')
-          # Echo values for visibility
-          echo "pod-publish-extensions: $pod_publish_extensions"
-          echo "pod-publish-extensions=$pod_publish_extensions" >> "$GITHUB_OUTPUT"
   release:
-    needs: setup-configuration
     permissions:
         contents: write
-    uses: adobe/aepsdk-commons/.github/workflows/ios-release.yml@gha-ios-5.3.2
+    uses: shushinde/aepsdk-commons/.github/workflows/ios-release.yml@spm-only-release-flag
     with:
       tag: ${{ github.event.inputs.tag }}
       create-github-release: ${{ github.event.inputs.create-github-release == 'true' && 'AEPServices, AEPCore, AEPIdentity, AEPLifecycle, AEPSignal' || '' }}
       release-dependency-frameworks: ${{ github.event.inputs.create-github-release == 'true' && 'AEPRulesEngine' || '' }}
-      pod-publish-extensions: ${{ needs.setup-configuration.outputs.pod-publish-extensions }}
-      version-validation-paths: > 
-        AEPCore.xcodeproj/project.pbxproj, 
-        AEPCore.podspec, 
-        AEPCore/Sources/configuration/ConfigurationConstants.swift, 
-        AEPIdentity.podspec, 
-        AEPIdentity/Sources/IdentityConstants.swift, 
-        AEPLifecycle.podspec, 
-        AEPLifecycle/Sources/LifecycleConstants.swift, 
-        AEPSignal.podspec, 
-        AEPSignal/Sources/SignalConstants.swift, 
-        AEPServices.podspec
+      pod-publish-extensions: ''
+      publish-cocoapods: false
+      version-validation-paths: >
+        AEPCore.xcodeproj/project.pbxproj,
+        AEPCore/Sources/configuration/ConfigurationConstants.swift,
+        AEPIdentity/Sources/IdentityConstants.swift,
+        AEPLifecycle/Sources/LifecycleConstants.swift,
+        AEPSignal/Sources/SignalConstants.swift
     secrets: inherit

@@ -60,7 +60,7 @@ workflows:
       - test-tvos-integration:
           requires:
             - validate-code
-      - test-spm-podspec-archive:
+      - test-spm-archive:
           requires:
             - validate-code
           filters:
@@ -73,29 +73,13 @@ workflows:
 commands: 
   install_dependencies:
     steps:
-          # restore pods related caches
-      - restore_cache:
-          keys:
-            - 1-gems-{{ checksum "Gemfile.lock" }}
-
-      # make sure we're on the right version of cocoapods
-      - run:
-          name: Verify Cocoapods Version
-          command: bundle check || bundle install --path vendor/bundle
-
-      # save cocoapods version gem data
-      - save_cache:
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-
-      - run:
-          name: Pod install
-          command: make ci-pod-install
-      
       - run:
           name: Install xcodegen
           command: brew install xcodegen
+
+      - run:
+          name: Install swiftlint
+          command: brew install swiftlint
         
   prestart_ios_simulator:
     steps:
@@ -411,7 +395,7 @@ jobs:
           name: Run tvOS integration Tests
           command: make integration-tvos-test
 
-  test-spm-podspec-archive:  
+  test-spm-archive:
     resource_class: m4pro.medium
     macos:
       xcode: 16.4.0
@@ -425,10 +409,6 @@ jobs:
       - run:
           name: Build XCFramework
           command: make ci-archive
-      # verify podspec is valid
-      - run:
-          name: Test Podspec
-          command: make test-podspec
       # verify SPM works
       - run:
           name: Test SPM 
