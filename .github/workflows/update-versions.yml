@@ -36,7 +36,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: shushinde/aepsdk-commons/.github/workflows/versions.yml@spm-only-release-flag
+    uses: shushinde/aepsdk-commons/.github/workflows/versions.yml@main
     with:
       version: ${{ github.event.inputs.version }}
       branch: ${{ github.event.inputs.branch }}

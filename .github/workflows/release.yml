@@ -30,7 +30,7 @@ jobs:
   release:
     permissions:
         contents: write
-    uses: shushinde/aepsdk-commons/.github/workflows/ios-release.yml@spm-only-release-flag
+    uses: shushinde/aepsdk-commons/.github/workflows/ios-release.yml@main
     with:
       tag: ${{ github.event.inputs.tag }}
       create-github-release: ${{ github.event.inputs.create-github-release == 'true' && 'AEPServices, AEPCore, AEPIdentity, AEPLifecycle, AEPSignal' || '' }}
