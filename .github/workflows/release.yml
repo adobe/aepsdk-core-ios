@@ -30,13 +30,12 @@ jobs:
   release:
     permissions:
         contents: write
-    uses: shushinde/aepsdk-commons/.github/workflows/ios-release.yml@main
+    uses: shushinde/aepsdk-commons/.github/workflows/ios-release-spm.yml@main
     with:
       tag: ${{ github.event.inputs.tag }}
       create-github-release: ${{ github.event.inputs.create-github-release == 'true' && 'AEPServices, AEPCore, AEPIdentity, AEPLifecycle, AEPSignal' || '' }}
       release-dependency-frameworks: ${{ github.event.inputs.create-github-release == 'true' && 'AEPRulesEngine' || '' }}
-      pod-publish-extensions: ''
-      publish-cocoapods: false
+      simulator-platforms: 'iOS, tvOS'
       version-validation-paths: >
         AEPCore.xcodeproj/project.pbxproj,
         AEPCore/Sources/configuration/ConfigurationConstants.swift,
