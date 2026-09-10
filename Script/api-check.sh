@@ -31,12 +31,17 @@ build_and_dump() {
     esac
 
     SDK_PATH=$(xcrun --sdk "$SDK" --show-sdk-path)
-    
+
     # Build in release mode as debug mode dumps non public APIs.
-    if ! swift build -c release --sdk "$SDK_PATH" --triple "$TRIPLE" -Xswiftc -enable-library-evolution > /dev/null 2>&1; then
-        echo "Build failed."
+    local build_log
+    build_log=$(mktemp)
+    if ! swift build -c release --sdk "$SDK_PATH" --triple "$TRIPLE" -Xswiftc -enable-library-evolution > "$build_log" 2>&1; then
+        echo "Build failed. Full output below:"
+        cat "$build_log"
+        rm -f "$build_log"
         exit 1
     fi
+    rm -f "$build_log"
         
     swift api-digester -sdk "$SDK_PATH" -dump-sdk -module "$module" \
         -target "$TRIPLE" -avoid-location -avoid-tool-args -abort-on-module-fail -swift-version 5 -I .build/release/Modules \
