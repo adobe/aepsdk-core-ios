@@ -11,6 +11,7 @@
 //
 
 import AEPServices
+import Foundation
 
 extension AnyCodable: CustomStringConvertible {
     /// Converts `AnyCodable`'s default decode strategy of array `[Any?]`  into `[AnyCodable]` value type

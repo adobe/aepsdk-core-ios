@@ -16,14 +16,14 @@ import Foundation
 enum LifecycleConstants {
     static let EXTENSION_NAME = "com.adobe.module.lifecycle"
     static let FRIENDLY_NAME = "Lifecycle"
-    static let EXTENSION_VERSION = "5.11.0"
+    static let EXTENSION_VERSION = "5.13.0"
 
     static let DATA_STORE_NAME = LifecycleConstants.EXTENSION_NAME
 
     static let START = "start"
     static let PAUSE = "pause"
-    static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0 // 7 days
-    static let DEFAULT_LIFECYCLE_TIMEOUT = 300 // 5 min
+    static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0  // 7 days
+    static let DEFAULT_LIFECYCLE_TIMEOUT = 300  // 5 min
 
     static let LOG_TAG = "Lifecycle"
 
