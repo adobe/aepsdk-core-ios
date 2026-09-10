@@ -32,10 +32,12 @@ build_and_dump() {
 
     SDK_PATH=$(xcrun --sdk "$SDK" --show-sdk-path)
 
-    # Build in release mode as debug mode dumps non public APIs.
+    # Build in release mode as debug mode dumps non public APIs. Scoped to just this
+    # module's target (--target) so the package graph doesn't also build test-only targets
+    # like AEPTestUtils, which use `@testable import` and can't compile in release mode.
     local build_log
     build_log=$(mktemp)
-    if ! swift build -c release --sdk "$SDK_PATH" --triple "$TRIPLE" -Xswiftc -enable-library-evolution > "$build_log" 2>&1; then
+    if ! swift build -c release --target "$module" --sdk "$SDK_PATH" --triple "$TRIPLE" -Xswiftc -enable-library-evolution > "$build_log" 2>&1; then
         echo "Build failed. Full output below:"
         cat "$build_log"
         rm -f "$build_log"
