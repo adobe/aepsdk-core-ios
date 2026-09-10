@@ -70,7 +70,7 @@ workflows:
                 - staging
                 - /dev-.*/
 
-commands: 
+commands:
   install_dependencies:
     steps:
       - run:
@@ -80,7 +80,7 @@ commands:
       - run:
           name: Install swiftlint
           command: brew install swiftlint
-        
+
   prestart_ios_simulator:
     steps:
       - macos/preboot-simulator:
@@ -94,7 +94,7 @@ commands:
           platform: "tvOS"
           device: "Apple TV"
           version: "18.5"
-      
+
   parse_and_upload_coverage:
     description: "Convert .xcresult → Cobertura XML and upload to Codecov"
     parameters:
@@ -147,7 +147,7 @@ jobs:
   validate-code:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
+      xcode: 26.0.0
 
     steps:
       - checkout
@@ -157,16 +157,16 @@ jobs:
       - run:
           name: Lint Source Code
           command: make lint
-      
-      - run:          
+
+      - run:
           name: Verify APIs
           command: make api-check
 
   test-ios-core:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
@@ -185,8 +185,8 @@ jobs:
   test-ios-services:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
@@ -201,12 +201,12 @@ jobs:
       - parse_and_upload_coverage:
           path: build/AEPServices-ios.xcresult
           flag: aepservices-ios-tests
-  
+
   test-ios-lifecycle:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
@@ -225,8 +225,8 @@ jobs:
   test-ios-identity:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
@@ -245,8 +245,8 @@ jobs:
   test-ios-signal:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
@@ -265,8 +265,7 @@ jobs:
   test-ios-integration:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
 
     steps:
       - checkout
@@ -274,7 +273,7 @@ jobs:
       - install_dependencies
 
       - prestart_ios_simulator
-      
+
       - run:
           name: Run iOS integration Tests
           command: make integration-test
@@ -282,15 +281,15 @@ jobs:
   test-tvos-core:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
       - install_dependencies
 
       - prestart_tvos_simulator
-      
+
       - run:
           name: Run AEPCore tvOS Tests
           command: make aep-core-tvos-unit-test
@@ -302,15 +301,15 @@ jobs:
   test-tvos-services:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
       - install_dependencies
 
       - prestart_tvos_simulator
-      
+
       - run:
           name: Run AEPServices tvOS Tests
           command: make aep-services-tvos-unit-test
@@ -322,15 +321,15 @@ jobs:
   test-tvos-lifecycle:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
       - install_dependencies
 
       - prestart_tvos_simulator
-      
+
       - run:
           name: Run AEPLifecycle tvOS Tests
           command: make aep-lifecycle-tvos-unit-test
@@ -342,15 +341,15 @@ jobs:
   test-tvos-identity:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
       - install_dependencies
 
       - prestart_tvos_simulator
-      
+
       - run:
           name: Run AEPIdentity tvOS Tests
           command: make aep-identity-tvos-unit-test
@@ -362,15 +361,15 @@ jobs:
   test-tvos-signal:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
       - install_dependencies
 
       - prestart_tvos_simulator
-      
+
       - run:
           name: Run AEPSignal tvOS Tests
           command: make aep-signal-tvos-unit-test
@@ -382,15 +381,15 @@ jobs:
   test-tvos-integration:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-      
+      xcode: 26.0.0
+
     steps:
       - checkout
 
       - install_dependencies
 
       - prestart_tvos_simulator
-      
+
       - run:
           name: Run tvOS integration Tests
           command: make integration-tvos-test
@@ -398,8 +397,8 @@ jobs:
   test-spm-archive:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
-    
+      xcode: 26.0.0
+
     steps:
       - checkout
 
@@ -411,5 +410,5 @@ jobs:
           command: make ci-archive
       # verify SPM works
       - run:
-          name: Test SPM 
+          name: Test SPM
           command: make test-SPM-integration
