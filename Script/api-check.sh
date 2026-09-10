@@ -13,7 +13,10 @@ parse_modules_from_package() {
         echo "Package.swift not found."
         exit 1
     fi
-    swift package dump-package | jq -r '.products[] | select(.type | has("library")) | .name'
+    # AEPTestUtils is a testing-helper library product (it uses `@testable import AEPCore`
+    # internally), so it can never build in the release-mode configuration this script uses
+    # and was never part of the tracked API/ baseline. Exclude it from API/ABI checks.
+    swift package dump-package | jq -r '.products[] | select(.type | has("library")) | select(.name != "AEPTestUtils") | .name'
 }
 
 build_and_dump() {
