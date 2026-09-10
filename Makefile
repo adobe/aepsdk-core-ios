@@ -25,7 +25,7 @@ BLUE='\033[0;34m'
 # CI variables - using values with defaults
 IOS_DEVICE_NAME ?= iPhone 16
 # If OS version is not specified, uses the first device name match in the list of available simulators
-IOS_VERSION ?= 18.5
+IOS_VERSION ?= 18.6
 ifeq ($(strip $(IOS_VERSION)),)
     IOS_DESTINATION = "platform=iOS Simulator,name=$(IOS_DEVICE_NAME)"
 else
