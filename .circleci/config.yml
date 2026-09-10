@@ -147,7 +147,7 @@ jobs:
   validate-code:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -165,7 +165,7 @@ jobs:
   test-ios-core:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -185,7 +185,7 @@ jobs:
   test-ios-services:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -205,7 +205,7 @@ jobs:
   test-ios-lifecycle:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -225,7 +225,7 @@ jobs:
   test-ios-identity:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -245,7 +245,7 @@ jobs:
   test-ios-signal:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -265,7 +265,7 @@ jobs:
   test-ios-integration:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -281,7 +281,7 @@ jobs:
   test-tvos-core:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -301,7 +301,7 @@ jobs:
   test-tvos-services:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -321,7 +321,7 @@ jobs:
   test-tvos-lifecycle:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -341,7 +341,7 @@ jobs:
   test-tvos-identity:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -361,7 +361,7 @@ jobs:
   test-tvos-signal:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -381,7 +381,7 @@ jobs:
   test-tvos-integration:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
@@ -397,7 +397,7 @@ jobs:
   test-spm-archive:
     resource_class: m4pro.medium
     macos:
-      xcode: 26.0.0
+      xcode: 26.6.0
 
     steps:
       - checkout
