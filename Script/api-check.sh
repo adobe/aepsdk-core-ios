@@ -13,7 +13,10 @@ parse_modules_from_package() {
         echo "Package.swift not found."
         exit 1
     fi
-    swift package dump-package | jq -r '.products[] | select(.type | has("library")) | .name'
+    # AEPTestUtils is a testing-helper library product (it uses `@testable import AEPCore`
+    # internally), so it can never build in the release-mode configuration this script uses
+    # and was never part of the tracked API/ baseline. Exclude it from API/ABI checks.
+    swift package dump-package | jq -r '.products[] | select(.type | has("library")) | select(.name != "AEPTestUtils") | .name'
 }
 
 build_and_dump() {
@@ -31,12 +34,19 @@ build_and_dump() {
     esac
 
     SDK_PATH=$(xcrun --sdk "$SDK" --show-sdk-path)
-    
-    # Build in release mode as debug mode dumps non public APIs.
-    if ! swift build -c release --sdk "$SDK_PATH" --triple "$TRIPLE" -Xswiftc -enable-library-evolution > /dev/null 2>&1; then
-        echo "Build failed."
+
+    # Build in release mode as debug mode dumps non public APIs. Scoped to just this
+    # module's target (--target) so the package graph doesn't also build test-only targets
+    # like AEPTestUtils, which use `@testable import` and can't compile in release mode.
+    local build_log
+    build_log=$(mktemp)
+    if ! swift build -c release --target "$module" --sdk "$SDK_PATH" --triple "$TRIPLE" -Xswiftc -enable-library-evolution > "$build_log" 2>&1; then
+        echo "Build failed. Full output below:"
+        cat "$build_log"
+        rm -f "$build_log"
         exit 1
     fi
+    rm -f "$build_log"
         
     swift api-digester -sdk "$SDK_PATH" -dump-sdk -module "$module" \
         -target "$TRIPLE" -avoid-location -avoid-tool-args -abort-on-module-fail -swift-version 5 -I .build/release/Modules \
