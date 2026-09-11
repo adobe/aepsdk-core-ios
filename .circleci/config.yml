@@ -137,6 +137,14 @@ commands:
               xcresultparser --output-format cobertura "$BUNDLE" > ./build/coverage/coverage.xml
             fi
 
+      - run:
+          name: (Codecov) Pre-install gpg
+          # codecov/upload's "Download CLI" step runs `brew install gpg` if gpg
+          # isn't already present, and that install's ca-certificates dependency
+          # conflicts with the one already linked on this image. Installing gpg
+          # ourselves first makes that check a no-op.
+          command: command -v gpg >/dev/null || { brew unlink ca-certificates || true; brew link --overwrite ca-certificates || true; HOMEBREW_NO_AUTO_UPDATE=1 brew install gpg; }
+
       - codecov/upload:
           files: ./build/coverage/coverage.xml
           flags: << parameters.flag >>
