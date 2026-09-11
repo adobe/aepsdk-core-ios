@@ -137,15 +137,12 @@ commands:
               xcresultparser --output-format cobertura "$BUNDLE" > ./build/coverage/coverage.xml
             fi
 
-      - run:
-          name: (Codecov) Pre-install gpg
-          # codecov/upload's "Download CLI" step runs `brew install gpg` if gpg
-          # isn't already present, and that install's ca-certificates dependency
-          # conflicts with the one already linked on this image. Installing gpg
-          # ourselves first makes that check a no-op.
-          command: command -v gpg >/dev/null || { brew unlink ca-certificates || true; brew link --overwrite ca-certificates || true; HOMEBREW_NO_AUTO_UPDATE=1 brew install gpg; }
-
       - codecov/upload:
+          # codecov/upload's default (non-pypi) path downloads a CLI binary and
+          # runs `brew install gpg` to verify it. That install's ca-certificates
+          # dependency conflicts with the one already on this CI image. Installing
+          # the CLI via pip instead avoids Homebrew entirely.
+          use_pypi: true
           files: ./build/coverage/coverage.xml
           flags: << parameters.flag >>
           upload_name: << parameters.flag >>
