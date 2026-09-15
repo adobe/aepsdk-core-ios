@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "AD7CED4A-C18C-470B-9780-EF5E289B0E22",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : true,
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:AEPCore.xcodeproj",
+        "identifier" : "3F4256FB24F474F4005D4006",
+        "name" : "AEPIntegrationTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -2502,11 +2502,11 @@
 				21CAC0D22422917600C11388 /* Sources */,
 				21CAC0D42422917600C11388 /* Resources */,
 				21CAC0D32422917600C11388 /* Frameworks */,
-				BB6812FF24E19B55007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				947D6C123058F7C700340758 /* PBXTargetDependency */,
 				3F03983D24BE63570019F095 /* PBXTargetDependency */,
 			);
 			name = AEPCore;
@@ -2543,11 +2543,11 @@
 				24B4934B24D4C31100AA38D9 /* Sources */,
 				24B4934C24D4C31100AA38D9 /* Frameworks */,
 				24B4934D24D4C31100AA38D9 /* Resources */,
-				BB68130724E19C32007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				947D6C203058F80F00340758 /* PBXTargetDependency */,
 				24B4936924D4C3C400AA38D9 /* PBXTargetDependency */,
 				24B4936B24D4C3C400AA38D9 /* PBXTargetDependency */,
 			);
@@ -2583,11 +2583,11 @@
 				3F03978324BE5DD30019F095 /* Sources */,
 				3F03978424BE5DD30019F095 /* Frameworks */,
 				3F03978524BE5DD30019F095 /* Resources */,
-				BB68130424E19C23007FDCF7 /* Run Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				947D6C1A3058F7FB00340758 /* PBXTargetDependency */,
 			);
 			name = AEPServices;
 			productName = AEPServices;
@@ -2643,7 +2643,6 @@
 				3FE6DDA524C62C090065EA05 /* Sources */,
 				3FE6DDA624C62C090065EA05 /* Frameworks */,
 				3FE6DDA724C62C090065EA05 /* Resources */,
-				BB68130624E19C2E007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2663,11 +2662,11 @@
 				3FE6DDCD24C62EE60065EA05 /* Sources */,
 				3FE6DDCE24C62EE60065EA05 /* Frameworks */,
 				3FE6DDCF24C62EE60065EA05 /* Resources */,
-				BB68130224E19C15007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				947D6C183058F7F400340758 /* PBXTargetDependency */,
 				3F39522424CA1CC500F7325B /* PBXTargetDependency */,
 				3FE6DE2524C634660065EA05 /* PBXTargetDependency */,
 			);
@@ -2703,11 +2702,11 @@
 				3FE6DE2B24C642330065EA05 /* Sources */,
 				3FE6DE2C24C642330065EA05 /* Frameworks */,
 				3FE6DE2D24C642330065EA05 /* Resources */,
-				BB68130124E19C10007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				947D6C163058F7F000340758 /* PBXTargetDependency */,
 				3F39522224CA1CBF00F7325B /* PBXTargetDependency */,
 				3FE6DE8A24C646360065EA05 /* PBXTargetDependency */,
 			);
@@ -2743,7 +2742,6 @@
 				3FF8170624D89B160064DFA1 /* Sources */,
 				3FF8170724D89B160064DFA1 /* Frameworks */,
 				3FF8170824D89B160064DFA1 /* Resources */,
-				BB68130024E19C06007FDCF7 /* ShellScript */,
 				4CF791772CAB4F84003C1FD8 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -2831,6 +2829,7 @@
 			mainGroup = 21CAC0CC2422917600C11388;
 			packageReferences = (
 				944B9FAE30513E7200266C16 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
+				947D6C103058F7AC00340758 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = 21CAC0D72422917600C11388 /* Products */;
 			projectDirPath = "";
@@ -3030,136 +3029,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		BB6812FF24E19B55007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed. Install it with 'brew install swiftlint'.\"\nfi\n";
-		};
-		BB68130024E19C06007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed. Install it with 'brew install swiftlint'.\"\nfi\n";
-		};
-		BB68130124E19C10007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed. Install it with 'brew install swiftlint'.\"\nfi\n";
-		};
-		BB68130224E19C15007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed. Install it with 'brew install swiftlint'.\"\nfi\n";
-		};
-		BB68130424E19C23007FDCF7 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed. Install it with 'brew install swiftlint'.\"\nfi\n";
-		};
-		BB68130624E19C2E007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed. Install it with 'brew install swiftlint'.\"\nfi\n";
-		};
-		BB68130724E19C32007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed. Install it with 'brew install swiftlint'.\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		21CAC0D22422917600C11388 /* Sources */ = {
@@ -3819,6 +3688,26 @@
 			isa = PBXTargetDependency;
 			target = 3FF8170924D89B160064DFA1 /* AEPCoreMocks */;
 			targetProxy = 3FF8172124D8ABF20064DFA1 /* PBXContainerItemProxy */;
+		};
+		947D6C123058F7C700340758 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 947D6C113058F7C700340758 /* SwiftLintBuildToolPlugin */;
+		};
+		947D6C163058F7F000340758 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 947D6C153058F7F000340758 /* SwiftLintBuildToolPlugin */;
+		};
+		947D6C183058F7F400340758 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 947D6C173058F7F400340758 /* SwiftLintBuildToolPlugin */;
+		};
+		947D6C1A3058F7FB00340758 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 947D6C193058F7FB00340758 /* SwiftLintBuildToolPlugin */;
+		};
+		947D6C203058F80F00340758 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 947D6C1F3058F80F00340758 /* SwiftLintBuildToolPlugin */;
 		};
 		ACC7A9782A0ED173001A04FB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4857,6 +4746,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		947D6C103058F7AC00340758 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.65.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -4864,6 +4761,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 944B9FAE30513E7200266C16 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
 			productName = AEPRulesEngine;
+		};
+		947D6C113058F7C700340758 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947D6C103058F7AC00340758 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		947D6C153058F7F000340758 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947D6C103058F7AC00340758 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		947D6C173058F7F400340758 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947D6C103058F7AC00340758 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		947D6C193058F7FB00340758 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947D6C103058F7AC00340758 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		947D6C1F3058F80F00340758 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947D6C103058F7AC00340758 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
