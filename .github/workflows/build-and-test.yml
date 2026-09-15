@@ -24,10 +24,10 @@ jobs:
     uses: shushinde/aepsdk-commons/.github/workflows/ios-spm-build-and-test.yml@main
     with:
       xcode-version: '26.3.0'
-      ios-device-name: 'iPhone 17'
-      ios-version: '26.3'
+      ios-device-name: 'iPhone 17 Pro'
+      ios-version: '26.2'
       tvos-device-name: 'Apple TV'
-      tvos-version: '26.3'
+      tvos-version: '26.2'
       run-test-ios-unit: true
       run-test-tvos-unit: true
       run-test-ios-integration: true
