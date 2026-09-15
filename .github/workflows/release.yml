@@ -30,9 +30,10 @@ jobs:
   release:
     permissions:
         contents: write
-    uses: shushinde/aepsdk-commons/.github/workflows/ios-release-spm.yml@main
+    uses: shushinde/aepsdk-commons/.github/workflows/ios-spm-release.yml@main
     with:
       tag: ${{ github.event.inputs.tag }}
+      xcode-version: '26.3.0'
       create-github-release: ${{ github.event.inputs.create-github-release == 'true' && 'AEPServices, AEPCore, AEPIdentity, AEPLifecycle, AEPSignal' || '' }}
       release-dependency-frameworks: ${{ github.event.inputs.create-github-release == 'true' && 'AEPRulesEngine' || '' }}
       simulator-platforms: 'iOS, tvOS'
