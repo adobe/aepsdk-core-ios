@@ -26,6 +26,7 @@
 
 /* Begin PBXBuildFile section */
 		0DD8CC428EAC7397F3E3A9DE /* Pods_AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D21FF298AE8CE1F0AB582D /* Pods_AEPIdentity.framework */; };
+		10CD5DC52252468CACB01314 /* MobileCore+ProfileAttributesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1413D8083BF435BB07D29C9 /* MobileCore+ProfileAttributesTests.swift */; };
 		1828CCDD7C5AFAAB33BEA6C8 /* Pods_AEPCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39282143E012E30EEE6674F2 /* Pods_AEPCoreTests.framework */; };
 		1E588FE7F092CC3BEF5923A8 /* Pods_AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC41D5506BEDFEC2A9D479C /* Pods_AEPSignal.framework */; };
 		2107F02624C9FDFE002935CF /* PushIDManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02524C9FDFE002935CF /* PushIDManageable.swift */; };
@@ -163,8 +164,6 @@
 		3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */; };
 		3F0397DD24BE5FF30019F095 /* ApplicationSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */; };
 		3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */; };
-		B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */; };
-		B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */; };
 		3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C024BE5FF30019F095 /* URLOpening.swift */; };
 		3F0397E024BE5FF30019F095 /* URLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C124BE5FF30019F095 /* URLService.swift */; };
 		3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E324BE60910019F095 /* HitProcessing.swift */; };
@@ -207,7 +206,6 @@
 		3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */; };
 		3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */; };
 		3F08FF9B24DA0DA100D34DE3 /* rules_functional_1.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */; };
-		MOB24751AA0000000000002 /* ADBMobileConfig-rules.zip in Resources */ = {isa = PBXBuildFile; fileRef = MOB24751AA0000000000001 /* ADBMobileConfig-rules.zip */; };
 		3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */; };
 		3F16761424E1B0630041B970 /* RulesConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16761324E1B0630041B970 /* RulesConstants.swift */; };
 		3F16762824F031A00041B970 /* EventHubContractTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762724F031A00041B970 /* EventHubContractTests.swift */; };
@@ -235,7 +233,6 @@
 		3F39521024CA096100F7325B /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F424CA096100F7325B /* SlowMockExtension.swift */; };
 		3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F624CA096100F7325B /* MockExtensionTwo.swift */; };
 		3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */; };
-		10CD5DC52252468CACB01314 /* MobileCore+ProfileAttributesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1413D8083BF435BB07D29C9 /* MobileCore+ProfileAttributesTests.swift */; };
 		3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */; };
 		3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */; };
 		3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */; };
@@ -504,6 +501,8 @@
 		92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* MessageMonitor.swift */; };
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
+		947788283049381D008CEB53 /* SQLiteJournalMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9477882730493810008CEB53 /* SQLiteJournalMode.swift */; };
+		9477882F30495AE9008CEB53 /* DataQueueConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9477882E30495AE7008CEB53 /* DataQueueConfig.swift */; };
 		A992DAF6408E4EF7F6023F33 /* Pods_AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 561016C58C744A0F4899C05C /* Pods_AEPLifecycle.framework */; };
 		AABB00DD24CA004400REEVAL /* LaunchRule+Reevaluable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */; };
 		AABB00EE24CA004400INTCPT /* RuleReevaluationInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00FF24CA004400INTCPT /* RuleReevaluationInterceptor.swift */; };
@@ -519,6 +518,8 @@
 		B6D6A02D26601279005042BE /* FloatingButtonPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */; };
 		B6E568C72DF3AE20006F1741 /* rules_testMatcherNe_multipleValues.json in Resources */ = {isa = PBXBuildFile; fileRef = B6E568C62DF3AE20006F1741 /* rules_testMatcherNe_multipleValues.json */; };
 		B6E568C92DF3B28C006F1741 /* rules_testMatcherNc_multipleValues.json in Resources */ = {isa = PBXBuildFile; fileRef = B6E568C82DF3B28C006F1741 /* rules_testMatcherNc_multipleValues.json */; };
+		B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */; };
+		B8A2C00724BE5FF30019F16 /* NetworkingIsAvailableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */; };
 		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
@@ -562,14 +563,15 @@
 		BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */; };
 		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
 		BFFD6ECE2D4C94D7000D3224 /* MobileCoreInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */; };
-		CB4ECE7D82944E828AFDF90E /* ProfileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59208A30D20541B9B941200E /* ProfileAttributes.swift */; };
 		BFFD6ED02D5575D4000D3224 /* MobileCoreInitializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */; };
 		C0FC8CAF8ADDBE9FBAE4C374 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */; };
+		CB4ECE7D82944E828AFDF90E /* ProfileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59208A30D20541B9B941200E /* ProfileAttributes.swift */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
 		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
 		D42C98A026CCB024002E3184 /* XDMEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */; };
 		E1D4AFEFF51B009BFC7BDF9E /* Pods_AEPSignalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 109359E45EEAE020AB32E187 /* Pods_AEPSignalTests.framework */; };
 		F3E5DC536F16C910B482CBE8 /* Pods_AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F45189B63F077DD02E531C58 /* Pods_AEPCoreMocks.framework */; };
+		MOB24751AA0000000000002 /* ADBMobileConfig-rules.zip in Resources */ = {isa = PBXBuildFile; fileRef = MOB24751AA0000000000001 /* ADBMobileConfig-rules.zip */; };
 		REEVALUABLE0001 /* rules_reevaluable.json in Resources */ = {isa = PBXBuildFile; fileRef = REEVALUABLE0002 /* rules_reevaluable.json */; };
 /* End PBXBuildFile section */
 
@@ -964,8 +966,6 @@
 		3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsNamedCollection.swift; sourceTree = "<group>"; };
 		3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationSystemInfoService.swift; sourceTree = "<group>"; };
 		3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoService.swift; sourceTree = "<group>"; };
-		B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkPathMonitorProvider.swift; sourceTree = "<group>"; };
-		B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingIsAvailableTests.swift; sourceTree = "<group>"; };
 		3F0397C024BE5FF30019F095 /* URLOpening.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLOpening.swift; sourceTree = "<group>"; };
 		3F0397C124BE5FF30019F095 /* URLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLService.swift; sourceTree = "<group>"; };
 		3F0397E324BE60910019F095 /* HitProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitProcessing.swift; sourceTree = "<group>"; };
@@ -1007,7 +1007,6 @@
 		3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataMerger.swift; sourceTree = "<group>"; };
 		3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataMergeTests.swift; sourceTree = "<group>"; };
 		3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_functional_1.zip; sourceTree = "<group>"; };
-		MOB24751AA0000000000001 /* ADBMobileConfig-rules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "ADBMobileConfig-rules.zip"; sourceTree = "<group>"; };
 		3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
 		3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestableNetworkService.swift; path = AEPCore/Mocks/TestableNetworkService.swift; sourceTree = SOURCE_ROOT; };
 		3F16761324E1B0630041B970 /* RulesConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesConstants.swift; sourceTree = "<group>"; };
@@ -1032,7 +1031,6 @@
 		3F3951F424CA096100F7325B /* SlowMockExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
 		3F3951F624CA096100F7325B /* MockExtensionTwo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtensionTwo.swift; sourceTree = "<group>"; };
 		3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
-		A1413D8083BF435BB07D29C9 /* MobileCore+ProfileAttributesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+ProfileAttributesTests.swift"; sourceTree = "<group>"; };
 		3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloader.swift; sourceTree = "<group>"; };
 		3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRulesDownloaderNetworkService.swift; sourceTree = "<group>"; };
 		3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
@@ -1222,6 +1220,7 @@
 		4CF7919A2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TestHelper.swift"; sourceTree = "<group>"; };
 		561016C58C744A0F4899C05C /* Pods_AEPLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		57BD6E641AFED0510599B36C /* Pods_AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		59208A30D20541B9B941200E /* ProfileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAttributes.swift; sourceTree = "<group>"; };
 		5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		62D21FF298AE8CE1F0AB582D /* Pods_AEPIdentity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIdentity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1276,8 +1275,11 @@
 		92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitoring.swift; sourceTree = "<group>"; };
 		92F06D0325BA33F3004C1700 /* Showable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showable.swift; sourceTree = "<group>"; };
 		93CFCD63764CE54E145E7D8F /* Pods-AEPSignalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.release.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.release.xcconfig"; sourceTree = "<group>"; };
+		9477882730493810008CEB53 /* SQLiteJournalMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteJournalMode.swift; sourceTree = "<group>"; };
+		9477882E30495AE7008CEB53 /* DataQueueConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataQueueConfig.swift; sourceTree = "<group>"; };
 		97B3AC66212CDC60B40AE41E /* Pods-AEPSignal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignal.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignal/Pods-AEPSignal.debug.xcconfig"; sourceTree = "<group>"; };
 		9DE12D90D1BAF0798BC007AB /* Pods-AEPCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.release.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.release.xcconfig"; sourceTree = "<group>"; };
+		A1413D8083BF435BB07D29C9 /* MobileCore+ProfileAttributesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+ProfileAttributesTests.swift"; sourceTree = "<group>"; };
 		A5F5A65742E1DBDC25CF9F98 /* Pods-AEPIdentityTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A6A5961CCE6FC2BC3C4808A0 /* Pods-AEPLifecycle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycle.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycle/Pods-AEPLifecycle.debug.xcconfig"; sourceTree = "<group>"; };
 		AA406DB9C15FB845D1DE51F0 /* Pods-AEPLifecycle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycle.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycle/Pods-AEPLifecycle.release.xcconfig"; sourceTree = "<group>"; };
@@ -1299,6 +1301,8 @@
 		B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPositionTests.swift; sourceTree = "<group>"; };
 		B6E568C62DF3AE20006F1741 /* rules_testMatcherNe_multipleValues.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNe_multipleValues.json; sourceTree = "<group>"; };
 		B6E568C82DF3B28C006F1741 /* rules_testMatcherNc_multipleValues.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNc_multipleValues.json; sourceTree = "<group>"; };
+		B8A2C03024BE5FF30019F13 /* NetworkPathMonitorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkPathMonitorProvider.swift; sourceTree = "<group>"; };
+		B8A2C06024BE5FF30019F16 /* NetworkingIsAvailableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingIsAvailableTests.swift; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -1342,7 +1346,6 @@
 		BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_dispatch_consequence.json; sourceTree = "<group>"; };
 		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
 		BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializer.swift; sourceTree = "<group>"; };
-		59208A30D20541B9B941200E /* ProfileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAttributes.swift; sourceTree = "<group>"; };
 		BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializerTests.swift; sourceTree = "<group>"; };
 		CBB1F735C1AAEA1CD448B2C0 /* Pods-AEPLifecycleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CEA4853D9F0F29877DDF2DFD /* Pods-AEPCoreMocks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreMocks.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreMocks/Pods-AEPCoreMocks.release.xcconfig"; sourceTree = "<group>"; };
@@ -1352,6 +1355,7 @@
 		DDC41D5506BEDFEC2A9D479C /* Pods_AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F45189B63F077DD02E531C58 /* Pods_AEPCoreMocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCoreMocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7A9CEC59D6694933A01324 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
+		MOB24751AA0000000000001 /* ADBMobileConfig-rules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "ADBMobileConfig-rules.zip"; sourceTree = "<group>"; };
 		REEVALUABLE0002 /* rules_reevaluable.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_reevaluable.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1895,6 +1899,8 @@
 		3F0397B224BE5FF30019F095 /* dataqueue */ = {
 			isa = PBXGroup;
 			children = (
+				9477882E30495AE7008CEB53 /* DataQueueConfig.swift */,
+				9477882730493810008CEB53 /* SQLiteJournalMode.swift */,
 				3F0397B624BE5FF30019F095 /* DataEntity.swift */,
 				3F0397B524BE5FF30019F095 /* DataQueue.swift */,
 				3F0397B824BE5FF30019F095 /* DataQueuing.swift */,
@@ -2199,7 +2205,7 @@
 				75FC60E929AD45C200EB7579 /* InitOptions.swift */,
 				7522C4832C233ACD004AF637 /* Event+Debug.swift */,
 				59208A30D20541B9B941200E /* ProfileAttributes.swift */,
-				);
+			);
 			path = core;
 			sourceTree = "<group>";
 		};
@@ -3643,7 +3649,7 @@
 				3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */,
 				BFFD6ECE2D4C94D7000D3224 /* MobileCoreInitializer.swift in Sources */,
 				CB4ECE7D82944E828AFDF90E /* ProfileAttributes.swift in Sources */,
-					3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,
+				3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,
 				3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */,
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
@@ -3783,6 +3789,7 @@
 				923972B325AD844E0056A3E5 /* UIApplication+Window.swift in Sources */,
 				3F0397F924BE60910019F095 /* FileManager+ZIP.swift in Sources */,
 				3F0397FD24BE60910019F095 /* ThreadSafeDictionary.swift in Sources */,
+				947788283049381D008CEB53 /* SQLiteJournalMode.swift in Sources */,
 				3F0397F824BE60910019F095 /* ZipEntry.swift in Sources */,
 				3F0397F424BE60910019F095 /* HitQueuing.swift in Sources */,
 				786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */,
@@ -3814,6 +3821,7 @@
 				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,
 				B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */,
+				9477882F30495AE9008CEB53 /* DataQueueConfig.swift in Sources */,
 				3F0397F624BE60910019F095 /* FileUnzipper.swift in Sources */,
 				3F0397D424BE5FF30019F095 /* SQLiteWrapper.swift in Sources */,
 				3F0397D024BE5FF30019F095 /* HttpMethod.swift in Sources */,
