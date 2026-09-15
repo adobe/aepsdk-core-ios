@@ -138,11 +138,6 @@ commands:
             fi
 
       - codecov/upload:
-          # codecov/upload's default (non-pypi) path downloads a CLI binary and
-          # runs `brew install gpg` to verify it. That install's ca-certificates
-          # dependency conflicts with the one already on this CI image. Installing
-          # the CLI via pip instead avoids Homebrew entirely.
-          use_pypi: true
           files: ./build/coverage/coverage.xml
           flags: << parameters.flag >>
           upload_name: << parameters.flag >>
