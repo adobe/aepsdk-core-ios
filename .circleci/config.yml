@@ -16,7 +16,6 @@
 version: 2.1
 
 orbs:
-  codecov: codecov/codecov@6.0.0
   macos: circleci/macos@2
 
 workflows:
@@ -137,11 +136,22 @@ commands:
               xcresultparser --output-format cobertura "$BUNDLE" > ./build/coverage/coverage.xml
             fi
 
-      - codecov/upload:
-          files: ./build/coverage/coverage.xml
-          flags: << parameters.flag >>
-          upload_name: << parameters.flag >>
-          disable_search: true
+      # Upload via the Codecov CLI installed through pip. This avoids the codecov orb's
+      # `brew install gpg` step, which is unreliable on the CI image's Homebrew (it fails
+      # either linking ca-certificates or pouring its bottle). `--break-system-packages`
+      # is required because the image's Python is PEP 668 "externally managed".
+      # Non-fatal: a coverage-upload hiccup should never fail the build.
+      - run:
+          name: Upload coverage to Codecov
+          command: |
+            python3 -m pip install --user --break-system-packages codecov-cli || true
+            export PATH="$(python3 -m site --user-base)/bin:$PATH"
+            codecovcli upload-process \
+              -t "${CODECOV_TOKEN}" \
+              -f ./build/coverage/coverage.xml \
+              -F "<< parameters.flag >>" \
+              -n "<< parameters.flag >>" \
+              --disable-search || echo "Codecov upload failed (non-fatal)"
 
 jobs:
   validate-code:
