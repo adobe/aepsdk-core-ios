@@ -1,0 +1,36 @@
+#
+# Copyright 2026 Adobe. All rights reserved.
+# This file is licensed to you under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License. You may obtain a copy
+# of the License at http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+# OF ANY KIND, either express or implied. See the License for the specific language
+# governing permissions and limitations under the License.
+#
+
+name: Build and Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - staging
+
+jobs:
+  build-and-test:
+    uses: shushinde/aepsdk-commons/.github/workflows/ios-spm-build-and-test.yml@main
+    with:
+      xcode-version: '26.6.0'
+      ios-device-name: 'iPhone 16'
+      ios-version: '18.6'
+      tvos-device-name: 'Apple TV'
+      tvos-version: '18.5'
+      run-test-ios-unit: true
+      run-test-tvos-unit: true
+      run-test-ios-integration: true
+      run-test-tvos-integration: true
+      enable-codecov: true
+    secrets: inherit

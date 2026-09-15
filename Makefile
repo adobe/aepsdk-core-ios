@@ -96,6 +96,21 @@ aep-signal-tvos-unit-test:
 
 unit-test-all: aep-core-unit-test aep-core-tvos-unit-test aep-services-unit-test aep-services-tvos-unit-test aep-lifecycle-unit-test aep-lifecycle-tvos-unit-test aep-identity-unit-test aep-identity-tvos-unit-test aep-signal-unit-test aep-signal-tvos-unit-test
 
+# Test-plan based targets (used by the GitHub Actions pipeline).
+# SwiftLint runs automatically via the SPM build-tool plugin during the build;
+# code coverage is configured in the test plans.
+unit-test-ios:
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(PROJECT_NAME) -testPlan AEPUnitTests -destination $(IOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/AEPUnitTests-ios.xcresult -skipPackagePluginValidation
+
+unit-test-tvos:
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(PROJECT_NAME) -testPlan AEPUnitTests -destination $(TVOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/AEPUnitTests-tvos.xcresult -skipPackagePluginValidation
+
+integration-test-ios:
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(PROJECT_NAME) -testPlan AEPIntegrationTests -destination $(IOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/AEPIntegrationTests-ios.xcresult -skipPackagePluginValidation
+
+integration-test-tvos:
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(PROJECT_NAME) -testPlan AEPIntegrationTests -destination $(TVOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/AEPIntegrationTests-tvos.xcresult -skipPackagePluginValidation
+
 integration-test:
 	@echo "######################################################################"
 	@echo "### Integration Testing iOS"

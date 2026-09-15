@@ -1,0 +1,53 @@
+{
+  "configurations" : [
+    {
+      "id" : "09806085-8BE0-4935-A461-9A671B70AFA3",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : true,
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:AEPCore.xcodeproj",
+        "identifier" : "3FE6DDD824C62EE60065EA05",
+        "name" : "AEPLifecycleTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:AEPCore.xcodeproj",
+        "identifier" : "24B4935624D4C31100AA38D9",
+        "name" : "AEPSignalTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:AEPCore.xcodeproj",
+        "identifier" : "21CAC0DE2422917600C11388",
+        "name" : "AEPCoreTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:AEPCore.xcodeproj",
+        "identifier" : "3F03978E24BE5DD30019F095",
+        "name" : "AEPServicesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:AEPCore.xcodeproj",
+        "identifier" : "3FE6DE3624C642330065EA05",
+        "name" : "AEPIdentityTests"
+      }
+    }
+  ],
+  "version" : 1
+}
