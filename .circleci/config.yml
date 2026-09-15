@@ -59,9 +59,15 @@ workflows:
       - test-tvos-integration:
           requires:
             - validate-code
-      - test-spm-podspec-archive:
+      - test-spm-archive:
           requires:
             - validate-code
+          filters:
+            branches:
+              only:
+                - main
+                - staging
+                - /dev-.*/
 
 commands:
   install_dependencies:
@@ -398,7 +404,7 @@ jobs:
           name: Run tvOS integration Tests
           command: make integration-tvos-test
 
-  test-spm-podspec-archive:
+  test-spm-archive:
     resource_class: m4pro.medium
     macos:
       xcode: 26.3.0
