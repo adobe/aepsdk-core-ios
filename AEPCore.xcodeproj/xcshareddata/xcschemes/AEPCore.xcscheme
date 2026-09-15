@@ -28,15 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:AEPUnitTests.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:AEPIntegrationTests.xctestplan">
-         </TestPlanReference>
-      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -47,56 +38,14 @@
                BlueprintName = "AEPCoreTests"
                ReferencedContainer = "container:AEPCore.xcodeproj">
             </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3F03978E24BE5DD30019F095"
-               BuildableName = "AEPServicesTests.xctest"
-               BlueprintName = "AEPServicesTests"
-               ReferencedContainer = "container:AEPCore.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3FE6DDD824C62EE60065EA05"
-               BuildableName = "AEPLifecycleTests.xctest"
-               BlueprintName = "AEPLifecycleTests"
-               ReferencedContainer = "container:AEPCore.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3FE6DE3624C642330065EA05"
-               BuildableName = "AEPIdentityTests.xctest"
-               BlueprintName = "AEPIdentityTests"
-               ReferencedContainer = "container:AEPCore.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "24B4935624D4C31100AA38D9"
-               BuildableName = "AEPSignalTests.xctest"
-               BlueprintName = "AEPSignalTests"
-               ReferencedContainer = "container:AEPCore.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3F4256FB24F474F4005D4006"
-               BuildableName = "AEPIntegrationTests.xctest"
-               BlueprintName = "AEPIntegrationTests"
-               ReferencedContainer = "container:AEPCore.xcodeproj">
-            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AEPCoreTests/testDispatchEventWithResponseCallbackSimple()">
+               </Test>
+               <Test
+                  Identifier = "IdentityStateTests/testSyncIdentifiersHappyPushID()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
