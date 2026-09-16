@@ -11,6 +11,7 @@
 //
 
 @testable import AEPServices
+import Foundation
 
 /// MockDataQueue - see also AEPServices/Mocks
 public class MockHitProcessor: HitProcessing {

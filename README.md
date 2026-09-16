@@ -49,7 +49,7 @@ target 'YOUR_TARGET_NAME' do
     pod 'AEPCore'
 end
 ```
-
+  
 Replace `YOUR_TARGET_NAME` and then, in the `Podfile` directory, type:
 
 ```bash

@@ -19,11 +19,12 @@ let package = Package(
     name: "AEPCore",
     platforms: [.iOS(.v12), .tvOS(.v12)],
     products: [
-        .library(name: "AEPCore", targets: ["AEPCore"]),
-        .library(name: "AEPIdentity", targets: ["AEPIdentity"]),
-        .library(name: "AEPLifecycle", targets: ["AEPLifecycle"]),
-        .library(name: "AEPServices", targets: ["AEPServices"]),
-        .library(name: "AEPSignal", targets: ["AEPSignal"])
+        .library(name: "AEPCore", type: .dynamic, targets: ["AEPCore"]),
+        .library(name: "AEPIdentity", type: .dynamic, targets: ["AEPIdentity"]),
+        .library(name: "AEPLifecycle", type: .dynamic, targets: ["AEPLifecycle"]),
+        .library(name: "AEPServices", type: .dynamic, targets: ["AEPServices"]),
+        .library(name: "AEPSignal", type: .dynamic, targets: ["AEPSignal"]),
+        .library(name: "AEPTestUtils", targets: ["AEPTestUtils"])
     ],
     dependencies: [
         .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .upToNextMajor(from: "5.0.0")),
@@ -49,5 +50,27 @@ let package = Package(
         .target(name: "AEPSignal",
                 dependencies: ["AEPCore"],
                 path: "AEPSignal/Sources"),
+        .target(name: "AEPTestUtils",
+                dependencies: ["AEPCore", "AEPServices"],
+                path: ".",
+                exclude: [
+                    "AEPCore.xcodeproj",
+                    "AEPCore.xcworkspace",
+                    "AEPCore/Sources",
+                    "AEPCore/Tests",
+                    "AEPIdentity",
+                    "AEPIntegrationTests",
+                    "AEPLifecycle",
+                    "AEPServices/Sources",
+                    "AEPServices/Tests",
+                    "AEPSignal",
+                    "API",
+                    "Documentation",
+                    "PackageCollection",
+                    "Script",
+                    "TestApps",
+                ],
+                sources: ["AEPServices/Mocks/PublicTestUtils", "AEPCore/Mocks/PublicTestUtils"],
+                linkerSettings: [.linkedFramework("XCTest")]),
     ]
 )
