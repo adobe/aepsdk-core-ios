@@ -121,39 +121,6 @@ integration-tvos-test:
 	@echo "######################################################################"
 	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPINTEGRATION_TEST_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES -skipPackagePluginValidation
 
-archive: _archive
-
-archive-ios: _archive-ios
-
-ci-archive: _archive
-
-ci-archive-ios: _archive-ios
-
-_archive: clean build-ios build-tvos
-	./Script/archive.sh create-xcframeworks
-
-_archive-ios: clean build-ios
-	./Script/archive.sh create-xcframeworks-ios
-
-build-ios:
-	./Script/archive.sh build-ios
-
-build-tvos:
-	./Script/archive.sh build-tvos
-
-zip:
-	cd build && zip -r -X $(AEPCORE_TARGET_NAME).xcframework.zip $(AEPCORE_TARGET_NAME).xcframework/
-	cd build && zip -r -X $(AEPSERVICES_TARGET_NAME).xcframework.zip $(AEPSERVICES_TARGET_NAME).xcframework/
-	cd build && zip -r -X $(AEPLIFECYCLE_TARGET_NAME).xcframework.zip $(AEPLIFECYCLE_TARGET_NAME).xcframework/
-	cd build && zip -r -X $(AEPIDENTITY_TARGET_NAME).xcframework.zip $(AEPIDENTITY_TARGET_NAME).xcframework/
-	cd build && zip -r -X $(AEPSIGNAL_TARGET_NAME).xcframework.zip $(AEPSIGNAL_TARGET_NAME).xcframework/
-	cd build && zip -r -X $(AEPRULESENGINE_TARGET_NAME).xcframework.zip $(AEPRULESENGINE_TARGET_NAME).xcframework/
-	swift package compute-checksum build/$(AEPCORE_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPSERVICES_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPLIFECYCLE_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPIDENTITY_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPSIGNAL_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPRULESENGINE_TARGET_NAME).xcframework.zip
 # Targets - CI steps
 
 clean:
