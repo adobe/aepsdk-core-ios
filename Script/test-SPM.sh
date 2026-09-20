@@ -48,8 +48,6 @@ let package = Package(
 swift package update
 swift package resolve
 
-# This is nececery to avoid internal PIF error
-swift package dump-pif > /dev/null
 (xcodebuild clean -scheme TestProject -destination 'generic/platform=iOS' > /dev/null) || :
 (xcodebuild clean -scheme TestProject -destination 'generic/platform=tvOS' > /dev/null) || :
 

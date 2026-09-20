@@ -11,6 +11,7 @@
 //
 
 import AEPServices
+import Foundation
 
 public extension NamedCollectionDataStore {
     /// Clears all known locations for Adobe Mobile SDK local device data persistence:

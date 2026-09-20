@@ -18,7 +18,7 @@ enum IdentityConstants {
 
     static let DATASTORE_NAME = EXTENSION_NAME
 
-    static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
+    static let API_TIMEOUT = TimeInterval(0.5)  // Get API requests timeout after half a second
     static let VISITOR_ID_PARAMETER_KEY_CUSTOMER = "d_cid_ic"
     static let KEY_PATH_OPTOUT = "/demoptout.jpg"
     static let CID_DELIMITER = "%01"
@@ -48,7 +48,8 @@ enum IdentityConstants {
     enum EventNames {
         static let ANALYTICS_FOR_IDENTITY_REQUEST = "AnalyticsForIdentityRequest"
         static let CONFIGURATION_RESPONSE_IDENTITY_EVENT = "Configuration Response Identity Event"
-        static let CONFIGURATION_UPDATE_FROM_IDENTITY_MODULE = "Configuration Update From Identity Module"
+        static let CONFIGURATION_UPDATE_FROM_IDENTITY_MODULE =
+            "Configuration Update From Identity Module"
         static let IDENTITY_APPENDED_URL = "IDENTITY_APPENDED_URL"
         static let IDENTITY_REQUEST_IDENTITY = "IdentityRequestIdentity"
         static let IDENTITY_RESPONSE_CONTENT_ONE_TIME = "IDENTITY_RESPONSE_CONTENT_ONE_TIME"

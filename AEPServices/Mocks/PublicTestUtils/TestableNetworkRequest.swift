@@ -11,6 +11,7 @@
 //
 
 @testable import AEPServices
+import Foundation
 
 /// `TestableNetworkRequest` is a specialized subclass of `NetworkRequest` for use in testing scenarios.
 /// It provides custom, overriding logic for the `Equatable` and `Hashable` protocols, and is meant for direct use as keys
