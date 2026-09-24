@@ -14,8 +14,15 @@ import Foundation
 
 /// Defines a platform service to be used to initialize `DataQueue` objects
 @objc(AEPDataQueuing) public protocol DataQueuing {
-    /// Initialize a `DataQueue` object
+    /// Initialize a `DataQueue` object with default configuration.
     /// - Parameter label: the label you assigned to the `DataQueue` at creation time.
     /// - Returns: the object of `DataQueue`, return false if failed to create an object
     func getDataQueue(label: String) -> DataQueue?
+
+    /// Initialize a `DataQueue` object with the given configuration, applied when the queue is created.
+    /// - Parameters:
+    ///   - label: the label you assigned to the `DataQueue` at creation time.
+    ///   - config: tuning for the queue's database.
+    /// - Returns: the object of `DataQueue`, or nil if it failed to create an object.
+    func getDataQueue(label: String, config: DataQueueConfig) -> DataQueue?
 }
