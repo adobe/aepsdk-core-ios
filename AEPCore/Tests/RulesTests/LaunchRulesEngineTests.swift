@@ -957,6 +957,245 @@ class LaunchRulesEngineTests: XCTestCase {
         // Then - completion should have been callable without crash
         XCTAssertTrue(mockInterceptor.onReevaluationTriggeredCalled)
     }
+
+    // MARK: - forwardToEdge consequence
+
+    /// Device-attributes payload matching the shape produced by the sending extension.
+    private var deviceAttributesEventData: [String: Any] {
+        return [
+            "app": ["id": "com.adobe.MessagingDemoAppSwiftUI", "platform": "apnsSandbox"],
+            "tokens": [
+                "liveActivityStart": [
+                    ["attributeType": "GameScoreLiveActivityAttributes", "value": "tokenA"],
+                    ["attributeType": "FoodDeliveryLiveActivityAttributes", "value": "tokenB"],
+                    ["attributeType": "AirplaneTrackingAttributes", "value": "tokenC"]
+                ]
+            ],
+            "pushToken": "push-abc-123",
+            "xdm": ["identityMap": ["ECID": [["id": "67151993616001726404692866062767366657"]]]],
+            "timezone": "Asia/Kolkata"
+        ]
+    }
+
+    /// A forwardToEdge consequence whose payload mixes scalar tokens and whole-value tokens
+    /// (for the array and the nested identityMap object).
+    private func forwardToEdgeConsequence() -> RuleConsequence {
+        let details: [String: Any?] = [
+            "payload": [
+                "xdm": [
+                    "eventType": "device.attributes",
+                    "identityMap": "{%xdm.identityMap%}"
+                ],
+                "data": [
+                    "pushToken": "{%pushToken%}",
+                    "liveActivityStart": "{%tokens.liveActivityStart%}",
+                    "timezone": "{%timezone%}"
+                ]
+            ]
+        ]
+        return RuleConsequence(id: "forward-1", type: "forwardToEdge", details: details)
+    }
+
+    func testForwardToEdge_wholeValueTokens_injectArrayAndObjectPreservingType() {
+        // Given
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let event = Event(name: "device attributes", type: "type", source: "source", data: deviceAttributesEventData)
+        let tokens = TokenFinder(event: event, extensionRuntime: runtime)
+
+        // When
+        let resolved = rulesEngine.replaceToken(for: forwardToEdgeConsequence(), data: tokens)
+
+        // Then - the array is injected as a real array of the correct length (not stringified)
+        let payload = resolved.details["payload"] as? [String: Any]
+        let data = payload?["data"] as? [String: Any]
+        let liveActivity = data?["liveActivityStart"] as? [[String: Any]]
+        XCTAssertEqual(3, liveActivity?.count)
+        XCTAssertEqual("GameScoreLiveActivityAttributes", liveActivity?[0]["attributeType"] as? String)
+        XCTAssertEqual("tokenC", liveActivity?[2]["value"] as? String)
+
+        // Scalars resolved
+        XCTAssertEqual("push-abc-123", data?["pushToken"] as? String)
+        XCTAssertEqual("Asia/Kolkata", data?["timezone"] as? String)
+
+        // Nested object token resolved as a dictionary, preserving type
+        let xdm = payload?["xdm"] as? [String: Any]
+        let identityMap = xdm?["identityMap"] as? [String: Any]
+        let ecid = identityMap?["ECID"] as? [[String: Any]]
+        XCTAssertEqual("67151993616001726404692866062767366657", ecid?[0]["id"] as? String)
+    }
+
+    func testForwardToEdge_wholeValueTokens_omitAbsentAttributes() {
+        // Given - event carries only the live activity tokens (no pushToken, no timezone)
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let partialData: [String: Any] = [
+            "tokens": ["liveActivityStart": [["attributeType": "GameScoreLiveActivityAttributes", "value": "tokenA"]]],
+            "xdm": ["identityMap": ["ECID": [["id": "ecid-1"]]]]
+        ]
+        let event = Event(name: "device attributes", type: "type", source: "source", data: partialData)
+        let tokens = TokenFinder(event: event, extensionRuntime: runtime)
+
+        // When
+        let resolved = rulesEngine.replaceToken(for: forwardToEdgeConsequence(), data: tokens)
+
+        // Then - absent attributes are omitted entirely rather than sent as empty strings
+        let data = (resolved.details["payload"] as? [String: Any])?["data"] as? [String: Any]
+        XCTAssertNotNil(data?["liveActivityStart"])
+        XCTAssertFalse(data?.keys.contains("pushToken") ?? true, "pushToken should be omitted when absent")
+        XCTAssertFalse(data?.keys.contains("timezone") ?? true, "timezone should be omitted when absent")
+    }
+
+    func testForwardToEdge_embeddedTokenStillRendersAsString() {
+        // Given - a token with surrounding text must keep the existing string-rendering behavior
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let event = Event(name: "device attributes", type: "type", source: "source", data: deviceAttributesEventData)
+        let tokens = TokenFinder(event: event, extensionRuntime: runtime)
+        let consequence = RuleConsequence(id: "c", type: "forwardToEdge",
+                                          details: ["payload": ["data": ["label": "tz-{%timezone%}"]]])
+
+        // When
+        let resolved = rulesEngine.replaceToken(for: consequence, data: tokens)
+
+        // Then
+        let data = (resolved.details["payload"] as? [String: Any])?["data"] as? [String: Any]
+        XCTAssertEqual("tz-Asia/Kolkata", data?["label"] as? String)
+    }
+
+    func testForwardOperationalData_process_dispatchesEventWithRuleTypeAndSourceAndResolvedData() {
+        // Given - no consent state is set up: the rules engine performs no consent check.
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        guard let rules = JSONRulesParser.parse(forwardOperationalDataRuleJson.data(using: .utf8)!) else {
+            XCTFail("Could not parse forward-operational-data rules JSON")
+            return
+        }
+        rulesEngine.replaceRules(with: rules)
+
+        let event = Event(name: "device attributes",
+                          type: "com.adobe.eventType.deviceAttributes",
+                          source: "com.adobe.eventSource.requestContent",
+                          data: deviceAttributesEventData)
+
+        // When
+        _ = rulesEngine.process(event: event)
+
+        // Then - a single event is dispatched using the type/source declared in the rule detail,
+        // with tokens resolved (array preserved, absent attribute omitted) and no consent-related keys.
+        let forwardEvent = runtime.dispatchedEvents.first { $0.type == "com.adobe.eventType.edgeBypassConsent" }
+        XCTAssertNotNil(forwardEvent, "Expected a forwarded event to be dispatched")
+        XCTAssertEqual("com.adobe.eventSource.requestContent", forwardEvent?.source)
+        XCTAssertNil(forwardEvent?.data?["consentBypass"], "no consent flag should be stamped into the payload")
+
+        // Scalar resolved
+        XCTAssertEqual("Asia/Kolkata", forwardEvent?.data?["timezone"] as? String)
+
+        let tokens = forwardEvent?.data?["tokens"] as? [String: Any]
+        // Whole-value array token preserved as a real array
+        let liveActivity = tokens?["liveActivityStart"] as? [[String: Any]]
+        XCTAssertEqual(3, liveActivity?.count)
+        XCTAssertEqual("tokenC", liveActivity?[2]["value"] as? String)
+        XCTAssertEqual("push-abc-123", tokens?["pushToken"] as? String)
+        // Absent whole-value token omitted, not sent as an empty string
+        XCTAssertFalse(tokens?.keys.contains("liveActivityUpdate") ?? true, "absent liveActivityUpdate should be omitted")
+    }
+
+    func testForwardOperationalData_process_missingSourceDoesNotDispatch() {
+        // Given - the rule detail omits `source`, which is required.
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        guard let rules = JSONRulesParser.parse(forwardOperationalDataRuleJsonMissingSource.data(using: .utf8)!) else {
+            XCTFail("Could not parse forward-operational-data rules JSON")
+            return
+        }
+        rulesEngine.replaceRules(with: rules)
+
+        let event = Event(name: "device attributes",
+                          type: "com.adobe.eventType.deviceAttributes",
+                          source: "com.adobe.eventSource.requestContent",
+                          data: deviceAttributesEventData)
+
+        // When
+        _ = rulesEngine.process(event: event)
+
+        // Then - no forwarded event is dispatched because the consequence is invalid.
+        let forwardEvent = runtime.dispatchedEvents.first { $0.type == "com.adobe.eventType.edgeBypassConsent" }
+        XCTAssertNil(forwardEvent, "no event should be forwarded when 'source' is missing")
+    }
+
+    private var forwardOperationalDataRuleJson: String {
+        return """
+        {
+            "version": 1,
+            "rules": [
+                {
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["com.adobe.eventType.deviceAttributes"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "forward-1",
+                            "type": "forward-operational-data",
+                            "detail": {
+                                "type": "com.adobe.eventType.edgeBypassConsent",
+                                "source": "com.adobe.eventSource.requestContent",
+                                "eventdataaction": "new",
+                                "eventdata": {
+                                    "timezone": "{%timezone%}",
+                                    "tokens": {
+                                        "pushToken": "{%pushToken%}",
+                                        "liveActivityStart": "{%tokens.liveActivityStart%}",
+                                        "liveActivityUpdate": "{%tokens.liveActivityUpdate%}"
+                                    },
+                                    "xdm": {
+                                        "identityMap": "{%xdm.identityMap%}"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+    }
+
+    private var forwardOperationalDataRuleJsonMissingSource: String {
+        return """
+        {
+            "version": 1,
+            "rules": [
+                {
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["com.adobe.eventType.deviceAttributes"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "forward-1",
+                            "type": "forward-operational-data",
+                            "detail": {
+                                "type": "com.adobe.eventType.edgeBypassConsent",
+                                "eventdataaction": "new",
+                                "eventdata": { "timezone": "{%timezone%}" }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+    }
 }
 
 // MARK: - Mock Interceptor
