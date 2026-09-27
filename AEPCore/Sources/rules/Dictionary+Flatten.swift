@@ -57,4 +57,26 @@ extension Dictionary where Key == String, Value == Any {
         }
         return result
     }
+
+    /// Resolves a dot-separated key path against this dictionary, returning the raw value at that
+    /// path with its type preserved (arrays and nested dictionaries are returned as-is, not flattened).
+    ///
+    /// Numeric path segments index into arrays, e.g. `"tokens.liveActivityStart.0.value"`; non-numeric
+    /// segments look up dictionary keys. Returns nil if any segment cannot be resolved.
+    ///
+    /// - Parameter path: dot-separated key path, e.g. `"tokens.liveActivityStart"`
+    /// - Returns: the value at `path`, or nil if the path does not exist
+    func value(forPath path: String) -> Any? {
+        var current: Any? = self
+        for segment in path.split(separator: ".") {
+            if let dict = current as? [String: Any] {
+                current = dict[String(segment)]
+            } else if let array = current as? [Any], let index = Int(segment), index >= 0, index < array.count {
+                current = array[index]
+            } else {
+                return nil
+            }
+        }
+        return current
+    }
 }
