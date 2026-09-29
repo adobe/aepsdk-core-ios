@@ -461,7 +461,7 @@ final class EventHub {
         }
 
         sharedState.set(version: version, data: data)
-        Log.debug(label: LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
+        Log.debug(label: LOG_TAG, template: "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n{data}", data: ["data": data ?? [:]])
         dispatchInternal(event: createSharedStateEvent(extensionName: extensionName, sharedStatetype: sharedStateType))
     }
 
@@ -503,7 +503,7 @@ final class EventHub {
         guard let pendingVersion = version, let container = extensionContainerFor(extensionName: extensionName) else { return }
         guard let sharedState = container.sharedState(for: sharedStateType) else { return }
         sharedState.updatePending(version: pendingVersion, data: data)
-        Log.debug(label: self.LOG_TAG, "Pending \(sharedStateType.rawValue) shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(PrettyDictionary.prettify(data))")
+        Log.debug(label: self.LOG_TAG, template: "Pending \(sharedStateType.rawValue) shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n{data}", data: ["data": data ?? [:]])
         dispatchInternal(event: createSharedStateEvent(extensionName: container.sharedStateName, sharedStatetype: sharedStateType))
     }
 
