@@ -338,7 +338,7 @@ public class LaunchRulesEngine {
             Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
             return nil
         }
-        Log.trace(label: LOG_TAG, "(\(self.name)) : Attaching event data: \(PrettyDictionary.prettify(from)) to \(PrettyDictionary.prettify(to))\n")
+        Log.trace(label: LOG_TAG, template: "(\(self.name)) : Attaching event data: {from} to {to}\n", data: ["from": from, "to": to])
         return EventDataMerger.merging(to: to, from: from, overwrite: false)
     }
 
@@ -357,7 +357,7 @@ public class LaunchRulesEngine {
             Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
             return nil
         }
-        Log.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data: \(PrettyDictionary.prettify(to)) with data: \(PrettyDictionary.prettify(from))\n")
+        Log.trace(label: LOG_TAG, template: "(\(self.name)) : Modifying event data: {to} with data: {from}\n", data: ["to": to, "from": from])
         return EventDataMerger.merging(to: to, from: from, overwrite: true)
     }
 
