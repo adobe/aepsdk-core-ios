@@ -34,19 +34,17 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_DETAIL_ACTION_NEW = "new"
     private static let CONSEQUENCE_TYPE_SCHEMA = "schema"
 
-    // `forward-operational-data` consequence: fills the `eventdata` template from the triggering
-    // event's data (scalars via tokens, arrays/objects via whole-value tokens) and dispatches a new
-    // event using the `type` and `source` declared in the consequence `detail`. It is structurally
-    // identical to a `dispatch` consequence (`type`, `source`, `eventdata`, `eventdataaction`); it
-    // exists as a distinct, self-documenting consequence type for forwarding operational data.
-    //
-    // The rules engine stays generic: it forwards exactly the `type`/`source` the rule declares and
-    // has no knowledge of any downstream extension, consent, or endpoint. Which extension picks up the
-    // dispatched event, and what it does with it, is entirely a function of the `type`/`source` in the
-    // rule plus whichever extension registers a listener for that pair.
+    // `forward-operational-data` consequence: copies the values found at the rule's enabled `attributes`
+    // paths from the triggering event data (plus `context` paths when anything was copied) into a new
+    // event dispatched with the `type`/`source` declared in the rule detail. Values are copied as-is and
+    // placed at the same path, so the output keeps the caller's structure. The rules engine stays generic:
+    // it performs no consent check and has no knowledge of the listener that receives the event.
     private static let CONSEQUENCE_TYPE_FORWARD_OPERATIONAL_DATA = "forward-operational-data"
     private static let FORWARD_OPERATIONAL_DATA_EVENT_NAME = "Forward operational data"
-
+    private static let FORWARD_DETAIL_ATTRIBUTES = "attributes"
+    private static let FORWARD_DETAIL_CONTEXT = "context"
+    private static let FORWARD_DETAIL_PATH = "path"
+    private static let FORWARD_DETAIL_ENABLED = "enabled"
     private static let CONSEQUENCE_SCHEMA_EVENT_HISTORY = "https://ns.adobe.com/personalization/eventHistoryOperation"
     private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT = "insert"
     private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS = "insertIfNotExists"
@@ -327,12 +325,17 @@ public class LaunchRulesEngine {
                     processSchemaConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent)
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_FORWARD_OPERATIONAL_DATA:
+                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
+                        Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process forward-operational-data consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
+                        continue
+                    }
                     guard let forwardEvent = processForwardOperationalDataConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent) else {
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Dispatching forward-operational-data event \(forwardEvent.id)")
                     extensionRuntime.dispatch(event: forwardEvent)
-
+                    dispatchChainedEventsCount[forwardEvent.id] = (dispatchChainCount ?? 0) + 1
+                    
                 default:
                     let consequenceEvent = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent)
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(consequenceEvent)")
@@ -417,20 +420,17 @@ public class LaunchRulesEngine {
                                                  data: dispatchEventData)
     }
 
-    /// Process a `forward-operational-data` consequence. The consequence `details` are structurally
-    /// identical to a dispatch consequence: `type`, `source`, `eventdataaction` ("new"/"copy") and an
-    /// `eventdata` template whose scalar tokens (e.g. `{%timezone%}`) and whole-value tokens (e.g.
-    /// `{%tokens.liveActivityStart%}` for arrays/objects) have already been resolved against the
-    /// triggering event data by `replaceToken(for:data:)`. Whole-value tokens whose attribute is not
-    /// present on the event are omitted from the resolved data.
+    /// Process a `forward-operational-data` consequence. `details` must contain:
+    /// - `type` / `source`: the event type and source to dispatch.
+    /// - `attributes`: `[{ "path": ["tokens", "pushNotification"], "enabled": true }, ...]`. For every enabled entry the
+    ///   value found at exactly that path in the triggering event data is copied, as-is, to the same path in the new event.
+    /// - `context` (optional): `[{ "path": ["app"] }]`, copied the same way but only when at least one attribute was copied.
     ///
-    /// The `type` and `source` come from the rule `detail` and are forwarded verbatim - the rules
-    /// engine performs no consent check and adds nothing to the payload. Consent handling (if any) and
-    /// endpoint routing are the responsibility of whichever extension listens for that `type`/`source`.
+    /// Paths are arrays of dictionary keys; missing paths are skipped and no empty containers are created.
     /// - Parameters:
-    ///   - consequence: the RuleConsequence containing the resolved forward details
-    ///   - processedEvent: the triggering event, used as the parent for the chained event
-    /// - Returns: a new Event to be dispatched, or nil if the details are invalid
+    ///   - consequence: the RuleConsequence containing the forward details
+    ///   - processedEvent: the triggering event, used as the data source and as the parent of the new event
+    /// - Returns: the event to dispatch, or nil when the details are invalid or no enabled attribute was found
     private func processForwardOperationalDataConsequence(consequence: RuleConsequence, processedEvent: Event) -> Event? {
         guard let type = consequence.eventType else {
             Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a forward-operational-data consequence \(consequence.id), 'type' is missing from 'details'")
@@ -440,28 +440,70 @@ public class LaunchRulesEngine {
             Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a forward-operational-data consequence \(consequence.id), 'source' is missing from 'details'")
             return nil
         }
-        let action = consequence.eventDataAction ?? LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW
-
-        var eventData: [String: Any]
-        if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_COPY {
-            eventData = processedEvent.data ?? [:] // copy event data from triggering event
-        } else if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW {
-            guard let newData = consequence.eventData?.compactMapValues({ $0 }) else {
-                Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a forward-operational-data consequence \(consequence.id), 'eventdata' is missing from 'details'")
-                return nil
-            }
-            eventData = newData
-        } else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a forward-operational-data consequence \(consequence.id), unsupported 'eventdataaction' '\(action)', expected copy/new")
+        guard let attributes = consequence.details[LaunchRulesEngine.FORWARD_DETAIL_ATTRIBUTES] as? [Any] else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a forward-operational-data consequence \(consequence.id), 'attributes' is missing from 'details'")
             return nil
         }
 
-        Log.trace(label: LOG_TAG, "(\(self.name)) : Forwarding operational data (\(type)/\(source)) for consequence \(consequence.id)")
+        let eventData = processedEvent.data ?? [:]
+        var forwardData = copyPaths(from: eventData, entries: attributes, requireEnabled: true, consequenceId: consequence.id)
+        guard !forwardData.isEmpty else {
+            Log.trace(label: LOG_TAG, "(\(self.name)) : No enabled attribute found in event \(processedEvent.id) for forward-operational-data consequence \(consequence.id), nothing to forward")
+            return nil
+        }
+        if let context = consequence.details[LaunchRulesEngine.FORWARD_DETAIL_CONTEXT] as? [Any] {
+            let contextData = copyPaths(from: eventData, entries: context, requireEnabled: false, consequenceId: consequence.id)
+            forwardData = EventDataMerger.merging(to: forwardData, from: contextData, overwrite: false)
+        }
 
+        Log.trace(label: LOG_TAG, "(\(self.name)) : Forwarding operational data (\(type)/\(source)) for consequence \(consequence.id)")
         return processedEvent.createChainedEvent(name: LaunchRulesEngine.FORWARD_OPERATIONAL_DATA_EVENT_NAME,
                                                  type: type,
                                                  source: source,
-                                                 data: eventData)
+                                                 data: forwardData)
+    }
+
+    /// Copies the value at each entry's `path` in `data` to the same path in the returned dictionary.
+    /// Entries that are malformed, disabled (when `requireEnabled`), or whose path is not found are skipped.
+    private func copyPaths(from data: [String: Any], entries: [Any], requireEnabled: Bool, consequenceId: String) -> [String: Any] {
+        var result: [String: Any] = [:]
+        for rawEntry in entries {
+            guard let entry = (rawEntry as? [String: Any?])?.compactMapValues({ $0 }),
+                  let path = entry[LaunchRulesEngine.FORWARD_DETAIL_PATH] as? [String], !path.isEmpty else {
+                Log.warning(label: LOG_TAG, "(\(self.name)) : Skipping malformed path entry in forward-operational-data consequence \(consequenceId)")
+                continue
+            }
+            if requireEnabled, entry[LaunchRulesEngine.FORWARD_DETAIL_ENABLED] as? Bool != true {
+                continue
+            }
+            guard let value = LaunchRulesEngine.value(at: path, in: data) else {
+                continue
+            }
+            LaunchRulesEngine.set(value, at: path, in: &result)
+        }
+        return result
+    }
+
+    private static func value(at path: [String], in data: [String: Any]) -> Any? {
+        var current: Any = data
+        for key in path {
+            guard let dict = current as? [String: Any], let next = dict[key] else {
+                return nil
+            }
+            current = next
+        }
+        return current is NSNull ? nil : current
+    }
+
+    private static func set(_ value: Any, at path: [String], in data: inout [String: Any]) {
+        guard let key = path.first else { return }
+        if path.count == 1 {
+            data[key] = value
+            return
+        }
+        var child = data[key] as? [String: Any] ?? [:]
+        set(value, at: Array(path.dropFirst()), in: &child)
+        data[key] = child
     }
 
     /// Replace tokens inside the provided consequence with the right value
@@ -490,52 +532,11 @@ public class LaunchRulesEngine {
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
         var mutableDict = dict
         for (key, value) in mutableDict {
-            guard let value = value else {
-                continue
+            if let value = value {
+                mutableDict[key] = replaceToken(in: value, data: data)
             }
-            // Whole-value token, e.g. "{%tokens.liveActivityStart%}". Three cases:
-            //  - resolves to an array/dictionary -> assign the raw value so its structure/type is
-            //    preserved instead of being rendered to a String (which is impossible for collections).
-            //  - resolves to nil (attribute absent on the event) -> omit the key entirely rather than
-            //    emitting an empty string, so absent optional attributes are not forwarded.
-            //  - resolves to a scalar -> fall through to normal Template rendering, keeping the existing
-            //    behavior byte-for-byte identical (a present scalar bare token still renders to a String).
-            if let stringValue = value as? String, let tokenKey = wholeValueTokenKey(stringValue) {
-                let resolved = data.get(key: tokenKey)
-                if resolved is [Any] || resolved is [String: Any] {
-                    mutableDict[key] = resolved
-                    continue
-                }
-                if resolved == nil {
-                    mutableDict.removeValue(forKey: key)
-                    continue
-                }
-                // present scalar -> fall through to Template rendering below
-            }
-            mutableDict[key] = replaceToken(in: value, data: data)
         }
         return mutableDict
-    }
-
-    /// Returns the inner key when `value` is exactly one whole-value token, e.g. `"{%foo.bar%}"`.
-    /// Returns nil for embedded tokens (`"id-{%x%}"`), multi-token strings, or transformer tokens
-    /// (`"{%int(x)%}"`) - those fall through to normal string rendering via `Template`.
-    /// - Parameter value: the candidate template string
-    /// - Returns: the token key without delimiters, or nil if `value` is not a single whole-value token
-    private func wholeValueTokenKey(_ value: String) -> String? {
-        let left = LaunchRulesEngine.LAUNCH_RULE_TOKEN_LEFT_DELIMITER
-        let right = LaunchRulesEngine.LAUNCH_RULE_TOKEN_RIGHT_DELIMITER
-        let trimmed = value.trimmingCharacters(in: .whitespaces)
-        guard trimmed.hasPrefix(left), trimmed.hasSuffix(right), trimmed.count > left.count + right.count else {
-            return nil
-        }
-        let inner = String(trimmed.dropFirst(left.count).dropLast(right.count))
-        // Reject anything that is not a single, plain token (no nested delimiters, no transformer call).
-        guard !inner.contains(left), !inner.contains(right), !inner.contains("(") else {
-            return nil
-        }
-        let key = inner.trimmingCharacters(in: .whitespaces)
-        return key.isEmpty ? nil : key
     }
 
     private func replaceToken(in array: [Any], data: Traversable) -> [Any] {

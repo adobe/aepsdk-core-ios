@@ -112,13 +112,7 @@ class TokenFinder: Traversable {
             Log.trace(label: LOG_TAG, "Current event data is nil, can not use it to do token replacement")
             return ""
         }
-        // Prefer the flattened scalar value (existing behavior). If the flattened key does not
-        // exist, fall back to a raw dot-path lookup so whole objects/arrays (e.g.
-        // "tokens.liveActivityStart") can be resolved with their type preserved.
-        if let flattenedValue = dict.flattening()[key] {
-            return flattenedValue
-        }
-        return dict.value(forPath: key)
+        return dict.flattening()[key]
     }
 
     private func generateJsonString(_ data: [String: AnyCodable]?) -> String {
