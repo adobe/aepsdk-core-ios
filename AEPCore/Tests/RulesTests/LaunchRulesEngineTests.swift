@@ -1000,3 +1000,233 @@ class MockRuleReevaluationInterceptor: RuleReevaluationInterceptor {
         allEventsReceived.removeAll()
     }
 }
+
+// MARK: - forward-operational-data consequence
+
+extension LaunchRulesEngineTests {
+    private static let operationalDataType = "com.adobe.eventType.generic.operationalData"
+    private static let requestContent = "com.adobe.eventSource.requestContent"
+    private static let bypassType = "com.adobe.eventType.edgeBypassConsent"
+
+    /// Rule matching operational-data events with a single forward-operational-data consequence.
+    private func forwardRuleEngine(detail: [String: Any], runtime: TestableExtensionRuntime, conditionType: String = operationalDataType) -> LaunchRulesEngine? {
+        let rule: [String: Any] = [
+            "version": 1,
+            "rules": [[
+                "condition": ["type": "group", "definition": ["logic": "and", "conditions": [
+                    ["type": "matcher", "definition": ["key": "~type", "matcher": "eq", "values": [conditionType]]],
+                    ["type": "matcher", "definition": ["key": "~source", "matcher": "eq", "values": [LaunchRulesEngineTests.requestContent]]]
+                ]]],
+                "consequences": [["id": "RC-forward", "type": "forward-operational-data", "detail": detail]]
+            ]]
+        ]
+        guard let data = try? JSONSerialization.data(withJSONObject: rule), let rules = JSONRulesParser.parse(data) else {
+            XCTFail("Could not parse forward-operational-data rule")
+            return nil
+        }
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        rulesEngine.replaceRules(with: rules)
+        runtime.resetDispatchedEventAndCreatedSharedStates()
+        return rulesEngine
+    }
+
+    private var backendShapedDetail: [String: Any] {
+        return [
+            "type": LaunchRulesEngineTests.bypassType,
+            "source": LaunchRulesEngineTests.requestContent,
+            "attributes": [
+                ["path": ["timezone"], "enabled": true],
+                ["path": ["tokens", "pushNotification"], "enabled": true],
+                ["path": ["tokens", "liveActivityStart"], "enabled": false],
+                ["path": ["tokens", "liveActivityUpdate"], "enabled": true]
+            ],
+            "context": [["path": ["app"]]]
+        ]
+    }
+
+    private var backendShapedEventData: [String: Any] {
+        return [
+            "app": ["id": "com.adobe.ajo.MobileTestApp", "platform": "apnsSandbox"],
+            "timezone": "America/Los_Angeles",
+            // Same key name at a different level must never be picked up.
+            "pushNotification": "decoy-top-level",
+            "tokens": [
+                "pushNotification": ["804EB6EDB22D"],
+                "liveActivityStart": [["attributeType": "GameScoreLiveActivityAttributes", "value": "la-start"]],
+                "liveActivityUpdate": [
+                    ["liveActivityID": "Test2", "token": "t1"],
+                    ["liveActivityID": "Test22", "token": "t2"],
+                    ["liveActivityID": "Test23", "token": "t3"],
+                    ["liveActivityID": "Test4", "token": "t4"]
+                ]
+            ]
+        ]
+    }
+
+    private func operationalEvent(_ data: [String: Any]) -> Event {
+        return Event(name: "Device attributes", type: LaunchRulesEngineTests.operationalDataType,
+                     source: LaunchRulesEngineTests.requestContent, data: data)
+    }
+
+    func testForwardOperationalData_copiesEnabledPathsAsIs_withContext() {
+        let runtime = TestableExtensionRuntime()
+        guard let rulesEngine = forwardRuleEngine(detail: backendShapedDetail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
+
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        let forwarded = runtime.dispatchedEvents[0]
+        XCTAssertEqual(LaunchRulesEngineTests.bypassType, forwarded.type)
+        XCTAssertEqual(LaunchRulesEngineTests.requestContent, forwarded.source)
+        XCTAssertEqual("Forward operational data", forwarded.name)
+
+        let expected: [String: Any] = [
+            "app": ["id": "com.adobe.ajo.MobileTestApp", "platform": "apnsSandbox"],
+            "timezone": "America/Los_Angeles",
+            "tokens": [
+                "pushNotification": ["804EB6EDB22D"],
+                "liveActivityUpdate": [
+                    ["liveActivityID": "Test2", "token": "t1"],
+                    ["liveActivityID": "Test22", "token": "t2"],
+                    ["liveActivityID": "Test23", "token": "t3"],
+                    ["liveActivityID": "Test4", "token": "t4"]
+                ]
+            ]
+        ]
+        XCTAssertEqual(expected as NSDictionary, forwarded.data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_missingPathsSkipped_noEmptyContainers() {
+        let runtime = TestableExtensionRuntime()
+        guard let rulesEngine = forwardRuleEngine(detail: backendShapedDetail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(["timezone": "Asia/Kolkata", "app": ["id": "x"]]))
+
+        let expected: [String: Any] = ["timezone": "Asia/Kolkata", "app": ["id": "x"]]
+        XCTAssertEqual(expected as NSDictionary, runtime.dispatchedEvents.first?.data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_onlyDisabledOrContextPresent_nothingDispatched() {
+        let runtime = TestableExtensionRuntime()
+        guard let rulesEngine = forwardRuleEngine(detail: backendShapedDetail, runtime: runtime) else { return }
+
+        // Only a disabled attribute and the context key are present.
+        _ = rulesEngine.process(event: operationalEvent([
+            "app": ["id": "x"],
+            "tokens": ["liveActivityStart": [["attributeType": "A", "value": "v"]]]
+        ]))
+
+        XCTAssertTrue(runtime.dispatchedEvents.isEmpty)
+    }
+
+    func testForwardOperationalData_sameKeyNameAtOtherLevel_notMatched() {
+        let runtime = TestableExtensionRuntime()
+        var detail = backendShapedDetail
+        detail["attributes"] = [["path": ["tokens", "pushNotification"], "enabled": true]]
+        guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(["pushNotification": "top-level-only"]))
+
+        XCTAssertTrue(runtime.dispatchedEvents.isEmpty)
+    }
+
+    func testForwardOperationalData_pathThroughNonDictionary_notMatched() {
+        let runtime = TestableExtensionRuntime()
+        var detail = backendShapedDetail
+        detail["attributes"] = [["path": ["tokens", "0"], "enabled": true]]
+        guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(["tokens": ["a", "b"]]))
+
+        XCTAssertTrue(runtime.dispatchedEvents.isEmpty, "paths traverse dictionaries only, never array indexes")
+    }
+
+    func testForwardOperationalData_malformedEntriesSkipped() {
+        let runtime = TestableExtensionRuntime()
+        var detail = backendShapedDetail
+        detail["attributes"] = [
+            ["path": "timezone", "enabled": true],   // path not an array
+            ["path": [], "enabled": true],           // empty path
+            ["enabled": true],                       // no path
+            ["path": ["timezone"], "enabled": "yes"], // enabled not a bool
+            ["path": ["tokens", "pushNotification"], "enabled": true]
+        ]
+        guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
+
+        let data = runtime.dispatchedEvents.first?.data
+        XCTAssertNil(data?["timezone"])
+        XCTAssertEqual(["804EB6EDB22D"], (data?["tokens"] as? [String: Any])?["pushNotification"] as? [String])
+    }
+
+    func testForwardOperationalData_missingAttributes_nothingDispatched() {
+        let runtime = TestableExtensionRuntime()
+        var detail = backendShapedDetail
+        detail.removeValue(forKey: "attributes")
+        guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
+
+        XCTAssertTrue(runtime.dispatchedEvents.isEmpty)
+    }
+
+    func testForwardOperationalData_missingTypeOrSource_nothingDispatched() {
+        for missing in ["type", "source"] {
+            let runtime = TestableExtensionRuntime()
+            var detail = backendShapedDetail
+            detail.removeValue(forKey: missing)
+            guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+            _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
+
+            XCTAssertTrue(runtime.dispatchedEvents.isEmpty, "missing '\(missing)' must not dispatch")
+        }
+    }
+
+    func testForwardOperationalData_valueTypesPreserved() {
+        let runtime = TestableExtensionRuntime()
+        var detail = backendShapedDetail
+        detail["attributes"] = [
+            ["path": ["count"], "enabled": true],
+            ["path": ["flag"], "enabled": true],
+            ["path": ["nested"], "enabled": true]
+        ]
+        guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(["count": 3, "flag": true, "nested": ["a": ["b": 1]]]))
+
+        let data = runtime.dispatchedEvents.first?.data
+        XCTAssertEqual(3, data?["count"] as? Int)
+        XCTAssertEqual(true, data?["flag"] as? Bool)
+        XCTAssertEqual(["a": ["b": 1]] as NSDictionary, data?["nested"] as? NSDictionary)
+    }
+
+    func testForwardOperationalData_forwardedEventMatchingSameRule_notForwardedAgain() {
+        // The rule forwards to the same type/source it matches: the chain limit must stop the loop.
+        let runtime = TestableExtensionRuntime()
+        var detail = backendShapedDetail
+        detail["type"] = LaunchRulesEngineTests.operationalDataType
+        guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+
+        _ = rulesEngine.process(event: runtime.dispatchedEvents[0])
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+    }
+
+    func testForwardOperationalData_otherConsequenceTokenBehaviorUnchanged() {
+        // A bare token for an absent key still renders to an empty string for other consequence types.
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let event = Event(name: "e", type: "type", source: "source", data: ["tokens": ["a": ["x"]]])
+        let consequence = RuleConsequence(id: "c", type: "add", details: ["eventdata": ["missing": "{%notThere%}", "array": "{%tokens.a%}"]])
+
+        let resolved = rulesEngine.replaceToken(for: consequence, data: TokenFinder(event: event, extensionRuntime: runtime))
+
+        let eventData = resolved.details["eventdata"] as? [String: Any?]
+        XCTAssertEqual("", eventData?["missing"] as? String)
+        XCTAssertEqual("", eventData?["array"] as? String)
+    }
+}
