@@ -172,7 +172,7 @@ public class Lifecycle: NSObject, Extension {
                                                         type: EventType.lifecycle,
                                                         source: EventSource.responseContent,
                                                         data: eventData)
-        Log.trace(label: LifecycleConstants.LOG_TAG, "Dispatching lifecycle start event with data: \n\(PrettyDictionary.prettify(eventData))")
+        Log.trace(label: LifecycleConstants.LOG_TAG, template: "Dispatching lifecycle start event with data: \n{eventData}", data: ["eventData": eventData])
         dispatch(event: startEvent)
     }
 

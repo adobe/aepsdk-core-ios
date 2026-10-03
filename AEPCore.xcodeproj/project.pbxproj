@@ -177,6 +177,7 @@
 		3F0397FF24BE60910019F095 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397F124BE60910019F095 /* AnyCodable.swift */; };
 		3F03981524BE61520019F095 /* UnzipperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980124BE61520019F095 /* UnzipperTest.swift */; };
 		3F03981624BE61520019F095 /* SystemInfoServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980224BE61520019F095 /* SystemInfoServiceTest.swift */; };
+		942DD2843061369600D7415A /* LogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942DD2853061369600D7415A /* LogTests.swift */; };
 		3F03981724BE61520019F095 /* DataQueueService+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980324BE61520019F095 /* DataQueueService+Testable.swift */; };
 		3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980424BE61520019F095 /* DataQueueServiceTests.swift */; };
 		3F03981924BE61520019F095 /* URLServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980524BE61520019F095 /* URLServiceTest.swift */; };
@@ -497,6 +498,8 @@
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		944B9FB030513ECA00266C16 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 944B9FAF30513ECA00266C16 /* AEPRulesEngine */; };
+		947788283049381D008CEB53 /* SQLiteJournalMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9477882730493810008CEB53 /* SQLiteJournalMode.swift */; };
+		9477882F30495AE9008CEB53 /* DataQueueConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9477882E30495AE7008CEB53 /* DataQueueConfig.swift */; };
 		AABB00DD24CA004400REEVAL /* LaunchRule+Reevaluable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */; };
 		AABB00EE24CA004400INTCPT /* RuleReevaluationInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00FF24CA004400INTCPT /* RuleReevaluationInterceptor.swift */; };
 		AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */; };
@@ -968,6 +971,7 @@
 		3F0397F124BE60910019F095 /* AnyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		3F03980124BE61520019F095 /* UnzipperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnzipperTest.swift; sourceTree = "<group>"; };
 		3F03980224BE61520019F095 /* SystemInfoServiceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoServiceTest.swift; sourceTree = "<group>"; };
+		942DD2853061369600D7415A /* LogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogTests.swift; sourceTree = "<group>"; };
 		3F03980324BE61520019F095 /* DataQueueService+Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataQueueService+Testable.swift"; sourceTree = "<group>"; };
 		3F03980424BE61520019F095 /* DataQueueServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataQueueServiceTests.swift; sourceTree = "<group>"; };
 		3F03980524BE61520019F095 /* URLServiceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLServiceTest.swift; sourceTree = "<group>"; };
@@ -1247,6 +1251,8 @@
 		92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitoring.swift; sourceTree = "<group>"; };
 		92F06D0325BA33F3004C1700 /* Showable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showable.swift; sourceTree = "<group>"; };
 		A1413D8083BF435BB07D29C9 /* MobileCore+ProfileAttributesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+ProfileAttributesTests.swift"; sourceTree = "<group>"; };
+		9477882730493810008CEB53 /* SQLiteJournalMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteJournalMode.swift; sourceTree = "<group>"; };
+		9477882E30495AE7008CEB53 /* DataQueueConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataQueueConfig.swift; sourceTree = "<group>"; };
 		AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LaunchRule+Reevaluable.swift"; sourceTree = "<group>"; };
 		AABB00FF24CA004400INTCPT /* RuleReevaluationInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RuleReevaluationInterceptor.swift; sourceTree = "<group>"; };
 		AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDMLanguage.swift; sourceTree = "<group>"; };
@@ -1668,6 +1674,7 @@
 		24B4934724D337A800AA38D9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				942DD2863061369600D7415A /* log */,
 				3F03983324BE62AA0019F095 /* resources */,
 				3F03980024BE61520019F095 /* services */,
 				3F03980E24BE61520019F095 /* utility */,
@@ -1843,6 +1850,8 @@
 		3F0397B224BE5FF30019F095 /* dataqueue */ = {
 			isa = PBXGroup;
 			children = (
+				9477882E30495AE7008CEB53 /* DataQueueConfig.swift */,
+				9477882730493810008CEB53 /* SQLiteJournalMode.swift */,
 				3F0397B624BE5FF30019F095 /* DataEntity.swift */,
 				3F0397B524BE5FF30019F095 /* DataQueue.swift */,
 				3F0397B824BE5FF30019F095 /* DataQueuing.swift */,
@@ -1943,6 +1952,14 @@
 				75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */,
 			);
 			path = services;
+			sourceTree = "<group>";
+		};
+		942DD2863061369600D7415A /* log */ = {
+			isa = PBXGroup;
+			children = (
+				942DD2853061369600D7415A /* LogTests.swift */,
+			);
+			path = log;
 			sourceTree = "<group>";
 		};
 		3F03980E24BE61520019F095 /* utility */ = {
@@ -3243,6 +3260,7 @@
 				923972B325AD844E0056A3E5 /* UIApplication+Window.swift in Sources */,
 				3F0397F924BE60910019F095 /* FileManager+ZIP.swift in Sources */,
 				3F0397FD24BE60910019F095 /* ThreadSafeDictionary.swift in Sources */,
+				947788283049381D008CEB53 /* SQLiteJournalMode.swift in Sources */,
 				3F0397F824BE60910019F095 /* ZipEntry.swift in Sources */,
 				3F0397F424BE60910019F095 /* HitQueuing.swift in Sources */,
 				786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */,
@@ -3274,6 +3292,7 @@
 				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,
 				B8A2C00424BE5FF30019F13 /* NetworkPathMonitorProvider.swift in Sources */,
+				9477882F30495AE9008CEB53 /* DataQueueConfig.swift in Sources */,
 				3F0397F624BE60910019F095 /* FileUnzipper.swift in Sources */,
 				3F0397D424BE5FF30019F095 /* SQLiteWrapper.swift in Sources */,
 				3F0397D024BE5FF30019F095 /* HttpMethod.swift in Sources */,
@@ -3293,6 +3312,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				942DD2843061369600D7415A /* LogTests.swift in Sources */,
 				3F03981624BE61520019F095 /* SystemInfoServiceTest.swift in Sources */,
 				92490BE7258BE23A00762B04 /* MessageMonitorServiceTest.swift in Sources */,
 				249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */,
@@ -3873,7 +3893,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3906,7 +3926,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3995,7 +4015,7 @@
 					"$(inherited)",
 					/usr/lib/swift,
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4034,7 +4054,7 @@
 					"$(inherited)",
 					/usr/lib/swift,
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4107,7 +4127,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4138,7 +4158,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4280,7 +4300,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4311,7 +4331,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4341,7 +4361,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4372,7 +4392,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4447,7 +4467,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4478,7 +4498,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4554,7 +4574,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4586,7 +4606,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.11.0;
+				MARKETING_VERSION = 5.12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
