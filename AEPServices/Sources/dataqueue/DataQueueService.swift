@@ -41,7 +41,6 @@ public class DataQueueService: DataQueuing {
                 }
                 return queue
             }
-            
             let dataQueue = SQLiteDataQueue(databaseName: databaseName, serialQueue: dbQueue, config: config)
             store[databaseName] = dataQueue
             return dataQueue

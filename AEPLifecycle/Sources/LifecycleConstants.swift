@@ -22,8 +22,8 @@ enum LifecycleConstants {
 
     static let START = "start"
     static let PAUSE = "pause"
-    static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0 // 7 days
-    static let DEFAULT_LIFECYCLE_TIMEOUT = 300 // 5 min
+    static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0  // 7 days
+    static let DEFAULT_LIFECYCLE_TIMEOUT = 300  // 5 min
 
     static let LOG_TAG = "Lifecycle"
 
