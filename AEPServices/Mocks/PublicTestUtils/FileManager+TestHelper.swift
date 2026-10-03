@@ -11,6 +11,7 @@
 //
 
 @testable import AEPServices
+import Foundation
 
 public extension FileManager {
     /// Clears the cache for specified items within the application's cache directory. Ex: the event database for a given extension.

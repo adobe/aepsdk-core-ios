@@ -10,6 +10,7 @@
  */
 
 import AEPServices
+import Foundation
 
 public class MockDataStore: NamedCollectionProcessing {
     private let queue = DispatchQueue(label: "com.adobe.mockdatastore.syncqueue")
