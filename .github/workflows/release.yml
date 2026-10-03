@@ -21,7 +21,7 @@ on:
         required: true
 
       create-github-release:
-        description: 'Create a GitHub release with uploaded artifacts for AEPRulesEngine, AEPServices, AEPCore, AEPIdentity, AEPLifecycle, and AEPSignal. If the provided `tag` does not exist, it will be created.'
+        description: 'Create a source-only GitHub release for the tag (no binary artifacts). SPM consumers build from source via this tag. If the provided `tag` does not exist, it will be created.'
         type: boolean
         required: true
         default: true
@@ -34,8 +34,10 @@ jobs:
     with:
       tag: ${{ github.event.inputs.tag }}
       xcode-version: '26.3.0'
+      # Pure-SPM, source-only distribution: no CocoaPods and no XCFramework binary.
+      # SPM consumers resolve this git tag and build AEPCore & friends from source.
       create-github-release: ${{ github.event.inputs.create-github-release == 'true' && 'AEPServices, AEPCore, AEPIdentity, AEPLifecycle, AEPSignal' || '' }}
-      release-dependency-frameworks: ${{ github.event.inputs.create-github-release == 'true' && 'AEPRulesEngine' || '' }}
+      tag-only: true
       simulator-platforms: 'iOS, tvOS'
       version-validation-paths: >
         AEPCore.xcodeproj/project.pbxproj,

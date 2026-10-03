@@ -414,10 +414,7 @@ jobs:
 
       - install_dependencies
 
-      # verify XCFramework archive builds
-      - run:
-          name: Build XCFramework
-          command: make ci-archive
+      # Pure-SPM, source-only distribution: no XCFramework is built or shipped.
       # verify SPM works
       - run:
           name: Test SPM
