@@ -148,12 +148,12 @@ zip:
 	cd build && zip -r -X $(AEPIDENTITY_TARGET_NAME).xcframework.zip $(AEPIDENTITY_TARGET_NAME).xcframework/
 	cd build && zip -r -X $(AEPSIGNAL_TARGET_NAME).xcframework.zip $(AEPSIGNAL_TARGET_NAME).xcframework/
 	cd build && zip -r -X $(AEPRULESENGINE_TARGET_NAME).xcframework.zip $(AEPRULESENGINE_TARGET_NAME).xcframework/
-	swift package compute-checksum build/$(AEPCORE_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPSERVICES_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPLIFECYCLE_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPIDENTITY_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPSIGNAL_TARGET_NAME).xcframework.zip
-	swift package compute-checksum build/$(AEPRULESENGINE_TARGET_NAME).xcframework.zip
+	xcrun swift package compute-checksum build/$(AEPCORE_TARGET_NAME).xcframework.zip
+	xcrun swift package compute-checksum build/$(AEPSERVICES_TARGET_NAME).xcframework.zip
+	xcrun swift package compute-checksum build/$(AEPLIFECYCLE_TARGET_NAME).xcframework.zip
+	xcrun swift package compute-checksum build/$(AEPIDENTITY_TARGET_NAME).xcframework.zip
+	xcrun swift package compute-checksum build/$(AEPSIGNAL_TARGET_NAME).xcframework.zip
+	xcrun swift package compute-checksum build/$(AEPRULESENGINE_TARGET_NAME).xcframework.zip
 
 # Targets - CI steps
 
