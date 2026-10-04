@@ -80,7 +80,7 @@ Include `AEPCore.xcodeproj` in the targeted Xcode project and link all necessary
 
 ### Binaries
 
-Run `make archive` or `make archive-ios` from the root directory to generate `.xcframeworks` for each module. The `make archive` command will generate XCFrameworks which support iOS and tvOS, while `make archive-ios` will generate XCFrameworks for iOS alone. Once complete, the XCFrameworks can be found in the `build` folder. Drag and drop all `.xcframeworks` to your app target in Xcode.
+SwiftPM source products use automatic linkage, allowing the consuming build to choose static or dynamic linkage. Run `make archive` or `make archive-ios` from the root directory to generate the separately distributed dynamic `.xcframeworks` for each module. These archive targets use the native Xcode framework schemes; `make archive` supports iOS and tvOS, while `make archive-ios` supports iOS alone. Once complete, the XCFrameworks can be found in the `build` folder. Drag and drop all `.xcframeworks` to your app target in Xcode.
 
 ## Documentation
 
