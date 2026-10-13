@@ -1006,42 +1006,60 @@ class MockRuleReevaluationInterceptor: RuleReevaluationInterceptor {
 extension LaunchRulesEngineTests {
     private static let operationalDataType = "com.adobe.eventType.generic.operationalData"
     private static let requestContent = "com.adobe.eventSource.requestContent"
-    private static let bypassType = "com.adobe.eventType.edgeBypassConsent"
+    private static let edgeIdentityType = "com.adobe.eventType.edgeIdentity"
+    private static let responseOperationalData = "com.adobe.eventSource.responseOperationalData"
 
-    /// Rule matching operational-data events with a single forward-operational-data consequence.
-    private func forwardRuleEngine(detail: [String: Any], runtime: TestableExtensionRuntime, conditionType: String = operationalDataType) -> LaunchRulesEngine? {
-        let rule: [String: Any] = [
-            "version": 1,
-            "rules": [[
-                "condition": ["type": "group", "definition": ["logic": "and", "conditions": [
-                    ["type": "matcher", "definition": ["key": "~type", "matcher": "eq", "values": [conditionType]]],
-                    ["type": "matcher", "definition": ["key": "~source", "matcher": "eq", "values": [LaunchRulesEngineTests.requestContent]]]
-                ]]],
-                "consequences": [["id": "RC-forward", "type": "forward-operational-data", "detail": detail]]
-            ]]
+    private func forwardRule(detail: [String: Any], id: String = "RC-forward", conditionType: String = operationalDataType) -> [String: Any] {
+        return [
+            "condition": ["type": "group", "definition": ["logic": "and", "conditions": [
+                ["type": "matcher", "definition": ["key": "~type", "matcher": "eq", "values": [conditionType]]],
+                ["type": "matcher", "definition": ["key": "~source", "matcher": "eq", "values": [LaunchRulesEngineTests.requestContent]]]
+            ]]],
+            "consequences": [["id": id, "type": "forward-operational-data", "detail": detail]]
         ]
-        guard let data = try? JSONSerialization.data(withJSONObject: rule), let rules = JSONRulesParser.parse(data) else {
+    }
+
+    private func forwardRulesEngine(rules: [[String: Any]], runtime: TestableExtensionRuntime) -> LaunchRulesEngine? {
+        let ruleSet: [String: Any] = ["version": 1, "rules": rules]
+        guard let data = try? JSONSerialization.data(withJSONObject: ruleSet), let parsed = JSONRulesParser.parse(data) else {
             XCTFail("Could not parse forward-operational-data rule")
             return nil
         }
         let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
-        rulesEngine.replaceRules(with: rules)
+        rulesEngine.replaceRules(with: parsed)
         runtime.resetDispatchedEventAndCreatedSharedStates()
         return rulesEngine
     }
 
-    private var backendShapedDetail: [String: Any] {
+    /// Rule matching operational-data events with a single forward-operational-data consequence.
+    private func forwardRuleEngine(detail: [String: Any], runtime: TestableExtensionRuntime, conditionType: String = operationalDataType) -> LaunchRulesEngine? {
+        return forwardRulesEngine(rules: [forwardRule(detail: detail, conditionType: conditionType)], runtime: runtime)
+    }
+
+    /// The rule shipped for consent bypass device attribute sync (all four attributes enabled).
+    private var shippedDetail: [String: Any] {
         return [
-            "type": LaunchRulesEngineTests.bypassType,
-            "source": LaunchRulesEngineTests.requestContent,
+            "type": LaunchRulesEngineTests.edgeIdentityType,
+            "source": LaunchRulesEngineTests.responseOperationalData,
             "attributes": [
                 ["path": ["timezone"], "enabled": true],
                 ["path": ["tokens", "pushNotification"], "enabled": true],
-                ["path": ["tokens", "liveActivityStart"], "enabled": false],
+                ["path": ["tokens", "liveActivityStart"], "enabled": true],
                 ["path": ["tokens", "liveActivityUpdate"], "enabled": true]
-            ],
-            "context": [["path": ["app"]]]
+            ]
         ]
+    }
+
+    /// Same as `shippedDetail` with `liveActivityStart` disabled.
+    private var backendShapedDetail: [String: Any] {
+        var detail = shippedDetail
+        detail["attributes"] = [
+            ["path": ["timezone"], "enabled": true],
+            ["path": ["tokens", "pushNotification"], "enabled": true],
+            ["path": ["tokens", "liveActivityStart"], "enabled": false],
+            ["path": ["tokens", "liveActivityUpdate"], "enabled": true]
+        ]
+        return detail
     }
 
     private var backendShapedEventData: [String: Any] {
@@ -1063,25 +1081,39 @@ extension LaunchRulesEngineTests {
         ]
     }
 
-    private func operationalEvent(_ data: [String: Any]) -> Event {
-        return Event(name: "Device attributes", type: LaunchRulesEngineTests.operationalDataType,
+    private func operationalEvent(_ data: [String: Any]?) -> Event {
+        return Event(name: "Device attributes for rules engine", type: LaunchRulesEngineTests.operationalDataType,
                      source: LaunchRulesEngineTests.requestContent, data: data)
     }
 
-    func testForwardOperationalData_copiesEnabledPathsAsIs_withContext() {
+    func testForwardOperationalData_shippedRule_forwardsAllPathsAsChainedEvent() {
+        let runtime = TestableExtensionRuntime()
+        guard let rulesEngine = forwardRuleEngine(detail: shippedDetail, runtime: runtime) else { return }
+        let e1 = operationalEvent(backendShapedEventData)
+
+        _ = rulesEngine.process(event: e1)
+
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        let e2 = runtime.dispatchedEvents[0]
+        XCTAssertEqual("Forward operational data", e2.name)
+        XCTAssertEqual(LaunchRulesEngineTests.edgeIdentityType, e2.type)
+        XCTAssertEqual(LaunchRulesEngineTests.responseOperationalData, e2.source)
+        XCTAssertNil(e2.responseID)
+        XCTAssertEqual(e1.id, e2.parentID)
+        var expected = backendShapedEventData
+        expected.removeValue(forKey: "pushNotification")
+        expected.removeValue(forKey: "app")
+        XCTAssertEqual(expected as NSDictionary, e2.data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_copiesOnlyEnabledPathsAsIs() {
         let runtime = TestableExtensionRuntime()
         guard let rulesEngine = forwardRuleEngine(detail: backendShapedDetail, runtime: runtime) else { return }
 
         _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
 
         XCTAssertEqual(1, runtime.dispatchedEvents.count)
-        let forwarded = runtime.dispatchedEvents[0]
-        XCTAssertEqual(LaunchRulesEngineTests.bypassType, forwarded.type)
-        XCTAssertEqual(LaunchRulesEngineTests.requestContent, forwarded.source)
-        XCTAssertEqual("Forward operational data", forwarded.name)
-
         let expected: [String: Any] = [
-            "app": ["id": "com.adobe.ajo.MobileTestApp", "platform": "apnsSandbox"],
             "timezone": "America/Los_Angeles",
             "tokens": [
                 "pushNotification": ["804EB6EDB22D"],
@@ -1093,7 +1125,7 @@ extension LaunchRulesEngineTests {
                 ]
             ]
         ]
-        XCTAssertEqual(expected as NSDictionary, forwarded.data as NSDictionary?)
+        XCTAssertEqual(expected as NSDictionary, runtime.dispatchedEvents[0].data as NSDictionary?)
     }
 
     func testForwardOperationalData_missingPathsSkipped_noEmptyContainers() {
@@ -1102,21 +1134,84 @@ extension LaunchRulesEngineTests {
 
         _ = rulesEngine.process(event: operationalEvent(["timezone": "Asia/Kolkata", "app": ["id": "x"]]))
 
-        let expected: [String: Any] = ["timezone": "Asia/Kolkata", "app": ["id": "x"]]
+        let expected: [String: Any] = ["timezone": "Asia/Kolkata"]
         XCTAssertEqual(expected as NSDictionary, runtime.dispatchedEvents.first?.data as NSDictionary?)
     }
 
-    func testForwardOperationalData_onlyDisabledOrContextPresent_nothingDispatched() {
+    func testForwardOperationalData_onlyDisabledAttributes_dispatchesEmptyPayload() {
         let runtime = TestableExtensionRuntime()
         guard let rulesEngine = forwardRuleEngine(detail: backendShapedDetail, runtime: runtime) else { return }
-
-        // Only a disabled attribute and the context key are present.
-        _ = rulesEngine.process(event: operationalEvent([
+        let e1 = operationalEvent([
             "app": ["id": "x"],
             "tokens": ["liveActivityStart": [["attributeType": "A", "value": "v"]]]
+        ])
+
+        _ = rulesEngine.process(event: e1)
+
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        let e2 = runtime.dispatchedEvents[0]
+        XCTAssertNil(e2.responseID)
+        XCTAssertEqual(e1.id, e2.parentID)
+        XCTAssertEqual(NSDictionary(), e2.data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_nilEventData_alwaysDispatched() {
+        let runtime = TestableExtensionRuntime()
+        guard let rulesEngine = forwardRuleEngine(detail: shippedDetail, runtime: runtime) else { return }
+        let e1 = operationalEvent(nil)
+
+        _ = rulesEngine.process(event: e1)
+
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        XCTAssertNil(runtime.dispatchedEvents[0].responseID)
+        XCTAssertEqual(e1.id, runtime.dispatchedEvents[0].parentID)
+        XCTAssertEqual(NSDictionary(), runtime.dispatchedEvents[0].data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_nullValuesSkipped_emptyTokenForwarded() {
+        let runtime = TestableExtensionRuntime()
+        guard let rulesEngine = forwardRuleEngine(detail: shippedDetail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent([
+            "timezone": NSNull(),
+            "tokens": ["pushNotification": "", "liveActivityUpdate": [Any](), "notAllowed": NSNull()],
+            "notAllowed": NSNull()
         ]))
 
-        XCTAssertTrue(runtime.dispatchedEvents.isEmpty)
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        let e2 = runtime.dispatchedEvents.first
+        XCTAssertNil(e2?.data?["timezone"])
+        let tokens = e2?.data?["tokens"] as? [String: Any]
+        XCTAssertEqual("", tokens?["pushNotification"] as? String)
+        XCTAssertEqual(0, (tokens?["liveActivityUpdate"] as? [Any])?.count, "an empty array is a value")
+        let expected: [String: Any] = [
+            "tokens": ["pushNotification": "", "liveActivityUpdate": [Any]()]
+        ]
+        XCTAssertEqual(expected as NSDictionary, e2?.data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_nullPushTokenNotForwarded() {
+        let runtime = TestableExtensionRuntime()
+        guard let rulesEngine = forwardRuleEngine(detail: shippedDetail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent([
+            "timezone": "Europe/London",
+            "tokens": ["pushNotification": NSNull()]
+        ]))
+
+        XCTAssertEqual(["timezone": "Europe/London"] as NSDictionary,
+                       runtime.dispatchedEvents.first?.data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_nullParent_childPathNotFound() {
+        let runtime = TestableExtensionRuntime()
+        guard let rulesEngine = forwardRuleEngine(detail: shippedDetail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(["tokens": NSNull()]))
+
+        let e2 = runtime.dispatchedEvents.first
+        XCTAssertNil(e2?.data?["tokens"])
+        XCTAssertEqual(NSDictionary(), e2?.data as NSDictionary?)
     }
 
     func testForwardOperationalData_sameKeyNameAtOtherLevel_notMatched() {
@@ -1127,7 +1222,7 @@ extension LaunchRulesEngineTests {
 
         _ = rulesEngine.process(event: operationalEvent(["pushNotification": "top-level-only"]))
 
-        XCTAssertTrue(runtime.dispatchedEvents.isEmpty)
+        XCTAssertEqual(NSDictionary(), runtime.dispatchedEvents.first?.data as NSDictionary?)
     }
 
     func testForwardOperationalData_pathThroughNonDictionary_notMatched() {
@@ -1138,7 +1233,21 @@ extension LaunchRulesEngineTests {
 
         _ = rulesEngine.process(event: operationalEvent(["tokens": ["a", "b"]]))
 
-        XCTAssertTrue(runtime.dispatchedEvents.isEmpty, "paths traverse dictionaries only, never array indexes")
+        XCTAssertEqual(NSDictionary(), runtime.dispatchedEvents.first?.data as NSDictionary?,
+                       "paths traverse dictionaries only, never array indexes")
+    }
+
+    func testForwardOperationalData_parentPathNotMatchedByChildRule() {
+        // Exact path match: an enabled child path does not forward the parent, and vice versa.
+        let runtime = TestableExtensionRuntime()
+        var detail = backendShapedDetail
+        detail["attributes"] = [["path": ["tokens", "pushNotification", "id"], "enabled": true]]
+        guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
+
+        XCTAssertNil(runtime.dispatchedEvents.first?.data?["tokens"])
+        XCTAssertEqual(NSDictionary(), runtime.dispatchedEvents.first?.data as NSDictionary?)
     }
 
     func testForwardOperationalData_malformedEntriesSkipped() {
@@ -1160,7 +1269,19 @@ extension LaunchRulesEngineTests {
         XCTAssertEqual(["804EB6EDB22D"], (data?["tokens"] as? [String: Any])?["pushNotification"] as? [String])
     }
 
-    func testForwardOperationalData_missingAttributes_nothingDispatched() {
+    func testForwardOperationalData_duplicateEnabledPath_copiedOnce() {
+        let runtime = TestableExtensionRuntime()
+        var detail = backendShapedDetail
+        detail["attributes"] = [["path": ["timezone"], "enabled": true], ["path": ["timezone"], "enabled": true]]
+        guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
+
+        _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
+
+        let expected: [String: Any] = ["timezone": "America/Los_Angeles"]
+        XCTAssertEqual(expected as NSDictionary, runtime.dispatchedEvents.first?.data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_missingAttributes_dispatchesEmptyPayload() {
         let runtime = TestableExtensionRuntime()
         var detail = backendShapedDetail
         detail.removeValue(forKey: "attributes")
@@ -1168,7 +1289,8 @@ extension LaunchRulesEngineTests {
 
         _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
 
-        XCTAssertTrue(runtime.dispatchedEvents.isEmpty)
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        XCTAssertEqual(NSDictionary(), runtime.dispatchedEvents[0].data as NSDictionary?)
     }
 
     func testForwardOperationalData_missingTypeOrSource_nothingDispatched() {
@@ -1202,11 +1324,32 @@ extension LaunchRulesEngineTests {
         XCTAssertEqual(["a": ["b": 1]] as NSDictionary, data?["nested"] as? NSDictionary)
     }
 
+    func testForwardOperationalData_multipleMatchingRules_oneEventPerRule() {
+        let runtime = TestableExtensionRuntime()
+        var timezoneOnly = shippedDetail
+        timezoneOnly["attributes"] = [["path": ["timezone"], "enabled": true], ["path": ["tokens", "pushNotification"], "enabled": false]]
+        var pushOnly = shippedDetail
+        pushOnly["attributes"] = [["path": ["tokens", "pushNotification"], "enabled": true]]
+        guard let rulesEngine = forwardRulesEngine(rules: [forwardRule(detail: timezoneOnly, id: "rule-1"),
+                                                           forwardRule(detail: pushOnly, id: "rule-2")],
+                                                   runtime: runtime) else { return }
+        let e1 = operationalEvent(backendShapedEventData)
+
+        _ = rulesEngine.process(event: e1)
+
+        XCTAssertEqual(2, runtime.dispatchedEvents.count)
+        XCTAssertTrue(runtime.dispatchedEvents.allSatisfy { $0.responseID == nil && $0.parentID == e1.id })
+        let payloads = runtime.dispatchedEvents.compactMap { $0.data as NSDictionary? }
+        XCTAssertTrue(payloads.contains(["timezone": "America/Los_Angeles"] as NSDictionary))
+        XCTAssertTrue(payloads.contains(["tokens": ["pushNotification": ["804EB6EDB22D"]]] as NSDictionary))
+    }
+
     func testForwardOperationalData_forwardedEventMatchingSameRule_notForwardedAgain() {
         // The rule forwards to the same type/source it matches: the chain limit must stop the loop.
         let runtime = TestableExtensionRuntime()
         var detail = backendShapedDetail
         detail["type"] = LaunchRulesEngineTests.operationalDataType
+        detail["source"] = LaunchRulesEngineTests.requestContent
         guard let rulesEngine = forwardRuleEngine(detail: detail, runtime: runtime) else { return }
 
         _ = rulesEngine.process(event: operationalEvent(backendShapedEventData))
@@ -1228,5 +1371,42 @@ extension LaunchRulesEngineTests {
         let eventData = resolved.details["eventdata"] as? [String: Any?]
         XCTAssertEqual("", eventData?["missing"] as? String)
         XCTAssertEqual("", eventData?["array"] as? String)
+    }
+
+    func testForwardOperationalData_reachesDedicatedTypeSourceListener() throws {
+        let runtime = TestableExtensionRuntime()
+        let engine = try XCTUnwrap(forwardRuleEngine(detail: shippedDetail, runtime: runtime))
+        _ = engine.process(event: operationalEvent(backendShapedEventData))
+        let consequence = try XCTUnwrap(runtime.dispatchedEvents.first)
+        let listener = EventListenerContainer(listener: { _ in }, type: Self.edgeIdentityType,
+                                              source: Self.responseOperationalData, triggerEventId: nil, timeoutTask: nil)
+        XCTAssertTrue(listener.shouldNotify(consequence))
+        XCTAssertFalse(listener.shouldNotify(Event(name: "wrong source", type: Self.edgeIdentityType,
+                                                    source: Self.requestContent, data: consequence.data)))
+        XCTAssertFalse(listener.shouldNotify(Event(name: "wrong type", type: EventType.edge,
+                                                    source: Self.responseOperationalData, data: consequence.data)))
+    }
+
+    func testForwardOperationalData_unmatchedTypeOrSourceDispatchesNothing() throws {
+        let runtime = TestableExtensionRuntime()
+        let engine = try XCTUnwrap(forwardRuleEngine(detail: shippedDetail, runtime: runtime))
+        _ = engine.process(event: Event(name: "wrong type", type: EventType.edge, source: Self.requestContent, data: backendShapedEventData))
+        _ = engine.process(event: Event(name: "wrong source", type: Self.operationalDataType,
+                                       source: EventSource.responseContent, data: backendShapedEventData))
+        XCTAssertTrue(runtime.dispatchedEvents.isEmpty)
+    }
+
+    func testForwardOperationalData_legacyContextIsIgnoredAndOriginalEventIsUnchanged() throws {
+        let runtime = TestableExtensionRuntime()
+        var detail = shippedDetail
+        detail["attributes"] = [["path": ["tokens"], "enabled": true]]
+        detail["context"] = [["path": ["tokens", "pushNotification"]], ["path": ["app"]]]
+        let engine = try XCTUnwrap(forwardRuleEngine(detail: detail, runtime: runtime))
+        let original: [String: Any] = ["tokens": "scalar", "app": ["id": "test"], "notAllowed": "secret"]
+        let event = operationalEvent(original)
+        _ = engine.process(event: event)
+        XCTAssertEqual(["tokens": "scalar"] as NSDictionary,
+                       runtime.dispatchedEvents.first?.data as NSDictionary?)
+        XCTAssertEqual(original as NSDictionary, event.data as NSDictionary?)
     }
 }
