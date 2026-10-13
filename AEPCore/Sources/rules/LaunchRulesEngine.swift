@@ -34,15 +34,14 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_DETAIL_ACTION_NEW = "new"
     private static let CONSEQUENCE_TYPE_SCHEMA = "schema"
 
-    // `forward-operational-data` consequence: copies the values found at the rule's enabled `attributes`
-    // paths from the triggering event data (plus `context` paths when anything was copied) into a new
-    // event dispatched with the `type`/`source` declared in the rule detail. Values are copied as-is and
-    // placed at the same path, so the output keeps the caller's structure. The rules engine stays generic:
-    // it performs no consent check and has no knowledge of the listener that receives the event.
+    // `forward-operational-data` consequence: always dispatches a chained event from the triggering event, with the
+    // `type`/`source` declared in the rule detail. It carries the values found at the rule's enabled `attributes`
+    // paths, excluding null values. Values are copied as-is to the same path.
+    // The rules engine stays generic: it performs no
+    // consent check and has no knowledge of the listener that receives the event.
     private static let CONSEQUENCE_TYPE_FORWARD_OPERATIONAL_DATA = "forward-operational-data"
     private static let FORWARD_OPERATIONAL_DATA_EVENT_NAME = "Forward operational data"
     private static let FORWARD_DETAIL_ATTRIBUTES = "attributes"
-    private static let FORWARD_DETAIL_CONTEXT = "context"
     private static let FORWARD_DETAIL_PATH = "path"
     private static let FORWARD_DETAIL_ENABLED = "enabled"
     private static let CONSEQUENCE_SCHEMA_EVENT_HISTORY = "https://ns.adobe.com/personalization/eventHistoryOperation"
@@ -332,10 +331,12 @@ public class LaunchRulesEngine {
                     guard let forwardEvent = processForwardOperationalDataConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent) else {
                         continue
                     }
-                    Log.trace(label: LOG_TAG, "(\(self.name)) : Dispatching forward-operational-data event \(forwardEvent.id)")
+                    Log.trace(label: LOG_TAG, "(\(self.name)) : Dispatching forward-operational-data consequence event \(forwardEvent.id) for event \(processedEvent.id)")
                     extensionRuntime.dispatch(event: forwardEvent)
+
+                    // The consequence can match rules too; track it so a rule forwarding to its own type/source cannot loop
                     dispatchChainedEventsCount[forwardEvent.id] = (dispatchChainCount ?? 0) + 1
-                    
+
                 default:
                     let consequenceEvent = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent)
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(consequenceEvent)")
@@ -420,17 +421,19 @@ public class LaunchRulesEngine {
                                                  data: dispatchEventData)
     }
 
-    /// Process a `forward-operational-data` consequence. `details` must contain:
-    /// - `type` / `source`: the event type and source to dispatch.
-    /// - `attributes`: `[{ "path": ["tokens", "pushNotification"], "enabled": true }, ...]`. For every enabled entry the
-    ///   value found at exactly that path in the triggering event data is copied, as-is, to the same path in the new event.
-    /// - `context` (optional): `[{ "path": ["app"] }]`, copied the same way but only when at least one attribute was copied.
+    /// Process a `forward-operational-data` consequence. `details` contains:
+    /// - `type` / `source` (required): the event type and source to dispatch.
+    /// - `attributes`: `[{ "path": ["tokens", "pushNotification"], "enabled": true }, ...]`. For every enabled entry whose
+    ///   exact path exists in the triggering event data, a non-null value is copied as-is to the
+    ///   same path in the new event.
     ///
-    /// Paths are arrays of dictionary keys; missing paths are skipped and no empty containers are created.
+    /// Paths are arrays of dictionary keys (no array indexes); missing paths are skipped and no empty containers are
+    /// created.
     /// - Parameters:
     ///   - consequence: the RuleConsequence containing the forward details
-    ///   - processedEvent: the triggering event, used as the data source and as the parent of the new event
-    /// - Returns: the event to dispatch, or nil when the details are invalid or no enabled attribute was found
+    ///   - processedEvent: the triggering event, used as the data source and parent of the new event
+    /// - Returns: a chained event from `processedEvent`, also when no enabled path was found,
+    ///   or nil when `type` or `source` is missing
     private func processForwardOperationalDataConsequence(consequence: RuleConsequence, processedEvent: Event) -> Event? {
         guard let type = consequence.eventType else {
             Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a forward-operational-data consequence \(consequence.id), 'type' is missing from 'details'")
@@ -440,50 +443,46 @@ public class LaunchRulesEngine {
             Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a forward-operational-data consequence \(consequence.id), 'source' is missing from 'details'")
             return nil
         }
-        guard let attributes = consequence.details[LaunchRulesEngine.FORWARD_DETAIL_ATTRIBUTES] as? [Any] else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a forward-operational-data consequence \(consequence.id), 'attributes' is missing from 'details'")
-            return nil
+        let attributes = consequence.details[LaunchRulesEngine.FORWARD_DETAIL_ATTRIBUTES] as? [Any] ?? []
+        if attributes.isEmpty {
+            Log.warning(label: LOG_TAG, "(\(self.name)) : forward-operational-data consequence \(consequence.id) has no valid 'attributes', no attribute will be forwarded")
         }
 
         let eventData = processedEvent.data ?? [:]
-        var forwardData = copyPaths(from: eventData, entries: attributes, requireEnabled: true, consequenceId: consequence.id)
-        guard !forwardData.isEmpty else {
-            Log.trace(label: LOG_TAG, "(\(self.name)) : No enabled attribute found in event \(processedEvent.id) for forward-operational-data consequence \(consequence.id), nothing to forward")
-            return nil
-        }
-        if let context = consequence.details[LaunchRulesEngine.FORWARD_DETAIL_CONTEXT] as? [Any] {
-            let contextData = copyPaths(from: eventData, entries: context, requireEnabled: false, consequenceId: consequence.id)
-            forwardData = EventDataMerger.merging(to: forwardData, from: contextData, overwrite: false)
+        var forwardData: [String: Any] = [:]
+
+        for path in paths(in: attributes, consequenceId: consequence.id) {
+            guard let value = LaunchRulesEngine.value(at: path, in: eventData) else {
+                continue
+            }
+            LaunchRulesEngine.set(value, at: path, in: &forwardData)
         }
 
-        Log.trace(label: LOG_TAG, "(\(self.name)) : Forwarding operational data (\(type)/\(source)) for consequence \(consequence.id)")
+        Log.trace(label: LOG_TAG, "(\(self.name)) : Forwarding allowed operational data (\(type)/\(source)) for consequence \(consequence.id)")
         return processedEvent.createChainedEvent(name: LaunchRulesEngine.FORWARD_OPERATIONAL_DATA_EVENT_NAME,
                                                  type: type,
                                                  source: source,
                                                  data: forwardData)
     }
 
-    /// Copies the value at each entry's `path` in `data` to the same path in the returned dictionary.
-    /// Entries that are malformed, disabled (when `requireEnabled`), or whose path is not found are skipped.
-    private func copyPaths(from data: [String: Any], entries: [Any], requireEnabled: Bool, consequenceId: String) -> [String: Any] {
-        var result: [String: Any] = [:]
+    /// Returns the `path` of each well-formed, enabled attribute entry.
+    private func paths(in entries: [Any], consequenceId: String) -> [[String]] {
+        var paths: [[String]] = []
         for rawEntry in entries {
             guard let entry = (rawEntry as? [String: Any?])?.compactMapValues({ $0 }),
                   let path = entry[LaunchRulesEngine.FORWARD_DETAIL_PATH] as? [String], !path.isEmpty else {
                 Log.warning(label: LOG_TAG, "(\(self.name)) : Skipping malformed path entry in forward-operational-data consequence \(consequenceId)")
                 continue
             }
-            if requireEnabled, entry[LaunchRulesEngine.FORWARD_DETAIL_ENABLED] as? Bool != true {
+            if entry[LaunchRulesEngine.FORWARD_DETAIL_ENABLED] as? Bool != true {
                 continue
             }
-            guard let value = LaunchRulesEngine.value(at: path, in: data) else {
-                continue
-            }
-            LaunchRulesEngine.set(value, at: path, in: &result)
+            paths.append(path)
         }
-        return result
+        return paths
     }
 
+    /// Returns the value at exactly `path`, or nil when the path is missing or its value is null.
     private static func value(at path: [String], in data: [String: Any]) -> Any? {
         var current: Any = data
         for key in path {
@@ -495,6 +494,7 @@ public class LaunchRulesEngine {
         return current is NSNull ? nil : current
     }
 
+    /// Sets `value` at `path`, creating intermediate dictionaries as needed.
     private static func set(_ value: Any, at path: [String], in data: inout [String: Any]) {
         guard let key = path.first else { return }
         if path.count == 1 {
