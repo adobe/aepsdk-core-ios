@@ -18,7 +18,7 @@
     /// This class is used to create and display fullscreen messages on the current view.
     @objc(AEPFullscreenMessage)
     @available(iOSApplicationExtension, unavailable)
-    public class FullscreenMessage: NSObject, FullscreenPresentable {
+public class FullscreenMessage: NSObject, FullscreenPresentable, @unchecked Sendable {
         let LOG_PREFIX = "FullscreenMessage"
         private let DOWNLOAD_CACHE = "adbdownloadcache"
         private let HTML_EXTENSION = "html"
@@ -278,7 +278,7 @@
         /// - Parameters:
         ///   - name: the name of the message being passed from javascript
         ///   - handler: a method to be called when the javascript message is passed
-        @objc public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
+        @objc public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping @Sendable (Any?) -> Void) {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else {
                     return
@@ -335,6 +335,7 @@
             }
         }
 
+        @MainActor
         private func getConfiguredWebView(newFrame: CGRect) -> WKWebView {
             let webViewConfiguration = WKWebViewConfiguration()
 

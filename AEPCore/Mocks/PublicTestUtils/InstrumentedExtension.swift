@@ -23,7 +23,7 @@ public class InstrumentedExtension: NSObject, Extension {
     private static let logTag = "InstrumentedExtension"
     public var name = "com.adobe.InstrumentedExtension"
     public var friendlyName = "InstrumentedExtension"
-    private static var _extensionVersion = "1.0.0"
+    nonisolated(unsafe) private static var _extensionVersion = "1.0.0"
     public static var extensionVersion: String {
         get {
             return queue.sync { _extensionVersion }
@@ -37,7 +37,7 @@ public class InstrumentedExtension: NSObject, Extension {
     public var runtime: ExtensionRuntime
 
     // Expected events Dictionary - key: EventSpec, value: the expected count
-    private static var _expectedEvents = ThreadSafeDictionary<EventSpec, CountDownLatch>()
+    nonisolated(unsafe) private static var _expectedEvents = ThreadSafeDictionary<EventSpec, CountDownLatch>()
     static var expectedEvents: ThreadSafeDictionary<EventSpec, CountDownLatch> {
         get {
             return queue.sync { _expectedEvents }
@@ -48,7 +48,7 @@ public class InstrumentedExtension: NSObject, Extension {
     }
 
     // All the events seen by this listener that are not of type instrumentedExtension - key: EventSpec, value: received events with EventSpec type and source
-    private static var _receivedEvents = ThreadSafeDictionary<EventSpec, [Event]>()
+    nonisolated(unsafe) private static var _receivedEvents = ThreadSafeDictionary<EventSpec, [Event]>()
     static var receivedEvents: ThreadSafeDictionary<EventSpec, [Event]> {
         get {
             return queue.sync { _receivedEvents }

@@ -19,7 +19,7 @@ public final class MobileCore: NSObject {
     private static let LOG_TAG = "MobileCore"
 
     #if DEBUG
-        internal static var mobileCoreInitializer = MobileCoreInitializer()
+    nonisolated(unsafe) internal static var mobileCoreInitializer = MobileCoreInitializer()
     #else
         private static let mobileCoreInitializer = MobileCoreInitializer()
     #endif

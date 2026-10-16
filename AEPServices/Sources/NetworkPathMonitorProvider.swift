@@ -17,7 +17,7 @@ import Network
 /// `isInternetAvailable()` implementation. A single shared, long-lived monitor is used (rather than
 /// creating a new one per call) so `currentPath` stays continuously up to date.
 final class NetworkPathMonitorProvider {
-    static let shared = NetworkPathMonitorProvider()
+    nonisolated(unsafe) static let shared = NetworkPathMonitorProvider()
 
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "com.adobe.networkPathMonitor.queue")

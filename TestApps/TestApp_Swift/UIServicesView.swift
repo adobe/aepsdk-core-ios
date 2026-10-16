@@ -13,7 +13,7 @@ import SwiftUI
 import AEPServices
 
 class AEPUIManager {
-    static let shared: AEPUIManager = AEPUIManager()
+    nonisolated(unsafe) static let shared: AEPUIManager = AEPUIManager()
     
     private let sampleHTML = """
     <html lang="en">

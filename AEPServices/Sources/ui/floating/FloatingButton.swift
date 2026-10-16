@@ -16,7 +16,7 @@
     /// This class is used to create a floating button
     @objc(AEPFloatingButton)
     @available(iOSApplicationExtension, unavailable)
-    public class FloatingButton: NSObject, FloatingButtonPresentable {
+    public class FloatingButton: NSObject, FloatingButtonPresentable, @unchecked Sendable {
 
         private let LOG_PREFIX = "FloatingButton"
 
