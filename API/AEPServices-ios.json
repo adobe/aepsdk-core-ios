@@ -4829,8 +4829,8 @@
             "declAttributes": [
               "HasInitialValue",
               "Final",
-              "ObjC",
               "Nonisolated",
+              "ObjC",
               "HasStorage"
             ],
             "hasStorage": true,
@@ -14525,6 +14525,13 @@
           },
           {
             "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
             "name": "Showable",
             "printedName": "Showable",
             "usr": "c:@M@AEPServices@objc(pl)AEPShowable",
@@ -15415,7 +15422,7 @@
             ],
             "declKind": "Func",
             "usr": "c:@M@AEPServices@objc(cs)AEPFullscreenMessage(im)handleJavascriptMessage:withHandler:",
-            "mangledName": "$s11AEPServices17FullscreenMessageC016handleJavascriptC0_11withHandlerySS_yypSgctF",
+            "mangledName": "$s11AEPServices17FullscreenMessageC016handleJavascriptC0_11withHandlerySS_yypSgYbctF",
             "moduleName": "AEPServices",
             "declAttributes": [
               "ObjC"
@@ -15655,6 +15662,13 @@
             "printedName": "FullscreenPresentable",
             "usr": "c:@M@AEPServices@objc(pl)AEPFullscreenPresentable",
             "mangledName": "$s11AEPServices21FullscreenPresentableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
           },
           {
             "kind": "Conformance",

@@ -4627,8 +4627,8 @@
             "declAttributes": [
               "HasInitialValue",
               "Final",
-              "ObjC",
               "Nonisolated",
+              "ObjC",
               "HasStorage"
             ],
             "hasStorage": true,
