@@ -142,6 +142,82 @@ class RulesEngineIntegrationTests: XCTestCase {
         wait(for: [expectation1, expectation2, expectation3], timeout: 3)
     }
 
+    func testForwardOperationalDataConsequence() {
+        // Expected trigger event to match the forward-operational-data rule and forward only the enabled paths
+        let configData = """
+        {
+          "global.privacy": "optedin",
+          "rules.url" : "https://rules.com/rules.zip"
+        }
+        """.data(using: .utf8)
+        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_forward_operational_data")
+
+        let triggerEvent = Event(name: "Device attributes for rules engine",
+                                 type: "com.adobe.eventType.generic.operationalData",
+                                 source: EventSource.requestContent,
+                                 data: [
+                                    "timezone": "America/Los_Angeles",
+                                    "email": "not-allowed@example.com",
+                                    "tokens": [
+                                        "pushNotification": "push-token",
+                                        "liveActivityStart": [["attributeType": "GameScore", "value": "la-start"]],
+                                        "liveActivityUpdate": [["liveActivityID": "order-123", "token": "la-update"]]
+                                    ]
+                                 ])
+        let expectation = XCTestExpectation(description: "validate forwarded operational data event")
+        expectation.assertForOverFulfill = true
+        MobileCore.registerEventListener(type: EventType.edgeIdentity,
+                                         source: "com.adobe.eventSource.responseOperationalData") { event in
+            XCTAssertEqual("Forward operational data", event.name)
+            XCTAssertEqual(triggerEvent.id, event.parentID)
+            let expected: [String: Any] = [
+                "timezone": "America/Los_Angeles",
+                "tokens": [
+                    "pushNotification": "push-token",
+                    "liveActivityUpdate": [["liveActivityID": "order-123", "token": "la-update"]]
+                ]
+            ]
+            XCTAssertEqual(expected as NSDictionary, event.data as NSDictionary?)
+            expectation.fulfill()
+        }
+
+        MobileCore.dispatch(event: triggerEvent)
+
+        wait(for: [expectation], timeout: 2)
+    }
+
+    func testForwardOperationalDataConsequence_chainedForward_doesNotLoop() {
+        // The forwarded event matches a second forward rule; as max chain count is 1, it is not forwarded again
+        let configData = """
+        {
+          "global.privacy": "optedin",
+          "rules.url" : "https://rules.com/rules.zip"
+        }
+        """.data(using: .utf8)
+        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_forward_operational_data")
+
+        let forwardedExpectation = XCTestExpectation(description: "validate forwarded event")
+        forwardedExpectation.assertForOverFulfill = true
+        MobileCore.registerEventListener(type: EventType.edgeIdentity,
+                                         source: "com.adobe.eventSource.responseOperationalData") { _ in
+            forwardedExpectation.fulfill()
+        }
+
+        let chainedExpectation = XCTestExpectation(description: "validate chained forward is not dispatched")
+        chainedExpectation.isInverted = true
+        MobileCore.registerEventListener(type: "test.type.forward.chained",
+                                         source: "test.source.forward.chained") { _ in
+            chainedExpectation.fulfill()
+        }
+
+        MobileCore.dispatch(event: Event(name: "Device attributes for rules engine",
+                                         type: "com.adobe.eventType.generic.operationalData",
+                                         source: EventSource.requestContent,
+                                         data: ["timezone": "UTC"]))
+
+        wait(for: [forwardedExpectation, chainedExpectation], timeout: 3)
+    }
+
     func mockRemoteConfigAndRules(for appId: String, with configData: Data?, localRulesName: String) {
         let configExpectation = XCTestExpectation(description: "read remote configuration")
         let rulesExpectation = XCTestExpectation(description: "read remote rules")
