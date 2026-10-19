@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~type",
+                "matcher": "eq",
+                "values": ["com.adobe.eventType.generic.operationalData"]
+              }
+            },
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~source",
+                "matcher": "eq",
+                "values": ["com.adobe.eventSource.requestContent"]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "forward-device-attributes",
+          "type": "forward-operational-data",
+          "detail": {
+            "type": "com.adobe.eventType.edgeIdentity",
+            "source": "com.adobe.eventSource.responseOperationalData",
+            "attributes": [
+              { "path": ["timezone"], "enabled": true },
+              { "path": ["tokens", "pushNotification"], "enabled": true },
+              { "path": ["tokens", "liveActivityStart"], "enabled": false },
+              { "path": ["tokens", "liveActivityUpdate"], "enabled": true }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~type",
+                "matcher": "eq",
+                "values": ["test.type.forward.loop"]
+              }
+            },
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~source",
+                "matcher": "eq",
+                "values": ["test.source.forward.loop"]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "forward-to-self",
+          "type": "forward-operational-data",
+          "detail": {
+            "type": "test.type.forward.loop",
+            "source": "test.source.forward.loop",
+            "attributes": [
+              { "path": ["timezone"], "enabled": true }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~type",
+                "matcher": "eq",
+                "values": ["test.type.forward.noType"]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "forward-missing-type",
+          "type": "forward-operational-data",
+          "detail": {
+            "source": "com.adobe.eventSource.responseOperationalData",
+            "attributes": [
+              { "path": ["timezone"], "enabled": true }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

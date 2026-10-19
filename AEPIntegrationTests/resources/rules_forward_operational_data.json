@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~type",
+                "matcher": "eq",
+                "values": [
+                  "com.adobe.eventType.generic.operationalData"
+                ]
+              }
+            },
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~source",
+                "matcher": "eq",
+                "values": [
+                  "com.adobe.eventSource.requestContent"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "forward-device-attributes",
+          "type": "forward-operational-data",
+          "detail": {
+            "type": "com.adobe.eventType.edgeIdentity",
+            "source": "com.adobe.eventSource.responseOperationalData",
+            "attributes": [
+              {
+                "path": [
+                  "timezone"
+                ],
+                "enabled": true
+              },
+              {
+                "path": [
+                  "tokens",
+                  "pushNotification"
+                ],
+                "enabled": true
+              },
+              {
+                "path": [
+                  "tokens",
+                  "liveActivityStart"
+                ],
+                "enabled": false
+              },
+              {
+                "path": [
+                  "tokens",
+                  "liveActivityUpdate"
+                ],
+                "enabled": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~type",
+                "matcher": "eq",
+                "values": [
+                  "com.adobe.eventType.edgeIdentity"
+                ]
+              }
+            },
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~source",
+                "matcher": "eq",
+                "values": [
+                  "com.adobe.eventSource.responseOperationalData"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "forward-chained",
+          "type": "forward-operational-data",
+          "detail": {
+            "type": "test.type.forward.chained",
+            "source": "test.source.forward.chained",
+            "attributes": [
+              {
+                "path": [
+                  "timezone"
+                ],
+                "enabled": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
