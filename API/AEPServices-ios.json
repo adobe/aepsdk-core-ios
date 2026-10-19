@@ -120,6 +120,7 @@
             "declAttributes": [
               "HasInitialValue",
               "Final",
+              "Nonisolated",
               "HasStorage"
             ],
             "isLet": true,
@@ -4829,6 +4830,7 @@
               "HasInitialValue",
               "Final",
               "ObjC",
+              "Nonisolated",
               "HasStorage"
             ],
             "hasStorage": true,
