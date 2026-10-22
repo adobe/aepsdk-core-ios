@@ -21,7 +21,7 @@ public final class MobileCore: NSObject {
     #if DEBUG
     nonisolated(unsafe) internal static var mobileCoreInitializer = MobileCoreInitializer()
     #else
-        private static let mobileCoreInitializer = MobileCoreInitializer()
+        nonisolated(unsafe) private static let mobileCoreInitializer = MobileCoreInitializer()
     #endif
 
     /// Current version of the Core extension

@@ -39,7 +39,7 @@ final class EventHub {
     #if DEBUG
     nonisolated(unsafe) public internal(set) static var shared = EventHub()
     #else
-        internal static let shared = EventHub()
+        nonisolated(unsafe) internal static let shared = EventHub()
     #endif
 
     // MARK: - Internal API
