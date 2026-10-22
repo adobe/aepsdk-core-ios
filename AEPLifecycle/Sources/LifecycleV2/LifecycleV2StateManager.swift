@@ -16,7 +16,7 @@ import AEPServices
 /// LifecycleV2StateManager manages app session state updates for the XDM scenario based on the start/pause Lifecycle events.
 class LifecycleV2StateManager {
 
-    private static var SELF_LOG_TAG = "LifecycleV2StateManager"
+    nonisolated(unsafe) private static var SELF_LOG_TAG = "LifecycleV2StateManager"
 
     enum State: String {
         case START = "start"

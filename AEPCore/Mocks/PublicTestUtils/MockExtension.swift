@@ -19,7 +19,7 @@ public class MockExtension: NSObject, Extension {
 
     public var name = "com.adobe.mockExtension"
     public var friendlyName = "mockExtension"
-    private static var _extensionVersion = "0.0.1"
+    nonisolated(unsafe) private static var _extensionVersion = "0.0.1"
     public static var extensionVersion: String {
         get {
             return queue.sync { _extensionVersion }
@@ -30,7 +30,7 @@ public class MockExtension: NSObject, Extension {
     }
     public var metadata: [String: String]?
 
-    private static var _registrationClosure: (() -> Void)?
+    nonisolated(unsafe) private static var _registrationClosure: (() -> Void)?
     public static var registrationClosure: (() -> Void)? {
         get {
             return queue.sync { _registrationClosure }
@@ -39,7 +39,7 @@ public class MockExtension: NSObject, Extension {
             queue.sync { _registrationClosure = newValue }
         }
     }
-    private static var _unregistrationClosure: (() -> Void)?
+    nonisolated(unsafe) private static var _unregistrationClosure: (() -> Void)?
     public static var unregistrationClosure: (() -> Void)? {
         get {
             return queue.sync { _unregistrationClosure }
@@ -48,7 +48,7 @@ public class MockExtension: NSObject, Extension {
             queue.sync { _unregistrationClosure = newValue }
         }
     }
-    private static var _eventReceivedClosure: ((Event) -> Void)?
+    nonisolated(unsafe) private static var _eventReceivedClosure: ((Event) -> Void)?
     public static var eventReceivedClosure: ((Event) -> Void)? {
         get {
             return queue.sync { _eventReceivedClosure }

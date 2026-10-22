@@ -54,7 +54,7 @@ struct NetworkAvailabilityView: View {
                 }
             }
             .padding(12)
-            .background(Color(.systemGray6))
+            .background(Color(.gray))
             .cornerRadius(10)
         }
     }

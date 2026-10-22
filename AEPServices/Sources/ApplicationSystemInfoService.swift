@@ -29,16 +29,20 @@ class ApplicationSystemInfoService: SystemInfoService {
 
     private let queue = DispatchQueue(label: "com.adobe.applicationSystemInfoService.queue")
 
+    private let deviceModel: String
+    private let deviceOSVersion: String
+
     private lazy var userAgent: String = {
-        let model = UIDevice.current.model
-        let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
+        let osVersion = deviceOSVersion.replacingOccurrences(of: ".", with: "_")
         let localeIdentifier = getSystemLocaleName().userAgentLocale ?? DEFAULT_LOCALE
 
-        return "Mozilla/5.0 (\(model); CPU OS \(osVersion) like Mac OS X; \(localeIdentifier))"
+        return "Mozilla/5.0 (\(deviceModel); CPU OS \(osVersion) like Mac OS X; \(localeIdentifier))"
     }()
 
     init(bundle: Bundle = Bundle.main) {
         self.bundle = bundle
+        self.deviceModel = UIDevice.current.model
+        self.deviceOSVersion = UIDevice.current.systemVersion
     }
 
     func getProperty(for key: String) -> String? {

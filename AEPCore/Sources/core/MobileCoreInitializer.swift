@@ -89,17 +89,19 @@ final class MobileCoreInitializer {
         let usingSceneDelegate = bundleInfoProvider(UIApplicationSceneManifestKey) != nil
         Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
 
+        nonisolated(unsafe) let contextData = additionalContextData
+
         // Call lifecycleStart immediately
         DispatchQueue.main.async {
             if UIApplication.shared.applicationState != .background {
-                MobileCore.lifecycleStart(additionalContextData: additionalContextData)
+                MobileCore.lifecycleStart(additionalContextData: contextData)
             }
         }
 
         if usingSceneDelegate {
             if #available(iOS 13.0, tvOS 13.0, *) {
                 _ = notificationObserver(UIScene.willEnterForegroundNotification, nil, nil) { _ in
-                    MobileCore.lifecycleStart(additionalContextData: additionalContextData)
+                    MobileCore.lifecycleStart(additionalContextData: contextData)
                 }
                 _ = notificationObserver(UIScene.didEnterBackgroundNotification, nil, nil) { _ in
                     MobileCore.lifecyclePause()
@@ -107,7 +109,7 @@ final class MobileCoreInitializer {
             }
         } else {
             _ = notificationObserver(UIApplication.willEnterForegroundNotification, nil, nil) { _ in
-                MobileCore.lifecycleStart(additionalContextData: additionalContextData)
+                MobileCore.lifecycleStart(additionalContextData: contextData)
             }
             _ = notificationObserver(UIApplication.didEnterBackgroundNotification, nil, nil) { _ in
                 MobileCore.lifecyclePause()

@@ -16,7 +16,7 @@ import Foundation
 /// The ServiceProvider Singleton is used to override and provide Core Services
 ///
 public class ServiceProvider {
-    public static let shared = ServiceProvider()
+    nonisolated(unsafe) public static let shared = ServiceProvider()
 
     #if os(iOS)
         /// MessagingDelegate which is used to listen for message visibility updates.
@@ -147,11 +147,11 @@ extension ServiceProvider {
     // Because Extensions cannot hold properties, this struct Holder is a work around.
     // Please note that the static variables work because the ServiceProvider is a singleton.
     private struct Holder {
-        static var overrideURLService: URLOpening?
-        static var defaultURLService = URLService()
+        nonisolated(unsafe) static var overrideURLService: URLOpening?
+        nonisolated(unsafe) static var defaultURLService = URLService()
         #if os(iOS)
-            static var overrideUIService: UIService?
-            static var defaultUIService = AEPUIService()
+        nonisolated(unsafe) static var overrideUIService: UIService?
+        nonisolated(unsafe) static var defaultUIService = AEPUIService()
         #endif
     }
 

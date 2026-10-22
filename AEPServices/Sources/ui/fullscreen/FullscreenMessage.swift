@@ -18,7 +18,7 @@
     /// This class is used to create and display fullscreen messages on the current view.
     @objc(AEPFullscreenMessage)
     @available(iOSApplicationExtension, unavailable)
-    public class FullscreenMessage: NSObject, FullscreenPresentable {
+public class FullscreenMessage: NSObject, FullscreenPresentable, @unchecked Sendable {
         let LOG_PREFIX = "FullscreenMessage"
         private let DOWNLOAD_CACHE = "adbdownloadcache"
         private let HTML_EXTENSION = "html"
@@ -33,7 +33,14 @@
         
         /// Assignable in the constructor, `settings` control the layout and behavior of the message
         @objc
-        public var settings: MessageSettings?
+        public var settings: MessageSettings? {
+            get { stateLock.lock(); defer { stateLock.unlock() }; return _settings }
+            set { stateLock.lock(); defer { stateLock.unlock() }; _settings = newValue }
+        }
+
+        private let stateLock = NSLock()
+        private var _settings: MessageSettings?
+        private var _payloadUsingLocalAssets: String?
 
         /// Native functions that can be called from javascript
         /// See `addHandler:forScriptMessage:`
@@ -46,7 +53,10 @@
 
         var isLocalImageUsed = false
         var payload: String
-        var payloadUsingLocalAssets: String?
+        var payloadUsingLocalAssets: String? {
+            get { stateLock.lock(); defer { stateLock.unlock() }; return _payloadUsingLocalAssets }
+            set { stateLock.lock(); defer { stateLock.unlock() }; _payloadUsingLocalAssets = newValue }
+        }
         var listener: FullscreenMessageDelegate?
         public internal(set) var webView: UIView?
         private var tempHtmlFile: URL?
@@ -76,7 +86,7 @@
             self.listener = listener
             self.isLocalImageUsed = isLocalImageUsed
             self.messageMonitor = messageMonitor
-            self.settings = settings
+            self._settings = settings
         }
 
         /// Call this API to hide the fullscreen message.
@@ -279,6 +289,8 @@
         ///   - name: the name of the message being passed from javascript
         ///   - handler: a method to be called when the javascript message is passed
         @objc public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
+            // handlers are stored and invoked on the main thread only
+            nonisolated(unsafe) let handler = handler
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else {
                     return
@@ -310,10 +322,11 @@
                 return
             }
 
-            payloadUsingLocalAssets = payload
+            var html = payload
             for asset in map {
-                payloadUsingLocalAssets = payloadUsingLocalAssets?.replacingOccurrences(of: asset.key, with: asset.value)
+                html = html.replacingOccurrences(of: asset.key, with: asset.value)
             }
+            payloadUsingLocalAssets = html
         }
 
         // MARK: - private methods
@@ -335,6 +348,7 @@
             }
         }
 
+        @MainActor
         private func getConfiguredWebView(newFrame: CGRect) -> WKWebView {
             let webViewConfiguration = WKWebViewConfiguration()
 

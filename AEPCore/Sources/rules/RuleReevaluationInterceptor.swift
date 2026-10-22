@@ -25,4 +25,3 @@ public protocol RuleReevaluationInterceptor: AnyObject {
         completion: @escaping (Bool) -> Void
     )
 }
-
