@@ -1089,9 +1089,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Swift (tvOS)/Pods-TestApp_Swift (tvOS)-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Swift (tvOS)/Pods-TestApp_Swift (tvOS)-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1128,9 +1132,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-E2E_Swift/Pods-E2E_Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-E2E_Swift/Pods-E2E_Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1211,9 +1219,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PerformanceApp/Pods-PerformanceApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PerformanceApp/Pods-PerformanceApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1250,9 +1262,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Objc/Pods-TestApp_Objc-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Objc/Pods-TestApp_Objc-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1267,9 +1283,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Objc (tvOS)/Pods-TestApp_Objc (tvOS)-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Objc (tvOS)/Pods-TestApp_Objc (tvOS)-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1328,9 +1348,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Swift/Pods-TestApp_Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Swift/Pods-TestApp_Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1731,15 +1755,19 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TestApp_Swift/TestApp_Swift.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview Content\"";
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestApp_Swift/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Test App";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1757,15 +1785,19 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TestApp_Swift/TestApp_Swift.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview Content\"";
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestApp_Swift/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Test App";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;
