@@ -833,6 +833,7 @@
             "static": true,
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "isFromExtension": true,
@@ -912,6 +913,7 @@
             "objc_name": "getIdentifiers:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "isFromExtension": true,
@@ -983,6 +985,7 @@
             "objc_name": "getExperienceCloudId:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "isFromExtension": true,
@@ -1206,6 +1209,7 @@
             "objc_name": "getUrlVariables:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "isFromExtension": true,

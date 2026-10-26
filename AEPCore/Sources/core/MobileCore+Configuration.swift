@@ -67,7 +67,7 @@ public extension MobileCore {
     /// Gets the currently configured `PrivacyStatus` and returns it via `completion`
     /// - Parameter completion: Invoked with the current `PrivacyStatus`
     @objc(getPrivacyStatus:)
-    static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> Void) {
+    @preconcurrency static func getPrivacyStatus(completion: @escaping @Sendable (PrivacyStatus) -> Void) {
         let event = Event(name: CoreConstants.EventNames.PRIVACY_STATUS_REQUEST, type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { responseEvent in
@@ -83,7 +83,7 @@ public extension MobileCore {
     /// Get a JSON string containing all of the user's identities known by the SDK  and calls a handler upon completion.
     /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format and an `AEPError` if the request failed
     @objc(getSdkIdentities:)
-    static func getSdkIdentities(completion: @escaping (String?, Error?) -> Void) {
+    @preconcurrency static func getSdkIdentities(completion: @escaping @Sendable (String?, Error?) -> Void) {
         let event = Event(name: CoreConstants.EventNames.GET_SDK_IDENTITIES, type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { responseEvent in

@@ -94,7 +94,9 @@ struct CoreView: View {
             HStack {
                 Button(action: {
                     MobileCore.getPrivacyStatus { privacyStatus in
-                        self.currentPrivacyStatus = "\(privacyStatus.rawValue)"
+                        DispatchQueue.main.async {
+                            self.currentPrivacyStatus = "\(privacyStatus.rawValue)"
+                        }
                     }
                 }) {
                     Text("Get Privacy")

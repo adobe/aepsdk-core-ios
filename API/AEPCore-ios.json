@@ -345,6 +345,20 @@
             ],
             "usr": "s:SY",
             "mangledName": "$sSY"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -1415,6 +1429,7 @@
             "objc_name": "dispatch:timeout:responseCallback:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "funcSelfKind": "NonMutating"
@@ -1468,6 +1483,7 @@
             "objc_name": "registerEventListenerWithType:source:listener:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "funcSelfKind": "NonMutating"
@@ -2015,6 +2031,7 @@
             "objc_name": "getPrivacyStatus:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "isFromExtension": true,
@@ -2086,6 +2103,7 @@
             "objc_name": "getSdkIdentities:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "isFromExtension": true,

@@ -152,7 +152,7 @@ public final class MobileCore: NSObject {
     ///            Use `.infinity` to wait indefinitely without `EventHub` triggering timeout.
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
     @objc(dispatch:timeout:responseCallback:)
-    public static func dispatch(event: Event, timeout: TimeInterval = 1, responseCallback: @escaping (Event?) -> Void) {
+    @preconcurrency public static func dispatch(event: Event, timeout: TimeInterval = 1, responseCallback: @escaping @Sendable (Event?) -> Void) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: timeout) { event in
             responseCallback(event)
         }
@@ -166,8 +166,9 @@ public final class MobileCore: NSObject {
     ///   - source: A `String` indicating the event source the current listener is listening for
     ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives an event with matched type and source.
     @objc(registerEventListenerWithType:source:listener:)
-    public static func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
+    @preconcurrency public static func registerEventListener(type: String, source: String, listener: @escaping @Sendable (Event) -> Void) {
         EventHub.shared.registerEventListener(type: type, source: source) { event in
+            nonisolated(unsafe) let event = event
             DispatchQueue.global(qos: .default).async {
                 listener(event)
             }
