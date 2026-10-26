@@ -193,7 +193,7 @@ clean:
 format: lint-autocorrect swift-format
 
 swift-format:
-	swiftformat . --swiftversion 5.1
+	swiftformat . --swiftversion 5.10
 
 lint-autocorrect:	
 	./Pods/SwiftLint/swiftlint --fix
@@ -202,7 +202,7 @@ lint:
 	./Pods/SwiftLint/swiftlint lint
 
 checkFormat:
-	swiftformat . --lint --swiftversion 5.1
+	swiftformat . --lint --swiftversion 5.10
 
 loc:
 	# use the following brew command to install cloc
@@ -253,7 +253,7 @@ test-podspec-testutils:
 	(sh ./Script/test-podspec-testutils.sh)
 
 pod-lint:
-	(pod lib lint --allow-warnings --verbose --swift-version=5.1)
+	(pod lib lint --allow-warnings --verbose --swift-version=5.10)
 
 api-check:
 	(sh ./Script/api-check.sh  --check --platform ios)
