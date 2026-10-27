@@ -1326,6 +1326,109 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         mockRuntime.dispatchedEvents.removeAll()
     }
 
+    // MARK: - forward-operational-data consequence tests
+    // Rules: rules_testForwardOperationalData.json
+    //   1. generic.operationalData/requestContent -> edgeIdentity/responseOperationalData, forwarding
+    //      timezone, tokens.pushNotification, tokens.liveActivityUpdate (tokens.liveActivityStart disabled)
+    //   2. test.type.forward.loop -> forwards to its own type/source
+    //   3. test.type.forward.noType -> 'type' missing from detail
+
+    private func operationalDataEvent(_ data: [String: Any]?) -> Event {
+        return Event(name: "Device attributes for rules engine",
+                     type: "com.adobe.eventType.generic.operationalData",
+                     source: EventSource.requestContent,
+                     data: data)
+    }
+
+    func testForwardOperationalData_forwardsEnabledPathsAsChainedEvent() {
+        resetRulesEngine(withNewRules: "rules_testForwardOperationalData")
+        let event = operationalDataEvent([
+            "timezone": "America/Los_Angeles",
+            "email": "not-allowed@example.com",
+            "tokens": [
+                "pushNotification": "push-token",
+                "liveActivityStart": [["attributeType": "GameScore", "value": "la-start"]],
+                "liveActivityUpdate": [["liveActivityID": "order-123", "token": "la-update"]]
+            ]
+        ])
+
+        let processedEvent = rulesEngine.process(event: event)
+
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let forwarded = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual("Forward operational data", forwarded.name)
+        XCTAssertEqual(EventType.edgeIdentity, forwarded.type)
+        XCTAssertEqual("com.adobe.eventSource.responseOperationalData", forwarded.source)
+        XCTAssertEqual(event.id, forwarded.parentID)
+        XCTAssertNil(forwarded.responseID)
+        let expected: [String: Any] = [
+            "timezone": "America/Los_Angeles",
+            "tokens": [
+                "pushNotification": "push-token",
+                "liveActivityUpdate": [["liveActivityID": "order-123", "token": "la-update"]]
+            ]
+        ]
+        XCTAssertEqual(expected as NSDictionary, forwarded.data as NSDictionary?)
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
+    func testForwardOperationalData_noEnabledPathInEvent_dispatchesEmptyData() {
+        resetRulesEngine(withNewRules: "rules_testForwardOperationalData")
+
+        _ = rulesEngine.process(event: operationalDataEvent([
+            "email": "not-allowed@example.com",
+            "tokens": ["liveActivityStart": [["attributeType": "GameScore", "value": "la-start"]]]
+        ]))
+
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(NSDictionary(), mockRuntime.dispatchedEvents[0].data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_noEventData_dispatchesEmptyData() {
+        resetRulesEngine(withNewRules: "rules_testForwardOperationalData")
+
+        _ = rulesEngine.process(event: operationalDataEvent(nil))
+
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(NSDictionary(), mockRuntime.dispatchedEvents[0].data as NSDictionary?)
+    }
+
+    func testForwardOperationalData_missingType_noEventDispatched() {
+        resetRulesEngine(withNewRules: "rules_testForwardOperationalData")
+
+        _ = rulesEngine.process(event: Event(name: "No type", type: "test.type.forward.noType",
+                                             source: EventSource.requestContent, data: ["timezone": "UTC"]))
+
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
+
+    func testForwardOperationalData_nonMatchingEvent_noEventDispatched() {
+        resetRulesEngine(withNewRules: "rules_testForwardOperationalData")
+
+        _ = rulesEngine.process(event: Event(name: "Other", type: "com.adobe.eventType.generic.operationalData",
+                                             source: EventSource.responseContent, data: ["timezone": "UTC"]))
+
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
+
+    func testForwardOperationalData_chainedForwardEvents_doNotLoop() {
+        resetRulesEngine(withNewRules: "rules_testForwardOperationalData")
+        let event = Event(name: "Loop", type: "test.type.forward.loop", source: "test.source.forward.loop",
+                          data: ["timezone": "UTC", "other": "dropped"])
+
+        // Process original event; dispatch chain count = 0
+        _ = rulesEngine.process(event: event)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let forwarded = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(["timezone": "UTC"] as NSDictionary, forwarded.data as NSDictionary?)
+        mockRuntime.dispatchedEvents.removeAll()
+
+        // Process forwarded event; dispatch chain count = 1, which is the max allowed
+        _ = rulesEngine.process(event: forwarded)
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
+
     // MARK: - Transforming tests
     // test that the data can be transformed to the correct type
     func testTransform() {
