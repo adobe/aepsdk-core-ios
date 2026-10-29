@@ -1062,6 +1062,7 @@
             "objc_name": "initializeWithOptions:completion:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC",
               "Available",
               "Available"
@@ -1119,6 +1120,7 @@
             "objc_name": "initializeWithAppId:completion:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC",
               "Available",
               "Available"
@@ -1191,6 +1193,7 @@
             "objc_name": "registerExtensions:completion:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "funcSelfKind": "NonMutating"
@@ -1253,6 +1256,7 @@
             "objc_name": "registerExtension:completion:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "funcSelfKind": "NonMutating"
@@ -1315,6 +1319,7 @@
             "objc_name": "unregisterExtension:completion:",
             "declAttributes": [
               "Final",
+              "Preconcurrency",
               "ObjC"
             ],
             "funcSelfKind": "NonMutating"

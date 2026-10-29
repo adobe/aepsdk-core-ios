@@ -51,7 +51,8 @@ public final class MobileCore: NSObject {
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     @objc(initializeWithOptions:completion:)
-    public static func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func initialize(options: InitOptions, _ completion: (@Sendable () -> Void)? = nil) {
         mobileCoreInitializer.initialize(options: options, completion)
     }
 
@@ -63,7 +64,8 @@ public final class MobileCore: NSObject {
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     @objc(initializeWithAppId:completion:)
-    public static func initialize(appId: String, _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func initialize(appId: String, _ completion: (@Sendable () -> Void)? = nil) {
         initialize(options: InitOptions(appId: appId), completion)
     }
 
@@ -71,7 +73,8 @@ public final class MobileCore: NSObject {
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
     @objc(registerExtensions:completion:)
-    public static func registerExtensions(_ extensions: [NSObject.Type], _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func registerExtensions(_ extensions: [NSObject.Type], _ completion: (@Sendable () -> Void)? = nil) {
         let idParser = IDParser()
         V4Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v4 if needed
         V5Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v5 if needed
@@ -113,7 +116,8 @@ public final class MobileCore: NSObject {
     /// Registers the extension from MobileCore
     /// - Parameter exten: The extension to be registered
     @objc(registerExtension:completion:)
-    public static func registerExtension(_ exten: Extension.Type, _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func registerExtension(_ exten: Extension.Type, _ completion: (@Sendable () -> Void)? = nil) {
         EventHub.shared.registerExtension(exten) { _ in
             EventHub.shared.shareEventHubSharedState()
             completion?()
@@ -123,7 +127,8 @@ public final class MobileCore: NSObject {
     /// Unregisters the extension from MobileCore
     /// - Parameter exten: The extension to be unregistered
     @objc(unregisterExtension:completion:)
-    public static func unregisterExtension(_ exten: Extension.Type, _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func unregisterExtension(_ exten: Extension.Type, _ completion: (@Sendable () -> Void)? = nil) {
         EventHub.shared.unregisterExtension(exten) { _ in
             completion?()
         }
