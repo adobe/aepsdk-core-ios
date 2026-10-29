@@ -19,9 +19,9 @@ public final class MobileCore: NSObject {
     private static let LOG_TAG = "MobileCore"
 
     #if DEBUG
-        internal static var mobileCoreInitializer = MobileCoreInitializer()
+    nonisolated(unsafe) internal static var mobileCoreInitializer = MobileCoreInitializer()
     #else
-        private static let mobileCoreInitializer = MobileCoreInitializer()
+        nonisolated(unsafe) private static let mobileCoreInitializer = MobileCoreInitializer()
     #endif
 
     /// Current version of the Core extension
@@ -51,7 +51,8 @@ public final class MobileCore: NSObject {
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     @objc(initializeWithOptions:completion:)
-    public static func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func initialize(options: InitOptions, _ completion: (@Sendable () -> Void)? = nil) {
         mobileCoreInitializer.initialize(options: options, completion)
     }
 
@@ -63,7 +64,8 @@ public final class MobileCore: NSObject {
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     @objc(initializeWithAppId:completion:)
-    public static func initialize(appId: String, _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func initialize(appId: String, _ completion: (@Sendable () -> Void)? = nil) {
         initialize(options: InitOptions(appId: appId), completion)
     }
 
@@ -71,7 +73,8 @@ public final class MobileCore: NSObject {
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
     @objc(registerExtensions:completion:)
-    public static func registerExtensions(_ extensions: [NSObject.Type], _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func registerExtensions(_ extensions: [NSObject.Type], _ completion: (@Sendable () -> Void)? = nil) {
         let idParser = IDParser()
         V4Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v4 if needed
         V5Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v5 if needed
@@ -113,7 +116,8 @@ public final class MobileCore: NSObject {
     /// Registers the extension from MobileCore
     /// - Parameter exten: The extension to be registered
     @objc(registerExtension:completion:)
-    public static func registerExtension(_ exten: Extension.Type, _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func registerExtension(_ exten: Extension.Type, _ completion: (@Sendable () -> Void)? = nil) {
         EventHub.shared.registerExtension(exten) { _ in
             EventHub.shared.shareEventHubSharedState()
             completion?()
@@ -123,7 +127,8 @@ public final class MobileCore: NSObject {
     /// Unregisters the extension from MobileCore
     /// - Parameter exten: The extension to be unregistered
     @objc(unregisterExtension:completion:)
-    public static func unregisterExtension(_ exten: Extension.Type, _ completion: (() -> Void)? = nil) {
+    // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
+    @preconcurrency public static func unregisterExtension(_ exten: Extension.Type, _ completion: (@Sendable () -> Void)? = nil) {
         EventHub.shared.unregisterExtension(exten) { _ in
             completion?()
         }
@@ -152,7 +157,7 @@ public final class MobileCore: NSObject {
     ///            Use `.infinity` to wait indefinitely without `EventHub` triggering timeout.
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
     @objc(dispatch:timeout:responseCallback:)
-    public static func dispatch(event: Event, timeout: TimeInterval = 1, responseCallback: @escaping (Event?) -> Void) {
+    @preconcurrency public static func dispatch(event: Event, timeout: TimeInterval = 1, responseCallback: @escaping @Sendable (Event?) -> Void) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: timeout) { event in
             responseCallback(event)
         }
@@ -166,8 +171,9 @@ public final class MobileCore: NSObject {
     ///   - source: A `String` indicating the event source the current listener is listening for
     ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives an event with matched type and source.
     @objc(registerEventListenerWithType:source:listener:)
-    public static func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
+    @preconcurrency public static func registerEventListener(type: String, source: String, listener: @escaping @Sendable (Event) -> Void) {
         EventHub.shared.registerEventListener(type: type, source: source) { event in
+            nonisolated(unsafe) let event = event
             DispatchQueue.global(qos: .default).async {
                 listener(event)
             }

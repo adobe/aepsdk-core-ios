@@ -37,9 +37,9 @@ final class EventHub {
     private var eventHistory: EventHistoryProvider?
     private var wrapperType: WrapperType = .none
     #if DEBUG
-        public internal(set) static var shared = EventHub()
+    nonisolated(unsafe) public internal(set) static var shared = EventHub()
     #else
-        internal static let shared = EventHub()
+        nonisolated(unsafe) internal static let shared = EventHub()
     #endif
 
     // MARK: - Internal API

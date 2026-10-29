@@ -16,7 +16,7 @@
     /// This class is used to create a floating button
     @objc(AEPFloatingButton)
     @available(iOSApplicationExtension, unavailable)
-    public class FloatingButton: NSObject, FloatingButtonPresentable {
+    public class FloatingButton: NSObject, FloatingButtonPresentable, @unchecked Sendable {
 
         private let LOG_PREFIX = "FloatingButton"
 
@@ -28,7 +28,12 @@
         private var panner: UIPanGestureRecognizer?
         private var timer: Timer?
         private var buttonImageView: UIImageView?
-        private var buttonPosition: FloatingButtonPosition = .center
+        private let positionLock = NSLock()
+        private var _buttonPosition: FloatingButtonPosition = .center
+        private var buttonPosition: FloatingButtonPosition {
+            get { positionLock.lock(); defer { positionLock.unlock() }; return _buttonPosition }
+            set { positionLock.lock(); defer { positionLock.unlock() }; _buttonPosition = newValue }
+        }
 
         private var listener: FloatingButtonDelegate?
 

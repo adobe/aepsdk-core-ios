@@ -340,7 +340,8 @@ extension ZipArchive {
     /// - Returns: The scanned subdata as T
     static func scanValue<T>(start: Int, data: Data) -> T {
         let subdata = data.subdata(in: start ..< start + MemoryLayout<T>.size)
-        return subdata.withUnsafeBytes { $0.load(as: T.self) }
+        // The scanned bytes are not guaranteed to be aligned for T, which traps on newer runtimes. loadUnaligned reads the same value without an alignment requirement.
+        return subdata.withUnsafeBytes { $0.loadUnaligned(as: T.self) }
     }
 
     ///

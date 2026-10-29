@@ -163,7 +163,7 @@ jobs:
   validate-code:
     resource_class: m4pro.medium
     macos:
-      xcode: 16.4.0
+      xcode: 27.0.0
 
     steps:
       - checkout

@@ -21,6 +21,7 @@
 		3FB58F8F252CE33B009C1358 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FB58F8E252CE33B009C1358 /* Assets.xcassets */; };
 		3FB58F92252CE33B009C1358 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FB58F90252CE33B009C1358 /* LaunchScreen.storyboard */; };
 		3FB58FA7252CFFD4009C1358 /* MyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB58FA6252CFFD4009C1358 /* MyExtension.swift */; };
+		63D2236E7BE63ECCE605679E /* NetworkAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */; };
 		64D7D66F6425325D4D459EED /* Pods_TestApp_Swift__tvOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B25A64F5BA85E21A5C27FD87 /* Pods_TestApp_Swift__tvOS_.framework */; };
 		780888B526D56F3800F5A665 /* LifecycleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888A626D56F3800F5A665 /* LifecycleView.swift */; };
 		780888B626D56F3800F5A665 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888A726D56F3800F5A665 /* MenuView.swift */; };
@@ -102,8 +103,6 @@
 		7A08C6747E305D5BF9CE2A3D /* Pods_TestApp_Objc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B889355E99E7CE85BE01DA34 /* Pods_TestApp_Objc.framework */; };
 		9F65FBBE14E3EB518B8FA743 /* Pods_TestApp_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148E88836D30DB0A4542D6F1 /* Pods_TestApp_Swift.framework */; };
 		AC0BC7342C66C34A0034105C /* UIServicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0BC7312C66ADB70034105C /* UIServicesView.swift */; };
-		63D2236E7BE63ECCE605679E /* NetworkAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */; };
-		C50E6C71BF4F7B2D9C39627F /* NetworkAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */; };
 		ACC05DC22C6AC15A005101D7 /* ADBMobileConfig_custom.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */; };
 		ACC05DC32C6AC15A005101D7 /* ADBMobileConfig_custom.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */; };
 		ACC05DC52C6AC997005101D7 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC42C6AC997005101D7 /* ADBMobileConfig.json */; };
@@ -122,6 +121,7 @@
 		BBF5EE342512BA0D0003265F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBF5EE322512BA0D0003265F /* LaunchScreen.storyboard */; };
 		BBFDDD65251179EB0084A12F /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFDDD64251179EB0084A12F /* PerformanceTests.swift */; };
 		BBFF40A42514293600E1331D /* PerfExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFF40A32514293600E1331D /* PerfExtension.swift */; };
+		C50E6C71BF4F7B2D9C39627F /* NetworkAvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */; };
 		EA22CF840591829E017BC06C /* Pods_TestApp_Objc__tvOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C00484C92FF17D160673BA /* Pods_TestApp_Objc__tvOS_.framework */; };
 		F9ECB06DBF3756046EDED3F4 /* Pods_E2E_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22024ADFC49796286A9CB8ED /* Pods_E2E_Swift.framework */; };
 /* End PBXBuildFile section */
@@ -288,6 +288,7 @@
 		68C6A2805E015B5EAEC88EB9 /* Pods-TestApp_Objc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp_Objc.debug.xcconfig"; path = "Target Support Files/Pods-TestApp_Objc/Pods-TestApp_Objc.debug.xcconfig"; sourceTree = "<group>"; };
 		73E4CE7F314740BC6AF3A5CA /* Pods-TestAppExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestAppExtension.debug.xcconfig"; path = "Target Support Files/Pods-TestAppExtension/Pods-TestAppExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		73F917DDAA83CF54D6804B96 /* Pods_TestAppExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestAppExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityView.swift; sourceTree = "<group>"; };
 		752261872AA7826700D59847 /* TestApp_Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp_Swift.entitlements; sourceTree = "<group>"; };
 		754508902ADDD3C400865E75 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		754508942ADDD3F000865E75 /* AEPIdentity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPIdentity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -356,7 +357,6 @@
 		8DD57656B2661DC8D3B4EB5D /* Pods-TestAppExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestAppExtension.release.xcconfig"; path = "Target Support Files/Pods-TestAppExtension/Pods-TestAppExtension.release.xcconfig"; sourceTree = "<group>"; };
 		9E695D276A2D5CA7797EF41F /* Pods-PerformanceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PerformanceApp.debug.xcconfig"; path = "Target Support Files/Pods-PerformanceApp/Pods-PerformanceApp.debug.xcconfig"; sourceTree = "<group>"; };
 		AC0BC7312C66ADB70034105C /* UIServicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServicesView.swift; sourceTree = "<group>"; };
-		74DF4FC844A98DFE4A3FC256 /* NetworkAvailabilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityView.swift; sourceTree = "<group>"; };
 		AC0BC7352C66C8D60034105C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig_custom.json; sourceTree = "<group>"; };
 		ACC05DC42C6AC997005101D7 /* ADBMobileConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
@@ -1089,9 +1089,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Swift (tvOS)/Pods-TestApp_Swift (tvOS)-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Swift (tvOS)/Pods-TestApp_Swift (tvOS)-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1128,9 +1132,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-E2E_Swift/Pods-E2E_Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-E2E_Swift/Pods-E2E_Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1211,9 +1219,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PerformanceApp/Pods-PerformanceApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PerformanceApp/Pods-PerformanceApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1250,9 +1262,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Objc/Pods-TestApp_Objc-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Objc/Pods-TestApp_Objc-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1267,9 +1283,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Objc (tvOS)/Pods-TestApp_Objc (tvOS)-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Objc (tvOS)/Pods-TestApp_Objc (tvOS)-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1328,9 +1348,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Swift/Pods-TestApp_Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestApp_Swift/Pods-TestApp_Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1653,7 +1677,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Testapp_Objc/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1671,7 +1695,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Testapp_Objc/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1690,6 +1714,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = E2E_Swift/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1709,6 +1734,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = E2E_Swift/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1729,19 +1755,23 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TestApp_Swift/TestApp_Swift.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview Content\"";
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestApp_Swift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				INFOPLIST_KEY_CFBundleDisplayName = "Test App";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1755,18 +1785,22 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TestApp_Swift/TestApp_Swift.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview Content\"";
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestApp_Swift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				INFOPLIST_KEY_CFBundleDisplayName = "Test App";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1838,6 +1872,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestApp_Swift/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1873,6 +1908,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestApp_Swift/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1960,7 +1996,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = E2E_SwiftUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1981,7 +2017,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = E2E_SwiftUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2005,7 +2041,7 @@
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PerformanceApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2027,7 +2063,7 @@
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PerformanceApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2045,7 +2081,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = PerformanceTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2065,7 +2101,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = PerformanceTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

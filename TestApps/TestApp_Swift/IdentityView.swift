@@ -47,7 +47,9 @@ struct IdentityView: View {
                 Group {
                     Button(action: {
                         Identity.getExperienceCloudId { ecid, error in
-                            self.experienceCloudId = ecid ?? ""
+                            DispatchQueue.main.async {
+                                self.experienceCloudId = ecid ?? ""
+                            }
                         }
                     }) {
                         Text("Get ExperienceCloudId")
@@ -60,7 +62,9 @@ struct IdentityView: View {
                 Group {
                     Button(action: {
                         MobileCore.getSdkIdentities { identities, _ in
-                            self.sdkIdentities = identities ?? ""
+                            DispatchQueue.main.async {
+                                self.sdkIdentities = identities ?? ""
+                            }
                         }
                     }) {
                         Text("Get Sdk Identities")
@@ -73,7 +77,9 @@ struct IdentityView: View {
                 Group {
                     Button(action: {
                         Identity.getUrlVariables { variables, error in
-                            self.urlVariables = variables ?? ""
+                            DispatchQueue.main.async {
+                                self.urlVariables = variables ?? ""
+                            }
                         }
                     }) {
                         Text("Get Url Variables")
@@ -86,7 +92,9 @@ struct IdentityView: View {
                 Group {
                     Button(action: {
                         Identity.appendTo(url: URL(string: "https://example.com")) { url, _ in
-                            self.url = url?.absoluteString ?? ""
+                            DispatchQueue.main.async {
+                                self.url = url?.absoluteString ?? ""
+                            }
                         }
                     }) {
                         Text("Append Url")

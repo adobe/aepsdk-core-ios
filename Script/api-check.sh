@@ -5,8 +5,8 @@
 
 set -e
 
-IOS_TRIPLE="arm64-apple-ios12.0"
-TVOS_TRIPLE="arm64-apple-tvos12.0"
+IOS_TRIPLE="arm64-apple-ios15.0"
+TVOS_TRIPLE="arm64-apple-tvos15.0"
 
 parse_modules_from_package() {
     if [ ! -f "Package.swift" ]; then
@@ -37,9 +37,13 @@ build_and_dump() {
         echo "Build failed."
         exit 1
     fi
+
+    # Xcode 27+ SwiftPM places modules directly in .build/release
+    MODULES_PATH=".build/release/Modules"
+    [ -d "$MODULES_PATH" ] || MODULES_PATH=".build/release"
         
     swift api-digester -sdk "$SDK_PATH" -dump-sdk -module "$module" \
-        -target "$TRIPLE" -avoid-location -avoid-tool-args -abort-on-module-fail -swift-version 5 -I .build/release/Modules \
+        -target "$TRIPLE" -avoid-location -avoid-tool-args -abort-on-module-fail -swift-version 5 -I "$MODULES_PATH" \
         -abi -o "$output_file"
 }
 
