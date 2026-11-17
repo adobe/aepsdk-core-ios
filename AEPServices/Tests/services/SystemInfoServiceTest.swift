@@ -115,6 +115,8 @@ class SystemInfoServiceTest: XCTestCase {
             XCTAssertEqual("ios", name)
         #elseif os(tvOS)
             XCTAssertEqual("tvos", name)
+        #elseif os(visionOS)
+            XCTAssertEqual("visionos", name)
         #endif
     }
 
@@ -131,6 +133,8 @@ class SystemInfoServiceTest: XCTestCase {
             XCTAssertEqual(DeviceType.PHONE, type)
         #elseif os(tvOS)
             XCTAssertEqual(DeviceType.TV, type)
+        #elseif os(visionOS)
+            XCTAssertEqual(DeviceType.UNKNOWN, type)
         #endif
     }
 
