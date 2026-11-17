@@ -103,7 +103,7 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getMobileCarrierName() -> String? {
-        #if targetEnvironment(macCatalyst) || os(tvOS)
+        #if targetEnvironment(macCatalyst) || os(tvOS) || os(visionOS)
             return "unknown"
         #else
             if #available(iOS 16, *) {
@@ -164,6 +164,8 @@ class ApplicationSystemInfoService: SystemInfoService {
             return "ios"
         #elseif os(tvOS)
             return "tvos"
+        #elseif os(visionOS)
+            return "visionos"
         #endif
     }
 
@@ -215,13 +217,24 @@ class ApplicationSystemInfoService: SystemInfoService {
 }
 
 struct NativeDisplayInformation {
-    private var screenRect: CGRect {
-        UIScreen.main.bounds
-    }
+    #if os(visionOS)
+        // visionOS has no UIScreen: windows and volumes have no fixed display size.
+        private var screenRect: CGRect {
+            .zero
+        }
 
-    private var screenScale: CGFloat {
-        UIScreen.main.scale
-    }
+        private var screenScale: CGFloat {
+            1
+        }
+    #else
+        private var screenRect: CGRect {
+            UIScreen.main.bounds
+        }
+
+        private var screenScale: CGFloat {
+            UIScreen.main.scale
+        }
+    #endif
 
     var widthPixels: Int {
         Int(screenRect.size.width * screenScale)

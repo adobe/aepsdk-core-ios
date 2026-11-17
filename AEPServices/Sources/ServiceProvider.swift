@@ -28,7 +28,7 @@ public class ServiceProvider {
     private var overrideSystemInfoService: SystemInfoService?
     private var defaultSystemInfoService = ApplicationSystemInfoService()
     private var overrideKeyValueService: NamedCollectionProcessing?
-    #if os(iOS)
+    #if os(iOS) || os(visionOS)
         private var defaultKeyValueService = FileSystemNamedCollection()
     #elseif os(tvOS)
         private var defaultKeyValueService = UserDefaultsNamedCollection()
@@ -119,7 +119,7 @@ public class ServiceProvider {
     internal func reset() {
         queue.async {
             self.defaultSystemInfoService = ApplicationSystemInfoService()
-            #if os(iOS)
+            #if os(iOS) || os(visionOS)
                 self.defaultKeyValueService = FileSystemNamedCollection()
             #elseif os(tvOS)
                 self.defaultKeyValueService = UserDefaultsNamedCollection()
